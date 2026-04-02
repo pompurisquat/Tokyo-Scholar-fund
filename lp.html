@@ -1,0 +1,953 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>金融業界世直しビジネス | 誠実なFPのための業務効率化プラットフォーム</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&family=Lato:wght@700;900&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --cream: #faf6f0;
+      --cream2: #f5ede0;
+      --coral: #e8835a;
+      --coral-light: #f2a882;
+      --teal: #4a9b8a;
+      --teal-dark: #357a6c;
+      --teal-light: #d6ede9;
+      --amber: #f0a830;
+      --text: #333333;
+      --text-light: #666666;
+      --white: #ffffff;
+      --radius-img: 40% 60% 55% 45% / 45% 45% 55% 55%;
+      --radius-card: 20px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Noto Sans JP', 'Hiragino Maru Gothic Pro', sans-serif;
+      color: var(--text);
+      background: var(--cream);
+      line-height: 1.8;
+      overflow-x: hidden;
+    }
+
+    /* ─── BLOBS ─── */
+    .blob {
+      position: absolute;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ─── NAV ─── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 200;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 6%;
+      background: rgba(250,246,240,0.93);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(0,0,0,0.06);
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+    .logo-icon {
+      width: 52px; height: 52px;
+      border-radius: 50%;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+    .logo-icon img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+    }
+    .logo-text { font-size: .95rem; font-weight: 900; color: var(--text); letter-spacing: .02em; }
+    .logo-text span { color: var(--coral); }
+    .nav-links { display: flex; gap: 28px; }
+    .nav-links a { color: var(--text-light); text-decoration: none; font-size: .88rem; font-weight: 500; transition: color .2s; }
+    .nav-links a:hover { color: var(--coral); }
+    .nav-cta {
+      background: var(--teal);
+      color: white;
+      border: none;
+      padding: 10px 24px;
+      border-radius: 50px;
+      font-size: .88rem;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: 'Noto Sans JP', sans-serif;
+      transition: background .2s, transform .2s;
+    }
+    .nav-cta:hover { background: var(--teal-dark); transform: translateY(-1px); }
+
+    /* ─── HERO ─── */
+    .hero {
+      min-height: 100vh;
+      padding: 120px 6% 80px;
+      background: var(--cream);
+      position: relative;
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+    }
+    .hero .blob1 {
+      width: 500px; height: 500px;
+      background: rgba(214,237,233,0.6);
+      top: -100px; right: -100px;
+    }
+    .hero .blob2 {
+      width: 300px; height: 300px;
+      background: rgba(240,168,48,0.15);
+      bottom: 0; left: 5%;
+    }
+    .hero-inner {
+      position: relative;
+      z-index: 1;
+      max-width: 760px;
+      width: 100%;
+      text-align: center;
+      margin: 0 auto;
+    }
+    .hero-text { width: 100%; }
+    .hero-en {
+      font-family: 'Lato', sans-serif;
+      font-size: clamp(2.5rem, 5vw, 4rem);
+      font-weight: 900;
+      color: var(--coral);
+      line-height: 1;
+      margin-bottom: 16px;
+      letter-spacing: -.02em;
+    }
+    .hero-tagbox {
+      display: inline-block;
+      background: var(--teal);
+      color: white;
+      padding: 8px 20px;
+      border-radius: 6px;
+      font-size: clamp(1.3rem, 2.5vw, 1.8rem);
+      font-weight: 900;
+      margin-bottom: 8px;
+      line-height: 1.4;
+    }
+    .hero-tagbox.amber { background: var(--amber); }
+    .hero-sub {
+      margin-top: 24px;
+      font-size: 1rem;
+      color: var(--text-light);
+      line-height: 2;
+      max-width: 560px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .hero-btns {
+      display: flex;
+      gap: 14px;
+      margin-top: 36px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    /* Claude character */
+    .claude-char {
+      margin: 0 auto 32px;
+      width: 110px; height: 110px;
+    }
+    .btn-teal {
+      background: var(--teal);
+      color: white;
+      padding: 14px 32px;
+      border-radius: 50px;
+      font-weight: 700;
+      font-size: .95rem;
+      text-decoration: none;
+      transition: background .2s, transform .2s;
+      box-shadow: 0 6px 20px rgba(74,155,138,0.3);
+    }
+    .btn-teal:hover { background: var(--teal-dark); transform: translateY(-2px); }
+    .btn-outline-coral {
+      border: 2px solid var(--coral);
+      color: var(--coral);
+      padding: 12px 28px;
+      border-radius: 50px;
+      font-weight: 700;
+      font-size: .95rem;
+      text-decoration: none;
+      transition: background .2s;
+    }
+    .btn-outline-coral:hover { background: rgba(232,131,90,0.08); }
+
+    .hero-visual {
+      flex-shrink: 0;
+      width: 380px;
+      position: relative;
+    }
+    .hero-img-wrap {
+      width: 340px;
+      height: 340px;
+      border-radius: 40% 60% 55% 45% / 45% 45% 55% 55%;
+      overflow: hidden;
+      background: linear-gradient(135deg, var(--teal-light), #c5e8e0);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 6rem;
+    }
+    .hero-badge-float {
+      position: absolute;
+      bottom: 20px; left: -20px;
+      background: white;
+      border-radius: 16px;
+      padding: 14px 20px;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+      font-size: .85rem;
+    }
+    .hero-badge-float strong { display: block; font-size: 1.3rem; color: var(--teal); font-weight: 900; }
+
+    /* ─── PROBLEM ─── */
+    .problem {
+      padding: 100px 6%;
+      background: var(--white);
+      position: relative;
+      overflow: hidden;
+    }
+    .problem .blob3 {
+      width: 400px; height: 400px;
+      background: rgba(214,237,233,0.4);
+      top: -80px; right: -80px;
+    }
+    .section-en {
+      font-family: 'Lato', sans-serif;
+      font-size: clamp(3rem, 6vw, 5rem);
+      font-weight: 900;
+      color: var(--coral);
+      opacity: .18;
+      text-align: center;
+      line-height: 1;
+      letter-spacing: -.02em;
+      margin-bottom: -16px;
+      position: relative;
+      z-index: 0;
+    }
+    .section-head {
+      text-align: center;
+      position: relative;
+      z-index: 1;
+      margin-bottom: 60px;
+    }
+    .section-jp {
+      font-size: clamp(1.4rem, 2.5vw, 2rem);
+      font-weight: 900;
+      color: var(--text);
+      margin-bottom: 12px;
+    }
+    .section-jp span { color: var(--coral); }
+    .underline-teal {
+      display: inline-block;
+      width: 48px; height: 3px;
+      background: var(--teal);
+      border-radius: 2px;
+      margin: 0 auto;
+    }
+    .section-desc {
+      margin-top: 12px;
+      font-size: .95rem;
+      color: var(--text-light);
+    }
+
+    .problem-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+    .problem-card {
+      background: var(--cream);
+      border-radius: var(--radius-card);
+      padding: 28px 22px;
+      position: relative;
+      border: 1.5px solid rgba(0,0,0,0.06);
+    }
+    .problem-card .p-icon { font-size: 2.2rem; margin-bottom: 12px; }
+    .problem-card h3 { font-size: .95rem; font-weight: 700; color: var(--text); margin-bottom: 8px; }
+    .problem-card p { font-size: .85rem; color: var(--text-light); line-height: 1.8; }
+
+    /* ─── MISSION BANNER ─── */
+    .mission-banner {
+      background: var(--teal);
+      padding: 60px 6%;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .mission-banner::before {
+      content: '';
+      position: absolute;
+      top: -60px; right: -60px;
+      width: 300px; height: 300px;
+      background: rgba(255,255,255,0.07);
+      border-radius: 50%;
+    }
+    .mission-banner::after {
+      content: '';
+      position: absolute;
+      bottom: -80px; left: -40px;
+      width: 250px; height: 250px;
+      background: rgba(255,255,255,0.05);
+      border-radius: 50%;
+    }
+    .mission-banner h2 {
+      font-size: clamp(1.3rem, 2.5vw, 1.9rem);
+      font-weight: 900;
+      color: white;
+      line-height: 1.6;
+      margin-bottom: 16px;
+      position: relative;
+      z-index: 1;
+    }
+    .mission-banner h2 em {
+      font-style: normal;
+      background: rgba(255,255,255,0.2);
+      padding: 2px 10px;
+      border-radius: 4px;
+    }
+    .mission-banner p {
+      font-size: .95rem;
+      color: rgba(255,255,255,0.85);
+      max-width: 700px;
+      margin: 0 auto;
+      line-height: 2;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ─── SERVICES ─── */
+    .services {
+      padding: 100px 6%;
+      background: var(--cream);
+      position: relative;
+      overflow: hidden;
+    }
+    .services .blob4 {
+      width: 350px; height: 350px;
+      background: rgba(240,168,48,0.1);
+      bottom: 100px; right: -80px;
+    }
+
+    .service-row {
+      display: flex;
+      align-items: center;
+      gap: 64px;
+      max-width: 1100px;
+      margin: 0 auto 100px;
+    }
+    .service-row.reverse { flex-direction: row-reverse; }
+
+    .service-img-wrap {
+      flex-shrink: 0;
+      width: 360px;
+      height: 360px;
+      border-radius: 40% 60% 60% 40% / 40% 40% 60% 60%;
+      overflow: hidden;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 7rem;
+    }
+    .service-row:nth-child(odd) .service-img-wrap  { background: linear-gradient(135deg, #d6ede9, #a8dbd4); }
+    .service-row:nth-child(even) .service-img-wrap { background: linear-gradient(135deg, #fde8d6, #f5c4a0); border-radius: 60% 40% 40% 60% / 60% 60% 40% 40%; }
+    .service-row:last-child .service-img-wrap { background: linear-gradient(135deg, #fdf3d6, #f5dfa0); border-radius: 45% 55% 50% 50% / 50% 45% 55% 50%; }
+
+    .service-content { flex: 1; }
+    .service-num {
+      font-family: 'Lato', sans-serif;
+      font-size: 4.5rem;
+      font-weight: 900;
+      color: var(--coral);
+      opacity: .2;
+      line-height: 1;
+      margin-bottom: -12px;
+    }
+    .service-tag {
+      display: inline-block;
+      background: var(--teal-light);
+      color: var(--teal-dark);
+      padding: 4px 14px;
+      border-radius: 50px;
+      font-size: .78rem;
+      font-weight: 700;
+      letter-spacing: .06em;
+      margin-bottom: 10px;
+    }
+    .service-tag.amber-tag { background: #fdecd0; color: #b07010; }
+    .service-tag.coral-tag { background: #fde0d4; color: #b05030; }
+    .service-content h2 {
+      font-size: clamp(1.4rem, 2.5vw, 1.9rem);
+      font-weight: 900;
+      color: var(--text);
+      line-height: 1.4;
+      margin-bottom: 10px;
+    }
+    .service-content .lead {
+      font-size: .95rem;
+      color: var(--text-light);
+      margin-bottom: 22px;
+    }
+
+    .feat-list { list-style: none; display: flex; flex-direction: column; gap: 10px; margin-bottom: 24px; }
+    .feat-list li {
+      display: flex; align-items: flex-start; gap: 10px;
+      font-size: .9rem; color: var(--text);
+    }
+    .feat-list li .check {
+      width: 20px; height: 20px; border-radius: 50%;
+      background: var(--teal); color: white;
+      display: flex; align-items: center; justify-content: center;
+      font-size: .65rem; font-weight: 900;
+      flex-shrink: 0; margin-top: 2px;
+    }
+    .feat-list li .check.amber { background: var(--amber); }
+    .feat-list li .check.coral { background: var(--coral); }
+
+    .flow-strip {
+      background: white;
+      border-radius: 12px;
+      padding: 16px 20px;
+      display: flex; align-items: center; gap: 8px;
+      flex-wrap: wrap;
+      font-size: .82rem;
+      color: var(--text-light);
+      border: 1.5px solid rgba(0,0,0,0.06);
+    }
+    .flow-chip {
+      background: var(--cream);
+      border: 1.5px solid rgba(0,0,0,0.08);
+      border-radius: 8px;
+      padding: 5px 12px;
+      font-weight: 700;
+      color: var(--text);
+      font-size: .8rem;
+    }
+    .flow-arr { color: var(--coral); font-weight: 700; }
+
+    /* ─── ROADMAP ─── */
+    .roadmap {
+      padding: 80px 6%;
+      background: var(--cream2);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .roadmap .blob5 {
+      width: 300px; height: 300px;
+      background: rgba(214,237,233,0.5);
+      top: -60px; left: -60px;
+    }
+    .roadmap-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 24px;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    .roadmap-card {
+      background: white;
+      border-radius: var(--radius-card);
+      padding: 32px 24px;
+      text-align: left;
+      border: 1.5px solid rgba(0,0,0,0.06);
+    }
+    .roadmap-card .phase {
+      display: inline-block;
+      font-size: .72rem; font-weight: 800;
+      letter-spacing: .1em;
+      padding: 4px 12px; border-radius: 50px;
+      margin-bottom: 14px;
+    }
+    .phase-now { background: var(--teal-light); color: var(--teal-dark); }
+    .phase-next { background: #fdecd0; color: #b07010; }
+    .roadmap-card h3 { font-size: 1.05rem; font-weight: 900; color: var(--text); margin-bottom: 10px; }
+    .roadmap-card p { font-size: .85rem; color: var(--text-light); line-height: 1.8; }
+
+    /* ─── VALUE ─── */
+    .value {
+      padding: 80px 6%;
+      background: white;
+    }
+    .value-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 20px;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    .value-card {
+      background: var(--cream);
+      border-radius: var(--radius-card);
+      padding: 32px 20px;
+      text-align: center;
+      border: 1.5px solid rgba(0,0,0,0.05);
+    }
+    .value-card .big-num {
+      font-family: 'Lato', sans-serif;
+      font-size: 3rem; font-weight: 900;
+      color: var(--coral); line-height: 1;
+    }
+    .value-card .unit { font-size: .8rem; color: var(--text-light); margin-bottom: 8px; }
+    .value-card p { font-size: .85rem; color: var(--text); font-weight: 500; }
+
+    /* ─── PHILOSOPHY ─── */
+    .philosophy {
+      padding: 100px 6%;
+      background: var(--cream);
+      position: relative;
+      overflow: hidden;
+    }
+    .philosophy .blob6 {
+      width: 400px; height: 400px;
+      background: rgba(232,131,90,0.08);
+      bottom: -80px; right: -80px;
+    }
+    .philosophy-inner {
+      max-width: 900px;
+      margin: 0 auto;
+      display: flex;
+      gap: 60px;
+      align-items: flex-start;
+      position: relative;
+      z-index: 1;
+    }
+    .philosophy-quote-wrap { flex: 1; }
+    .quote-mark {
+      font-family: 'Lato', sans-serif;
+      font-size: 6rem; line-height: .6;
+      color: var(--coral); opacity: .25;
+      font-weight: 900;
+      margin-bottom: 8px;
+    }
+    .quote-text {
+      font-size: 1rem;
+      color: var(--text);
+      line-height: 2.1;
+      border-left: 4px solid var(--teal);
+      padding-left: 20px;
+    }
+    .quote-text strong { color: var(--teal-dark); }
+    .quote-cite {
+      display: block;
+      margin-top: 20px;
+      font-size: .82rem;
+      color: var(--text-light);
+      font-weight: 700;
+    }
+    .philosophy-box {
+      flex-shrink: 0;
+      width: 280px;
+      background: var(--teal);
+      border-radius: var(--radius-card);
+      padding: 32px 24px;
+      color: white;
+    }
+    .philosophy-box h3 { font-size: 1rem; font-weight: 900; margin-bottom: 16px; opacity: .7; letter-spacing: .06em; }
+    .philosophy-box ul { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+    .philosophy-box ul li {
+      font-size: .9rem; line-height: 1.6;
+      padding-left: 16px;
+      position: relative;
+    }
+    .philosophy-box ul li::before {
+      content: '→';
+      position: absolute;
+      left: 0;
+      opacity: .7;
+    }
+
+    /* ─── CTA ─── */
+    .cta-section {
+      padding: 100px 6%;
+      background: var(--white);
+      text-align: center;
+    }
+    .cta-inner {
+      max-width: 720px;
+      margin: 0 auto;
+      background: var(--cream);
+      border-radius: 32px;
+      padding: 60px 48px;
+      border: 1.5px solid rgba(0,0,0,0.06);
+    }
+    .cta-en {
+      font-family: 'Lato', sans-serif;
+      font-size: 3rem; font-weight: 900;
+      color: var(--coral); opacity: .2;
+      line-height: 1; margin-bottom: -8px;
+    }
+    .cta-inner h2 {
+      font-size: clamp(1.4rem, 2.5vw, 2rem);
+      font-weight: 900;
+      color: var(--text);
+      margin-bottom: 14px;
+    }
+    .cta-inner p { font-size: .95rem; color: var(--text-light); margin-bottom: 36px; line-height: 1.9; }
+    .cta-btns { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+
+    /* ─── FOOTER ─── */
+    footer {
+      background: var(--text);
+      color: rgba(255,255,255,0.5);
+      text-align: center;
+      padding: 32px 6%;
+      font-size: .82rem;
+    }
+    footer strong { color: rgba(255,255,255,0.85); }
+
+    /* ─── FP ILLUSTRATIONS ─── */
+    .fp-floats {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .fp-float {
+      position: absolute;
+      opacity: 0.9;
+    }
+    .fp-float svg { filter: drop-shadow(0 4px 12px rgba(0,0,0,0.08)); }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 860px) {
+      .hero-inner { flex-direction: column; }
+      .fp-floats { display: none; }
+      .service-row, .service-row.reverse { flex-direction: column; gap: 32px; }
+      .service-img-wrap { width: 260px; height: 260px; }
+      .philosophy-inner { flex-direction: column; }
+      .philosophy-box { width: 100%; }
+      .nav-links { display: none; }
+      .cta-inner { padding: 40px 24px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="logo">
+    <div class="logo-icon"><img src="logo.jpg" alt="ロゴ" /></div>
+    <span class="logo-text">金融業界<span>世直しビジネス</span></span>
+  </a>
+  <div class="nav-links">
+    <a href="#services">サービス</a>
+    <a href="#roadmap">ロードマップ</a>
+    <a href="#philosophy">理念</a>
+    <a href="#contact">お問い合わせ</a>
+  </div>
+  <button class="nav-cta">無料で試す</button>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="blob blob1"></div>
+  <div class="blob blob2"></div>
+  <div class="hero-inner">
+    <div class="hero-text">
+
+      <!-- Claude風キャラクター -->
+      <div class="claude-char">
+        <svg viewBox="0 0 110 110" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- 外側の丸い背景 -->
+          <circle cx="55" cy="55" r="52" fill="#fde8d6" opacity=".6"/>
+          <!-- Anthropic/Claudeロゴ：放射状の丸みを帯びたバー -->
+          <g transform="translate(55,55)">
+            <!-- 12本の丸棒を放射状に配置 -->
+            <rect x="-5" y="-26" width="10" height="22" rx="5" fill="#e8835a" transform="rotate(0)"/>
+            <rect x="-5" y="-26" width="10" height="22" rx="5" fill="#e8835a" opacity=".9" transform="rotate(30)"/>
+            <rect x="-5" y="-26" width="10" height="22" rx="5" fill="#e8835a" opacity=".8" transform="rotate(60)"/>
+            <rect x="-5" y="-26" width="10" height="22" rx="5" fill="#e8835a" opacity=".7" transform="rotate(90)"/>
+            <rect x="-5" y="-26" width="10" height="22" rx="5" fill="#e8835a" opacity=".6" transform="rotate(120)"/>
+            <rect x="-5" y="-26" width="10" height="22" rx="5" fill="#e8835a" opacity=".5" transform="rotate(150)"/>
+            <rect x="-5" y="-26" width="10" height="22" rx="5" fill="#e8835a" opacity=".45" transform="rotate(180)"/>
+            <rect x="-5" y="-26" width="10" height="22" rx="5" fill="#e8835a" opacity=".4" transform="rotate(210)"/>
+            <rect x="-5" y="-26" width="10" height="22" rx="5" fill="#e8835a" opacity=".5" transform="rotate(240)"/>
+            <rect x="-5" y="-26" width="10" height="22" rx="5" fill="#e8835a" opacity=".6" transform="rotate(270)"/>
+            <rect x="-5" y="-26" width="10" height="22" rx="5" fill="#e8835a" opacity=".7" transform="rotate(300)"/>
+            <rect x="-5" y="-26" width="10" height="22" rx="5" fill="#e8835a" opacity=".8" transform="rotate(330)"/>
+          </g>
+        </svg>
+      </div>
+
+      <div class="hero-en">For Honest FP</div>
+      <div>
+        <div class="hero-tagbox">事務ゼロで、</div>
+      </div>
+      <div>
+        <div class="hero-tagbox amber">お客様と向き合う時間へ。</div>
+      </div>
+      <p class="hero-sub">
+        正しい金融知識を伝えたい。<br>
+        でも事務作業に追われて、お客様との時間が足りない。<br>
+        いくら稼げても、<strong style="color:var(--coral)">お客様が損する商品は絶対に届けたくない！</strong><br>
+        <br>
+        そんな<strong>誠実で利他的なFP・IFAさんの悩み</strong>を、<br>
+        業務効率化という武器で、まるごと解決します。
+      </p>
+      <div class="hero-btns">
+        <a href="#services" class="btn-teal">サービスを見る</a>
+        <a href="#contact" class="btn-outline-coral">無料相談はこちら</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROBLEM -->
+<section class="problem">
+  <div class="blob blob3"></div>
+  <div class="section-en">Problem</div>
+  <div class="section-head">
+    <p class="section-jp">誠実なFPほど、<span>なぜ苦しいのか</span></p>
+    <div class="underline-teal"></div>
+    <p class="section-desc">変額保険を売らず、お客様本位の提案をするほど、業務コストは増え収益は薄くなる構造があります。</p>
+  </div>
+  <div class="problem-grid">
+    <div class="problem-card">
+      <div class="p-icon">📋</div>
+      <h3>商談後の事務作業が膨大</h3>
+      <p>録音・議事録・提案書作成に何時間も。本来お客様と向き合う時間が奪われています。</p>
+    </div>
+    <div class="problem-card">
+      <div class="p-icon">📊</div>
+      <h3>複数社見積もりが煩雑</h3>
+      <p>各社ごとに異なるシステムへの入力。比較選定に要する時間は膨大なのに収益に直結しない。</p>
+    </div>
+    <div class="problem-card">
+      <div class="p-icon">🔄</div>
+      <h3>既存顧客フォローが後回しに</h3>
+      <p>新規獲得に追われ、大切な既存顧客の資産管理・フォローが手薄になりがち。</p>
+    </div>
+    <div class="problem-card">
+      <div class="p-icon">📉</div>
+      <h3>件数・預かり資産で評価される</h3>
+      <p>「お客様の資産をどれだけ増やしたか」ではなく売上だけが評価される日本の構造的問題。</p>
+    </div>
+  </div>
+</section>
+
+<!-- MISSION BANNER -->
+<div class="mission-banner">
+  <h2>
+    事務をゼロにして、<em>アポを増やす</em>。<br>
+    それが、日本に正しい金融知識を届ける近道。
+  </h2>
+  <p>
+    金融業界世直しビジネスは「正しい情報を届けたい」という思いを持つFP・IFAの方々が、<br>
+    一人でも多くのお客様と向き合える時間をつくるために生まれました。<br>
+    薄利でも持続できるビジネスモデルで、誠実な金融アドバイザーを全力支援します。
+  </p>
+</div>
+
+<!-- SERVICES -->
+<section class="services" id="services">
+  <div class="blob blob4"></div>
+  <div class="section-en">Services</div>
+  <div class="section-head">
+    <p class="section-jp">3つのツールで、<span>業務を革新する</span></p>
+    <div class="underline-teal"></div>
+    <p class="section-desc">商談から顧客フォローまで、FPの事務コストを根本から変えます。</p>
+  </div>
+
+  <!-- S01 -->
+  <div class="service-row">
+    <div class="service-img-wrap">🎙️</div>
+    <div class="service-content">
+      <div class="service-num">01</div>
+      <div class="service-tag">商談ツール</div>
+      <h2>AIが商談を<br>最高の営業資料に変える</h2>
+      <p class="lead">録音するだけ。あとはAIがすべてやります。</p>
+      <ul class="feat-list">
+        <li><span class="check">✓</span>商談音声を自動で文字起こし・議事録化</li>
+        <li><span class="check">✓</span>お客様の課題・ニーズをインフォグラフィックで可視化</li>
+        <li><span class="check">✓</span>商談内容から最適な提案プランを3パターン自動生成</li>
+        <li><span class="check">✓</span>蓄積データから顧客カルテを自動作成・更新</li>
+        <li><span class="check">✓</span>次回商談に活かせる提案傾向レポートを提供</li>
+      </ul>
+      <div class="flow-strip">
+        <div class="flow-chip">🎙 商談録音</div>
+        <div class="flow-arr">→</div>
+        <div class="flow-chip">📄 議事録自動生成</div>
+        <div class="flow-arr">→</div>
+        <div class="flow-chip">📊 提案3パターン</div>
+        <div class="flow-arr">→</div>
+        <div class="flow-chip">💾 顧客データ蓄積</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- S02 -->
+  <div class="service-row reverse">
+    <div class="service-img-wrap">📑</div>
+    <div class="service-content">
+      <div class="service-num">02</div>
+      <div class="service-tag amber-tag">見積代行</div>
+      <h2>複数社見積もりの<br>面倒をゼロにする</h2>
+      <p class="lead">LINEかGoogleフォームで送るだけ。あとは私たちがやります。</p>
+      <ul class="feat-list">
+        <li><span class="check amber">✓</span>複数保険会社への一括見積もり依頼を完全代行</li>
+        <li><span class="check amber">✓</span>FPはLINE or Googleフォームで顧客情報を送るだけ</li>
+        <li><span class="check amber">✓</span>各社の見積結果を比較表としてまとめて納品</li>
+        <li><span class="check amber">✓</span>FPが本来集中すべき「提案・関係構築」に専念できる</li>
+      </ul>
+      <div class="flow-strip">
+        <div class="flow-chip">📱 LINE/フォームで送信</div>
+        <div class="flow-arr">→</div>
+        <div class="flow-chip">⚙️ 当社が各社へ依頼</div>
+        <div class="flow-arr">→</div>
+        <div class="flow-chip">📑 比較表で納品</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- S03 -->
+  <div class="service-row">
+    <div class="service-img-wrap">📱</div>
+    <div class="service-content">
+      <div class="service-num">03</div>
+      <div class="service-tag coral-tag">顧客保全</div>
+      <h2>既存顧客の資産を<br>スマホで見える化</h2>
+      <p class="lead">設計書を撮影するだけ。FPもお客様もいつでも資産状況を確認できます。</p>
+      <ul class="feat-list">
+        <li><span class="check coral">✓</span>保険設計書・運用推移表をOCRで自動データ化</li>
+        <li><span class="check coral">✓</span>FP・顧客ともにスマホから金融資産を一元管理</li>
+        <li><span class="check coral">✓</span>運用状況の変化をプッシュ通知でリアルタイム把握</li>
+        <li><span class="check coral">✓</span>ライフイベントに合わせたフォローアラート機能</li>
+      </ul>
+      <div class="flow-strip">
+        <div class="flow-chip">📄 設計書を撮影</div>
+        <div class="flow-arr">→</div>
+        <div class="flow-chip">🔍 OCR読み取り</div>
+        <div class="flow-arr">→</div>
+        <div class="flow-chip">📱 スマホで管理</div>
+        <div class="flow-arr">→</div>
+        <div class="flow-chip">🔔 フォローアラート</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ROADMAP -->
+<section class="roadmap" id="roadmap">
+  <div class="blob blob5"></div>
+  <div class="section-en">Roadmap</div>
+  <div class="section-head">
+    <p class="section-jp">保険からIFAへ、<span>拡がる支援の輪</span></p>
+    <div class="underline-teal"></div>
+    <p class="section-desc">まずは保険FPの業務効率化から。次のステップとしてIFA業務にも対応します。</p>
+  </div>
+  <div class="roadmap-cards">
+    <div class="roadmap-card">
+      <span class="phase phase-now">NOW — 保険業務効率化</span>
+      <h3>保険FP向けサービス</h3>
+      <p>商談ツール・見積代行・顧客保全の3本柱で、保険FPの事務コストを劇的に削減。お客様と向き合う時間を最大化します。</p>
+    </div>
+    <div class="roadmap-card">
+      <span class="phase phase-next">NEXT — IFA業務効率化</span>
+      <h3>IFA向けサービス拡充</h3>
+      <p>投資顧問業務・ポートフォリオ管理・顧客報告書の自動化など、IFAが本来すべき資産運用提案に集中できる環境を提供します。</p>
+    </div>
+    <div class="roadmap-card">
+      <span class="phase phase-next">VISION — グローバルスタンダード</span>
+      <h3>日本の金融評価を変える</h3>
+      <p>「どれだけ売ったか」から「お客様の資産をどれだけ増やしたか」へ。誠実なアドバイザーが正当に評価される日本をつくります。</p>
+    </div>
+  </div>
+</section>
+
+<!-- VALUE -->
+<section class="value" id="value">
+  <div class="section-en">Impact</div>
+  <div class="section-head">
+    <p class="section-jp">導入で<span>ここまで変わる</span></p>
+    <div class="underline-teal"></div>
+  </div>
+  <div class="value-grid">
+    <div class="value-card">
+      <div class="big-num">70<span style="font-size:1.5rem">%</span></div>
+      <div class="unit">削減</div>
+      <p>商談後の事務作業時間</p>
+    </div>
+    <div class="value-card">
+      <div class="big-num">3<span style="font-size:1.5rem">倍</span></div>
+      <div class="unit">向上</div>
+      <p>1日に対応できる顧客数</p>
+    </div>
+    <div class="value-card">
+      <div class="big-num">0<span style="font-size:1.5rem">円</span></div>
+      <div class="unit">初期費用</div>
+      <p>無料トライアルで試せる</p>
+    </div>
+    <div class="value-card">
+      <div class="big-num">∞</div>
+      <div class="unit">可能性</div>
+      <p>薄利でも持続可能なFP事業へ</p>
+    </div>
+  </div>
+</section>
+
+<!-- PHILOSOPHY -->
+<section class="philosophy" id="philosophy">
+  <div class="blob blob6"></div>
+  <div class="section-en">Philosophy</div>
+  <div class="section-head">
+    <p class="section-jp">金融業界世直しビジネスの<span>想い</span></p>
+    <div class="underline-teal"></div>
+  </div>
+  <div class="philosophy-inner">
+    <div class="philosophy-quote-wrap">
+      <div class="quote-mark">"</div>
+      <p class="quote-text">
+        今の金融業界には、売り手と買い手の間に大きな情報格差がある。<br>
+        変額保険が海外で販売停止されているにもかかわらず、日本では売れ続けている。<br><br>
+        でも本当に正しい情報を届けるFPほど、稼げない構造になっている。それはおかしい。<br><br>
+        利益主義の金融機関や、チャンネル登録数しか考えないSNSインフルエンサーに<br>
+        振り回され続ける日本を変えたい。<br><br>
+        日本中の人々に金融知識が身近になれば、<strong>必ず日本は豊かになる</strong>と信じている。<br>
+        そのために尽力する誠実なFP・IFAを、テクノロジーの力で支えたい。
+      </p>
+      <cite class="quote-cite">— 静江興業 / 金融業界世直しビジネス</cite>
+    </div>
+    <div class="philosophy-box">
+      <h3>GLOBAL STANDARD</h3>
+      <ul>
+        <li>「どれだけ売ったか」ではなく「お客様の資産をどれだけ増やしたか」で評価される文化へ</li>
+        <li>誠実なアドバイスほど報われるビジネスモデルの実現</li>
+        <li>金融知識を「全ての人」に届ける社会インフラとして</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section" id="contact">
+  <div class="cta-inner">
+    <div class="cta-en">Let's Start</div>
+    <h2>まず、無料で試してみませんか</h2>
+    <p>
+      導入相談・デモのご依頼はお気軽にどうぞ。<br>
+      誠実なFP・IFAのビジネスを、全力でサポートします。
+    </p>
+    <div class="cta-btns">
+      <a href="#" class="btn-teal">無料トライアルを始める</a>
+      <a href="#" class="btn-outline-coral">LINEで相談する</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p><strong>静江興業 / 金融業界世直しビジネス</strong></p>
+  <p style="margin-top:8px">© 2025 静江興業. All rights reserved.</p>
+</footer>
+
+</body>
+</html>
