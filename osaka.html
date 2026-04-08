@@ -1,0 +1,2005 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>大阪府くらしInfoHub | 大阪の行政サービス・制度を一発検索</title>
+  <meta name="description" content="補助金・給付金・医療助成・住宅支援など、大阪府・大阪市の行政サービスをあなたの条件に合わせてかんたんに探せます。" />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&family=Lato:wght@700;900&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --green:       #006E3C;
+      --green-dark:  #004D2A;
+      --green-mid:   #009050;
+      --green-light: #D6EFDF;
+      --green-pale:  #F0FAF4;
+      --orange:      #E8540A;
+      --orange-light:#FDE8DA;
+      --gold:        #E8A820;
+      --text:        #222222;
+      --text-light:  #5A5A5A;
+      --white:       #FFFFFF;
+      --bg:          #F6FBF8;
+      --radius-card: 20px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Noto Sans JP', 'Hiragino Maru Gothic Pro', sans-serif;
+      color: var(--text);
+      background: var(--bg);
+      line-height: 1.8;
+      overflow-x: hidden;
+    }
+
+    /* ─── BLOBS ─── */
+    .blob {
+      position: absolute;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 0;
+      opacity: .18;
+    }
+
+    /* ─── NAV ─── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 200;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 6%;
+      background: rgba(246,251,248,0.95);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(0,110,60,.12);
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+    .logo-badge {
+      background: var(--green);
+      color: white;
+      font-weight: 900;
+      font-size: .75rem;
+      padding: 4px 10px;
+      border-radius: 6px;
+      letter-spacing: .04em;
+      white-space: nowrap;
+    }
+    .logo-text {
+      font-size: 1rem;
+      font-weight: 900;
+      color: var(--text);
+      letter-spacing: .02em;
+    }
+    .logo-text span { color: var(--green); }
+    .nav-links { display: flex; gap: 24px; }
+    .nav-links a {
+      color: var(--text-light);
+      text-decoration: none;
+      font-size: .88rem;
+      font-weight: 500;
+      transition: color .2s;
+    }
+    .nav-links a:hover { color: var(--green); }
+    .nav-cta {
+      background: var(--green);
+      color: white;
+      border: none;
+      padding: 10px 22px;
+      border-radius: 50px;
+      font-size: .88rem;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: 'Noto Sans JP', sans-serif;
+      transition: background .2s, transform .15s;
+    }
+    .nav-cta:hover { background: var(--green-dark); transform: translateY(-1px); }
+
+    /* ─── HERO ─── */
+    .hero {
+      min-height: 100vh;
+      padding: 130px 6% 90px;
+      background: var(--bg);
+      position: relative;
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+    }
+    .hero-blob1 {
+      width: 520px; height: 520px;
+      background: var(--green-light);
+      top: -100px; right: -120px;
+    }
+    .hero-blob2 {
+      width: 320px; height: 320px;
+      background: var(--orange-light);
+      bottom: 40px; left: -80px;
+      opacity: .22;
+    }
+    .hero-content { position: relative; z-index: 1; max-width: 620px; }
+
+    .osaka-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--green-light);
+      color: var(--green-dark);
+      font-size: .8rem;
+      font-weight: 700;
+      padding: 5px 14px;
+      border-radius: 50px;
+      margin-bottom: 20px;
+      border: 1px solid rgba(0,110,60,.2);
+    }
+    .osaka-badge::before { content: "🌿"; font-size: .85rem; }
+
+    .hero h1 {
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 900;
+      line-height: 1.3;
+      margin-bottom: 20px;
+      letter-spacing: -.01em;
+    }
+    .hero h1 em {
+      font-style: normal;
+      color: var(--green);
+    }
+    .hero p {
+      font-size: 1.05rem;
+      color: var(--text-light);
+      margin-bottom: 36px;
+      max-width: 500px;
+    }
+
+    .hero-btns { display: flex; gap: 14px; flex-wrap: wrap; }
+    .btn-primary {
+      background: var(--green);
+      color: white;
+      border: none;
+      padding: 16px 32px;
+      border-radius: 50px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: 'Noto Sans JP', sans-serif;
+      transition: background .2s, transform .15s, box-shadow .2s;
+      box-shadow: 0 6px 24px rgba(0,110,60,.25);
+      text-decoration: none;
+      display: inline-block;
+    }
+    .btn-primary:hover {
+      background: var(--green-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px rgba(0,110,60,.35);
+    }
+    .btn-secondary {
+      background: transparent;
+      color: var(--green);
+      border: 2px solid var(--green);
+      padding: 14px 28px;
+      border-radius: 50px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: 'Noto Sans JP', sans-serif;
+      transition: background .2s, transform .15s;
+      text-decoration: none;
+      display: inline-block;
+    }
+    .btn-secondary:hover {
+      background: var(--green-pale);
+      transform: translateY(-2px);
+    }
+
+    /* ─── STATS BAR ─── */
+    .stats-bar {
+      background: var(--green);
+      color: white;
+      display: flex;
+      justify-content: center;
+      gap: 60px;
+      padding: 28px 6%;
+      flex-wrap: wrap;
+    }
+    .stat-item { text-align: center; }
+    .stat-num {
+      font-size: 1.9rem;
+      font-weight: 900;
+      letter-spacing: -.02em;
+      display: block;
+    }
+    .stat-label { font-size: .8rem; opacity: .85; }
+
+    /* ─── SECTION COMMON ─── */
+    section { padding: 80px 6%; }
+
+    .section-label {
+      display: inline-block;
+      background: var(--green-light);
+      color: var(--green-dark);
+      font-size: .78rem;
+      font-weight: 700;
+      padding: 4px 14px;
+      border-radius: 50px;
+      margin-bottom: 12px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+    .section-title {
+      font-size: clamp(1.5rem, 3vw, 2.1rem);
+      font-weight: 900;
+      margin-bottom: 10px;
+      letter-spacing: -.01em;
+    }
+    .section-sub {
+      color: var(--text-light);
+      font-size: .95rem;
+      margin-bottom: 48px;
+    }
+
+    /* ─── CATEGORIES ─── */
+    .categories { background: white; }
+    .categories-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 20px;
+    }
+    .cat-card {
+      background: var(--bg);
+      border-radius: var(--radius-card);
+      padding: 28px 24px;
+      border: 1.5px solid transparent;
+      transition: border-color .2s, transform .2s, box-shadow .2s;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    .cat-card:hover {
+      border-color: var(--green);
+      transform: translateY(-4px);
+      box-shadow: 0 12px 32px rgba(0,110,60,.12);
+    }
+    .cat-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--green), var(--green-mid));
+      opacity: 0;
+      transition: opacity .2s;
+    }
+    .cat-card:hover::before { opacity: 1; }
+    .cat-icon {
+      font-size: 2.4rem;
+      margin-bottom: 12px;
+      display: block;
+    }
+    .cat-name {
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 6px;
+      color: var(--text);
+    }
+    .cat-desc {
+      font-size: .8rem;
+      color: var(--text-light);
+      line-height: 1.6;
+      margin-bottom: 12px;
+    }
+    .cat-tag {
+      font-size: .72rem;
+      font-weight: 700;
+      color: var(--green);
+      background: var(--green-light);
+      padding: 2px 10px;
+      border-radius: 50px;
+      display: inline-block;
+    }
+
+    /* ─── PICKUP ─── */
+    .pickup { background: var(--bg); }
+    .pickup-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 24px;
+    }
+    .pickup-card {
+      background: white;
+      border-radius: var(--radius-card);
+      padding: 28px;
+      border-left: 5px solid var(--green);
+      box-shadow: 0 4px 16px rgba(0,0,0,.06);
+      transition: transform .2s, box-shadow .2s;
+    }
+    .pickup-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 28px rgba(0,0,0,.1);
+    }
+    .pickup-badge {
+      font-size: .7rem;
+      font-weight: 700;
+      background: var(--orange-light);
+      color: var(--orange);
+      padding: 2px 10px;
+      border-radius: 50px;
+      display: inline-block;
+      margin-bottom: 10px;
+    }
+    .pickup-title {
+      font-size: .98rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    .pickup-desc {
+      font-size: .82rem;
+      color: var(--text-light);
+      line-height: 1.65;
+      margin-bottom: 14px;
+    }
+    .pickup-amount {
+      font-size: 1.1rem;
+      font-weight: 900;
+      color: var(--green);
+    }
+    .pickup-amount span { font-size: .78rem; font-weight: 500; color: var(--text-light); margin-left: 4px; }
+
+    /* ─── FEATURES ─── */
+    .features { background: white; }
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 24px;
+    }
+    .feat-card {
+      background: var(--green-pale);
+      border-radius: var(--radius-card);
+      padding: 30px 24px;
+      text-align: center;
+    }
+    .feat-icon {
+      font-size: 2.2rem;
+      margin-bottom: 14px;
+      display: block;
+    }
+    .feat-title {
+      font-size: .95rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    .feat-desc {
+      font-size: .82rem;
+      color: var(--text-light);
+      line-height: 1.65;
+    }
+
+    /* ─── HOW TO ─── */
+    .howto { background: var(--bg); }
+    .howto-steps {
+      display: flex;
+      gap: 0;
+      align-items: stretch;
+      flex-wrap: wrap;
+    }
+    .step {
+      flex: 1 1 200px;
+      background: white;
+      border-radius: var(--radius-card);
+      padding: 32px 24px;
+      text-align: center;
+      position: relative;
+    }
+    .step:not(:last-child)::after {
+      content: '→';
+      position: absolute;
+      right: -20px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 1.5rem;
+      color: var(--green-light);
+      z-index: 2;
+    }
+    .step + .step { margin-left: 16px; }
+    .step-num {
+      width: 42px; height: 42px;
+      background: var(--green);
+      color: white;
+      border-radius: 50%;
+      font-size: 1.1rem;
+      font-weight: 900;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 14px;
+    }
+    .step-title {
+      font-size: .92rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    .step-desc {
+      font-size: .8rem;
+      color: var(--text-light);
+      line-height: 1.6;
+    }
+
+    /* ─── CTA SECTION ─── */
+    .cta-section {
+      background: linear-gradient(135deg, var(--green-dark) 0%, var(--green) 60%, var(--green-mid) 100%);
+      color: white;
+      text-align: center;
+      padding: 80px 6%;
+      position: relative;
+      overflow: hidden;
+    }
+    .cta-section::before {
+      content: '';
+      position: absolute;
+      width: 600px; height: 600px;
+      border-radius: 50%;
+      background: rgba(255,255,255,.05);
+      top: -200px; right: -150px;
+    }
+    .cta-section h2 {
+      font-size: clamp(1.5rem, 3vw, 2.2rem);
+      font-weight: 900;
+      margin-bottom: 14px;
+      position: relative;
+      z-index: 1;
+    }
+    .cta-section p {
+      font-size: 1rem;
+      opacity: .88;
+      margin-bottom: 36px;
+      position: relative;
+      z-index: 1;
+    }
+    .cta-btns { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; position: relative; z-index: 1; }
+    .btn-white {
+      background: white;
+      color: var(--green-dark);
+      border: none;
+      padding: 16px 36px;
+      border-radius: 50px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: 'Noto Sans JP', sans-serif;
+      transition: transform .15s, box-shadow .2s;
+      box-shadow: 0 6px 20px rgba(0,0,0,.15);
+      text-decoration: none;
+      display: inline-block;
+    }
+    .btn-white:hover { transform: translateY(-2px); box-shadow: 0 10px 28px rgba(0,0,0,.22); }
+    .btn-outline-white {
+      background: transparent;
+      color: white;
+      border: 2px solid rgba(255,255,255,.7);
+      padding: 14px 32px;
+      border-radius: 50px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: 'Noto Sans JP', sans-serif;
+      transition: background .2s, transform .15s;
+      text-decoration: none;
+      display: inline-block;
+    }
+    .btn-outline-white:hover { background: rgba(255,255,255,.12); transform: translateY(-2px); }
+
+    /* ─── LINKS ─── */
+    .links-section { background: white; }
+    .links-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 16px;
+    }
+    .link-card {
+      border: 1.5px solid var(--green-light);
+      border-radius: 14px;
+      padding: 18px 20px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      text-decoration: none;
+      color: var(--text);
+      transition: border-color .2s, background .2s, transform .15s;
+    }
+    .link-card:hover {
+      border-color: var(--green);
+      background: var(--green-pale);
+      transform: translateX(4px);
+    }
+    .link-icon { font-size: 1.6rem; flex-shrink: 0; }
+    .link-name { font-size: .88rem; font-weight: 700; margin-bottom: 2px; }
+    .link-note { font-size: .75rem; color: var(--text-light); }
+    .link-arrow { margin-left: auto; color: var(--green); font-size: 1.1rem; }
+
+    /* ─── FOOTER ─── */
+    footer {
+      background: var(--green-dark);
+      color: rgba(255,255,255,.8);
+      padding: 48px 6% 28px;
+    }
+    .footer-top {
+      display: flex;
+      gap: 48px;
+      flex-wrap: wrap;
+      margin-bottom: 32px;
+      padding-bottom: 32px;
+      border-bottom: 1px solid rgba(255,255,255,.12);
+    }
+    .footer-brand { flex: 1 1 220px; }
+    .footer-logo {
+      font-size: 1.1rem;
+      font-weight: 900;
+      color: white;
+      margin-bottom: 10px;
+    }
+    .footer-logo span { color: #6EE095; }
+    .footer-tagline { font-size: .8rem; opacity: .7; line-height: 1.7; }
+    .footer-col { flex: 1 1 160px; }
+    .footer-col h4 { color: white; font-size: .85rem; margin-bottom: 14px; }
+    .footer-col ul { list-style: none; }
+    .footer-col li { margin-bottom: 8px; }
+    .footer-col a { color: rgba(255,255,255,.65); text-decoration: none; font-size: .8rem; transition: color .2s; }
+    .footer-col a:hover { color: white; }
+    .footer-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .footer-note { font-size: .72rem; opacity: .55; max-width: 600px; line-height: 1.65; }
+    .footer-copy { font-size: .75rem; opacity: .5; }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .hero { padding: 110px 5% 60px; }
+      .stats-bar { gap: 30px; }
+      .step:not(:last-child)::after { display: none; }
+      .step + .step { margin-left: 0; margin-top: 12px; }
+      .howto-steps { flex-direction: column; }
+    }
+
+    /* ─── DIAGNOSIS FORM ─── */
+    .diag-wrap {
+      max-width: 680px;
+      margin: 0 auto;
+    }
+    .diag-progress {
+      display: flex;
+      justify-content: center;
+      gap: 0;
+      margin-bottom: 36px;
+    }
+    .diag-step-dot {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+    }
+    .diag-step-dot .dot {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      background: var(--green-light);
+      color: var(--green-dark);
+      font-weight: 900;
+      font-size: .9rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 2px solid transparent;
+      transition: background .3s, color .3s;
+    }
+    .diag-step-dot.active .dot {
+      background: var(--green);
+      color: white;
+    }
+    .diag-step-dot.done .dot {
+      background: var(--green-dark);
+      color: white;
+    }
+    .diag-step-dot .dot-label {
+      font-size: .68rem;
+      color: var(--text-light);
+      white-space: nowrap;
+    }
+    .diag-step-dot.active .dot-label { color: var(--green); font-weight: 700; }
+    .diag-connector {
+      width: 60px;
+      height: 2px;
+      background: var(--green-light);
+      align-self: center;
+      margin-bottom: 20px;
+      transition: background .3s;
+    }
+    .diag-connector.done { background: var(--green-dark); }
+
+    .diag-panel {
+      background: white;
+      border-radius: var(--radius-card);
+      padding: 36px 40px;
+      box-shadow: 0 6px 28px rgba(0,110,60,.1);
+      display: none;
+    }
+    .diag-panel.active { display: block; }
+
+    .diag-panel h3 {
+      font-size: 1.1rem;
+      font-weight: 900;
+      margin-bottom: 24px;
+      color: var(--green-dark);
+    }
+    .diag-field { margin-bottom: 20px; }
+    .diag-field label {
+      display: block;
+      font-size: .85rem;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+    .diag-field select,
+    .diag-field input[type="number"] {
+      width: 100%;
+      padding: 12px 16px;
+      border: 1.5px solid #d0e8d9;
+      border-radius: 10px;
+      font-size: .92rem;
+      font-family: 'Noto Sans JP', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      outline: none;
+      transition: border-color .2s;
+    }
+    .diag-field select:focus,
+    .diag-field input:focus { border-color: var(--green); }
+
+    .diag-checks {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .diag-check-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--bg);
+      border: 1.5px solid #d0e8d9;
+      border-radius: 50px;
+      padding: 8px 16px;
+      font-size: .82rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: border-color .2s, background .2s;
+      user-select: none;
+    }
+    .diag-check-label input { display: none; }
+    .diag-check-label.checked {
+      border-color: var(--green);
+      background: var(--green-light);
+      color: var(--green-dark);
+      font-weight: 700;
+    }
+
+    .diag-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 28px;
+    }
+    .btn-diag-next {
+      background: var(--green);
+      color: white;
+      border: none;
+      padding: 13px 32px;
+      border-radius: 50px;
+      font-size: .92rem;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: 'Noto Sans JP', sans-serif;
+      transition: background .2s, transform .15s;
+      margin-left: auto;
+    }
+    .btn-diag-next:hover { background: var(--green-dark); transform: translateY(-1px); }
+    .btn-diag-back {
+      background: transparent;
+      color: var(--text-light);
+      border: 1.5px solid #ccc;
+      padding: 11px 24px;
+      border-radius: 50px;
+      font-size: .88rem;
+      font-weight: 500;
+      cursor: pointer;
+      font-family: 'Noto Sans JP', sans-serif;
+      transition: border-color .2s;
+    }
+    .btn-diag-back:hover { border-color: var(--green); color: var(--green); }
+
+    /* results */
+    #diag-results { display: none; }
+    #diag-results.active { display: block; }
+    .result-count {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+    .result-count strong { color: var(--green); font-size: 1.6rem; }
+    .result-count p { color: var(--text-light); font-size: .88rem; }
+
+    .result-card {
+      background: white;
+      border-radius: 16px;
+      padding: 22px 26px;
+      border-left: 5px solid var(--green);
+      box-shadow: 0 4px 16px rgba(0,0,0,.06);
+      margin-bottom: 16px;
+    }
+    .result-card-head {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 8px;
+      flex-wrap: wrap;
+    }
+    .result-cat {
+      font-size: .7rem;
+      font-weight: 700;
+      background: var(--green-light);
+      color: var(--green-dark);
+      padding: 2px 10px;
+      border-radius: 50px;
+    }
+    .result-title {
+      font-size: .98rem;
+      font-weight: 700;
+    }
+    .result-desc {
+      font-size: .82rem;
+      color: var(--text-light);
+      line-height: 1.65;
+      margin-bottom: 10px;
+    }
+    .result-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .result-amount {
+      font-size: 1rem;
+      font-weight: 900;
+      color: var(--green);
+    }
+    .result-amount span { font-size: .75rem; font-weight: 400; color: var(--text-light); margin-left: 4px; }
+
+    .no-result {
+      text-align: center;
+      padding: 40px;
+      color: var(--text-light);
+      font-size: .9rem;
+    }
+    .btn-retry {
+      display: inline-block;
+      margin-top: 16px;
+      background: var(--green);
+      color: white;
+      border: none;
+      padding: 12px 28px;
+      border-radius: 50px;
+      font-size: .9rem;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: 'Noto Sans JP', sans-serif;
+    }
+
+    @media (max-width: 600px) {
+      .diag-panel { padding: 24px 20px; }
+      .diag-connector { width: 32px; }
+    }
+
+    /* ─── CART BUTTON ─── */
+    .btn-cart-add {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--green);
+      color: white;
+      border: none;
+      padding: 9px 20px;
+      border-radius: 50px;
+      font-size: .82rem;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: 'Noto Sans JP', sans-serif;
+      transition: background .2s, transform .15s, box-shadow .2s;
+      box-shadow: 0 3px 10px rgba(0,110,60,.2);
+    }
+    .btn-cart-add:hover { background: var(--green-dark); transform: translateY(-1px); }
+    .btn-cart-add.in-cart {
+      background: #ccc;
+      color: #666;
+      box-shadow: none;
+      cursor: default;
+    }
+    .btn-cart-add.bounce {
+      animation: cartBounce .4s ease;
+    }
+    @keyframes cartBounce {
+      0%   { transform: scale(1); }
+      40%  { transform: scale(1.18) translateY(-2px); }
+      70%  { transform: scale(0.95); }
+      100% { transform: scale(1); }
+    }
+
+    /* ─── NAV CART ICON ─── */
+    .nav-cart-btn {
+      position: relative;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      font-size: 1.5rem;
+      line-height: 1;
+      padding: 4px 8px;
+      transition: transform .15s;
+    }
+    .nav-cart-btn:hover { transform: scale(1.1); }
+    .cart-badge {
+      position: absolute;
+      top: -4px; right: -4px;
+      background: var(--orange);
+      color: white;
+      font-size: .65rem;
+      font-weight: 900;
+      width: 18px; height: 18px;
+      border-radius: 50%;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Lato', sans-serif;
+    }
+    .cart-badge.visible { display: flex; }
+
+    /* ─── CART DRAWER ─── */
+    .cart-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.4);
+      z-index: 300;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .3s;
+    }
+    .cart-overlay.open { opacity: 1; pointer-events: all; }
+
+    .cart-drawer {
+      position: fixed;
+      top: 0; right: 0; bottom: 0;
+      width: min(440px, 100vw);
+      background: white;
+      z-index: 301;
+      display: flex;
+      flex-direction: column;
+      transform: translateX(100%);
+      transition: transform .35s cubic-bezier(.4,0,.2,1);
+      box-shadow: -8px 0 32px rgba(0,0,0,.15);
+    }
+    .cart-drawer.open { transform: translateX(0); }
+
+    .cart-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 24px;
+      border-bottom: 1px solid #eee;
+      flex-shrink: 0;
+    }
+    .cart-header h2 {
+      font-size: 1.05rem;
+      font-weight: 900;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .cart-close {
+      background: none;
+      border: none;
+      font-size: 1.4rem;
+      cursor: pointer;
+      color: var(--text-light);
+      line-height: 1;
+      transition: color .2s;
+    }
+    .cart-close:hover { color: var(--text); }
+
+    .cart-body {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px 24px;
+    }
+
+    .cart-empty {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--text-light);
+    }
+    .cart-empty .empty-icon { font-size: 3rem; margin-bottom: 12px; display: block; }
+    .cart-empty p { font-size: .88rem; line-height: 1.7; }
+
+    .cart-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 14px 0;
+      border-bottom: 1px solid #f0f0f0;
+    }
+    .cart-item-cat {
+      font-size: .68rem;
+      font-weight: 700;
+      background: var(--green-light);
+      color: var(--green-dark);
+      padding: 2px 9px;
+      border-radius: 50px;
+      white-space: nowrap;
+      margin-top: 2px;
+    }
+    .cart-item-info { flex: 1; }
+    .cart-item-title { font-size: .9rem; font-weight: 700; margin-bottom: 3px; }
+    .cart-item-amount { font-size: .78rem; color: var(--green); font-weight: 700; }
+    .cart-item-remove {
+      background: none;
+      border: none;
+      color: #bbb;
+      font-size: 1.1rem;
+      cursor: pointer;
+      padding: 2px 4px;
+      transition: color .2s;
+      flex-shrink: 0;
+    }
+    .cart-item-remove:hover { color: var(--orange); }
+
+    .cart-footer {
+      flex-shrink: 0;
+      padding: 20px 24px;
+      border-top: 1px solid #eee;
+      background: var(--bg);
+    }
+    .cart-summary {
+      font-size: .82rem;
+      color: var(--text-light);
+      margin-bottom: 16px;
+      text-align: center;
+    }
+    .cart-summary strong { color: var(--green); font-size: 1rem; }
+
+    .cart-action-self {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      background: var(--green);
+      color: white;
+      border: none;
+      padding: 15px;
+      border-radius: 12px;
+      font-size: .95rem;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: 'Noto Sans JP', sans-serif;
+      transition: background .2s, transform .15s;
+      margin-bottom: 10px;
+      text-decoration: none;
+    }
+    .cart-action-self:hover { background: var(--green-dark); transform: translateY(-1px); }
+
+    .cart-action-pro {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      background: white;
+      color: var(--orange);
+      border: 2px solid var(--orange);
+      padding: 13px;
+      border-radius: 12px;
+      font-size: .95rem;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: 'Noto Sans JP', sans-serif;
+      transition: background .2s, transform .15s;
+      margin-bottom: 10px;
+    }
+    .cart-action-pro:hover { background: var(--orange-light); transform: translateY(-1px); }
+
+    .cart-action-note {
+      font-size: .72rem;
+      color: var(--text-light);
+      text-align: center;
+      line-height: 1.6;
+    }
+
+    /* ─── PRO MODAL ─── */
+    .pro-modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.5);
+      z-index: 400;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .3s;
+    }
+    .pro-modal-overlay.open { opacity: 1; pointer-events: all; }
+    .pro-modal {
+      background: white;
+      border-radius: 24px;
+      padding: 36px 32px;
+      max-width: 480px;
+      width: 100%;
+      position: relative;
+      transform: scale(.92);
+      transition: transform .3s;
+    }
+    .pro-modal-overlay.open .pro-modal { transform: scale(1); }
+    .pro-modal-close {
+      position: absolute;
+      top: 16px; right: 16px;
+      background: none;
+      border: none;
+      font-size: 1.3rem;
+      cursor: pointer;
+      color: var(--text-light);
+    }
+    .pro-modal h3 {
+      font-size: 1.2rem;
+      font-weight: 900;
+      margin-bottom: 8px;
+      color: var(--green-dark);
+    }
+    .pro-modal .pro-lead {
+      font-size: .88rem;
+      color: var(--text-light);
+      margin-bottom: 20px;
+      line-height: 1.7;
+    }
+    .pro-modal .pro-items {
+      background: var(--bg);
+      border-radius: 12px;
+      padding: 16px 18px;
+      margin-bottom: 20px;
+    }
+    .pro-modal .pro-items p {
+      font-size: .82rem;
+      color: var(--text-light);
+      margin-bottom: 6px;
+      font-weight: 600;
+    }
+    .pro-modal .pro-items ul {
+      font-size: .82rem;
+      padding-left: 16px;
+      color: var(--text);
+      line-height: 1.9;
+    }
+    .pro-contact-form { display: flex; flex-direction: column; gap: 10px; }
+    .pro-contact-form input,
+    .pro-contact-form textarea {
+      width: 100%;
+      padding: 11px 14px;
+      border: 1.5px solid #d0e8d9;
+      border-radius: 10px;
+      font-size: .88rem;
+      font-family: 'Noto Sans JP', sans-serif;
+      outline: none;
+      transition: border-color .2s;
+      background: var(--bg);
+    }
+    .pro-contact-form input:focus,
+    .pro-contact-form textarea:focus { border-color: var(--green); }
+    .pro-contact-form textarea { resize: vertical; min-height: 80px; }
+    .btn-pro-send {
+      background: var(--orange);
+      color: white;
+      border: none;
+      padding: 14px;
+      border-radius: 50px;
+      font-size: .95rem;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: 'Noto Sans JP', sans-serif;
+      transition: background .2s, transform .15s;
+    }
+    .btn-pro-send:hover { background: #c94200; transform: translateY(-1px); }
+    .pro-sent-msg {
+      display: none;
+      text-align: center;
+      padding: 20px 0;
+    }
+    .pro-sent-msg .sent-icon { font-size: 2.5rem; margin-bottom: 10px; display: block; }
+    .pro-sent-msg p { font-size: .9rem; color: var(--text-light); line-height: 1.7; }
+
+    /* ─── SCROLL ANIMATION ─── */
+    .fade-up {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity .55s ease, transform .55s ease;
+    }
+    .fade-up.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── NAV ──────────────────────────────── -->
+<nav>
+  <a href="#" class="logo">
+    <span class="logo-badge">大阪府</span>
+    <span class="logo-text">くらしの<span>InfoHub</span></span>
+  </a>
+  <div class="nav-links">
+    <a href="#categories">制度を探す</a>
+    <a href="#pickup">注目の制度</a>
+    <a href="#links">公式窓口</a>
+  </div>
+  <button class="nav-cart-btn" onclick="openCart()" title="カートを見る">
+    🛒
+    <span class="cart-badge" id="cart-badge">0</span>
+  </button>
+  <button class="nav-cta" onclick="document.getElementById('diagnosis').scrollIntoView({behavior:'smooth'})">
+    かんたん診断
+  </button>
+</nav>
+
+<!-- ── HERO ──────────────────────────────── -->
+<section class="hero">
+  <div class="blob hero-blob1"></div>
+  <div class="blob hero-blob2"></div>
+
+  <div class="hero-content">
+    <div class="osaka-badge">大阪府・大阪市の行政サービス専門</div>
+    <h1>
+      大阪で使える<br>
+      <em>行政サービスを、</em><br>
+      もっとかんたんに。
+    </h1>
+    <p>補助金・給付金・医療助成・住宅支援。大阪府・大阪市・各区市町村の制度を、あなたの状況に合わせてお届けします。</p>
+    <div class="hero-btns">
+      <a href="#diagnosis" class="btn-primary">あなたに合った制度を診断する →</a>
+      <a href="#categories" class="btn-secondary">制度を検索する</a>
+    </div>
+  </div>
+</section>
+
+<!-- ── STATS ──────────────────────────────── -->
+<div class="stats-bar">
+  <div class="stat-item">
+    <span class="stat-num">200<small style="font-size:1.2rem">+</small></span>
+    <span class="stat-label">掲載制度数</span>
+  </div>
+  <div class="stat-item">
+    <span class="stat-num">43</span>
+    <span class="stat-label">対応市町村</span>
+  </div>
+  <div class="stat-item">
+    <span class="stat-num">10</span>
+    <span class="stat-label">カテゴリ</span>
+  </div>
+  <div class="stat-item">
+    <span class="stat-num">0<small style="font-size:1.2rem">円</small></span>
+    <span class="stat-label">完全無料・登録不要</span>
+  </div>
+</div>
+
+<!-- ── CATEGORIES ──────────────────────────────── -->
+<section class="categories" id="categories">
+  <div class="fade-up">
+    <span class="section-label">カテゴリから探す</span>
+    <h2 class="section-title">どんな制度をお探しですか？</h2>
+    <p class="section-sub">大阪府・市町村の制度をカテゴリ別に探せます。</p>
+  </div>
+  <div class="categories-grid">
+
+    <div class="cat-card fade-up">
+      <span class="cat-icon">👶</span>
+      <div class="cat-name">子育て</div>
+      <div class="cat-desc">子ども医療費助成・保育料・児童手当・出産支援金</div>
+      <span class="cat-tag">大阪府独自あり</span>
+    </div>
+
+    <div class="cat-card fade-up">
+      <span class="cat-icon">🏥</span>
+      <div class="cat-name">医療</div>
+      <div class="cat-desc">高額療養費・障がい者医療費助成・後期高齢者医療</div>
+      <span class="cat-tag">無料診断あり</span>
+    </div>
+
+    <div class="cat-card fade-up">
+      <span class="cat-icon">🏠</span>
+      <div class="cat-name">住宅</div>
+      <div class="cat-desc">府営住宅・住宅確保給付金・空き家活用補助</div>
+      <span class="cat-tag">申請サポート</span>
+    </div>
+
+    <div class="cat-card fade-up">
+      <span class="cat-icon">🤝</span>
+      <div class="cat-name">介護</div>
+      <div class="cat-desc">介護保険サービス・家族介護支援・介護予防教室</div>
+      <span class="cat-tag">窓口案内あり</span>
+    </div>
+
+    <div class="cat-card fade-up">
+      <span class="cat-icon">♿</span>
+      <div class="cat-name">障害</div>
+      <div class="cat-desc">障がい者手帳・就労継続支援・グループホーム</div>
+      <span class="cat-tag">相談窓口連携</span>
+    </div>
+
+    <div class="cat-card fade-up">
+      <span class="cat-icon">🎓</span>
+      <div class="cat-name">教育</div>
+      <div class="cat-desc">私立高校授業料無償化（大阪独自）・奨学給付金</div>
+      <span class="cat-tag">大阪府独自あり</span>
+    </div>
+
+    <div class="cat-card fade-up">
+      <span class="cat-icon">💼</span>
+      <div class="cat-name">就労</div>
+      <div class="cat-desc">就業促進給付・職業訓練・シニア就労支援</div>
+      <span class="cat-tag">ハローワーク連携</span>
+    </div>
+
+    <div class="cat-card fade-up">
+      <span class="cat-icon">🌱</span>
+      <div class="cat-name">生活困窮</div>
+      <div class="cat-desc">生活保護・緊急小口資金・住居確保給付金</div>
+      <span class="cat-tag">即日対応可</span>
+    </div>
+
+    <div class="cat-card fade-up">
+      <span class="cat-icon">🧾</span>
+      <div class="cat-name">税金</div>
+      <div class="cat-desc">府民税・市民税の各種控除・減免・猶予制度</div>
+      <span class="cat-tag">控除診断あり</span>
+    </div>
+
+    <div class="cat-card fade-up">
+      <span class="cat-icon">🪙</span>
+      <div class="cat-name">年金</div>
+      <div class="cat-desc">国民年金・厚生年金・保険料免除・納付猶予</div>
+      <span class="cat-tag">免除診断あり</span>
+    </div>
+
+  </div>
+</section>
+
+<!-- ── PICKUP ──────────────────────────────── -->
+<section class="pickup" id="pickup">
+  <div class="fade-up">
+    <span class="section-label">注目の制度</span>
+    <h2 class="section-title">大阪府ならではの支援制度</h2>
+    <p class="section-sub">大阪府・大阪市の独自制度を中心にピックアップしました。</p>
+  </div>
+  <div class="pickup-grid">
+
+    <div class="pickup-card fade-up">
+      <span class="pickup-badge">教育 ★ 大阪府独自</span>
+      <div class="pickup-title">私立高校授業料 実質無償化</div>
+      <div class="pickup-desc">大阪府の独自制度として、所得制限なしで私立高校の授業料を実質無料に。全国初の完全無償化モデル。</div>
+      <div class="pickup-amount">授業料全額<span>（対象校・条件あり）</span></div>
+    </div>
+
+    <div class="pickup-card fade-up">
+      <span class="pickup-badge">子育て ★ 大阪市</span>
+      <div class="pickup-title">子ども医療費助成（18歳まで）</div>
+      <div class="pickup-desc">大阪市では18歳到達後の最初の3月31日まで医療費の自己負担を助成。通院・入院ともに対象。</div>
+      <div class="pickup-amount">自己負担 ほぼ0円<span>（市民税非課税世帯等）</span></div>
+    </div>
+
+    <div class="pickup-card fade-up">
+      <span class="pickup-badge">住宅 ★ 大阪府</span>
+      <div class="pickup-title">大阪府営住宅 入居募集</div>
+      <div class="pickup-desc">低所得・高齢者・障がい者・ひとり親世帯などを対象に府営住宅を提供。家賃は収入に応じて決定。</div>
+      <div class="pickup-amount">家賃 月額 数千円〜<span>（収入基準あり）</span></div>
+    </div>
+
+    <div class="pickup-card fade-up">
+      <span class="pickup-badge">就労 ★ 大阪府</span>
+      <div class="pickup-title">就業促進給付金（大阪府独自）</div>
+      <div class="pickup-desc">大阪府内で再就職した求職者を対象に、就業促進のための一時金を支給。ハローワークと連携して申請。</div>
+      <div class="pickup-amount">最大 10万円<span>（条件・期間あり）</span></div>
+    </div>
+
+    <div class="pickup-card fade-up">
+      <span class="pickup-badge">子育て ★ 大阪府</span>
+      <div class="pickup-title">第2子以降 保育料 無償化</div>
+      <div class="pickup-desc">大阪府では第2子以降の保育料を所得に関わらず無償化。多子世帯の負担を大幅に軽減する独自施策。</div>
+      <div class="pickup-amount">保育料 0円<span>（第2子以降、認可保育所等）</span></div>
+    </div>
+
+    <div class="pickup-card fade-up">
+      <span class="pickup-badge">生活 ★ 大阪市</span>
+      <div class="pickup-title">住居確保給付金</div>
+      <div class="pickup-desc">離職や減収で住居を失う恐れがある方に、一定期間の家賃相当額を支給。大阪市内の相談窓口で受付中。</div>
+      <div class="pickup-amount">最長 12か月分<span>（審査あり）</span></div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ── HOW TO ──────────────────────────────── -->
+<section id="diagnosis" style="background:var(--bg);">
+  <div class="fade-up" style="text-align:center; margin-bottom:40px;">
+    <span class="section-label">かんたん診断</span>
+    <h2 class="section-title">あなたに合った制度を見つける</h2>
+    <p class="section-sub">3ステップの質問に答えるだけ。登録不要・無料。</p>
+  </div>
+
+  <div class="diag-wrap">
+    <!-- プログレス -->
+    <div class="diag-progress">
+      <div class="diag-step-dot active" id="dot-1">
+        <div class="dot">1</div>
+        <span class="dot-label">基本情報</span>
+      </div>
+      <div class="diag-connector" id="conn-1"></div>
+      <div class="diag-step-dot" id="dot-2">
+        <div class="dot">2</div>
+        <span class="dot-label">家族・状況</span>
+      </div>
+      <div class="diag-connector" id="conn-2"></div>
+      <div class="diag-step-dot" id="dot-3">
+        <div class="dot">3</div>
+        <span class="dot-label">お困りごと</span>
+      </div>
+    </div>
+
+    <!-- STEP 1 -->
+    <div class="diag-panel active" id="panel-1">
+      <h3>① あなたの基本情報を教えてください</h3>
+      <div class="diag-field">
+        <label>お住まいの市区町村</label>
+        <select id="d-city">
+          <option value="">-- 選択してください --</option>
+          <optgroup label="大阪市（24区）">
+            <option>大阪市（北区）</option><option>大阪市（都島区）</option>
+            <option>大阪市（福島区）</option><option>大阪市（此花区）</option>
+            <option>大阪市（中央区）</option><option>大阪市（西区）</option>
+            <option>大阪市（港区）</option><option>大阪市（大正区）</option>
+            <option>大阪市（天王寺区）</option><option>大阪市（浪速区）</option>
+            <option>大阪市（西淀川区）</option><option>大阪市（淀川区）</option>
+            <option>大阪市（東淀川区）</option><option>大阪市（東成区）</option>
+            <option>大阪市（生野区）</option><option>大阪市（旭区）</option>
+            <option>大阪市（城東区）</option><option>大阪市（鶴見区）</option>
+            <option>大阪市（阿倍野区）</option><option>大阪市（住之江区）</option>
+            <option>大阪市（住吉区）</option><option>大阪市（東住吉区）</option>
+            <option>大阪市（平野区）</option><option>大阪市（西成区）</option>
+          </optgroup>
+          <optgroup label="その他主要市">
+            <option>堺市</option><option>高槻市</option><option>豊中市</option>
+            <option>枚方市</option><option>東大阪市</option><option>八尾市</option>
+            <option>吹田市</option><option>茨木市</option><option>寝屋川市</option>
+            <option>岸和田市</option><option>摂津市</option><option>箕面市</option>
+            <option>守口市</option><option>門真市</option><option>松原市</option>
+            <option>富田林市</option><option>河内長野市</option><option>大東市</option>
+            <option>その他の市町村</option>
+          </optgroup>
+        </select>
+      </div>
+      <div class="diag-field">
+        <label>あなたの年齢</label>
+        <input type="number" id="d-age" min="0" max="110" placeholder="例：35" />
+      </div>
+      <div class="diag-field">
+        <label>性別</label>
+        <select id="d-gender">
+          <option value="">-- 選択してください --</option>
+          <option value="male">男性</option>
+          <option value="female">女性</option>
+          <option value="other">回答しない</option>
+        </select>
+      </div>
+      <div class="diag-nav">
+        <button class="btn-diag-next" onclick="diagNext(1)">次へ →</button>
+      </div>
+    </div>
+
+    <!-- STEP 2 -->
+    <div class="diag-panel" id="panel-2">
+      <h3>② 家族構成・世帯状況を教えてください</h3>
+      <div class="diag-field">
+        <label>世帯構成</label>
+        <select id="d-family">
+          <option value="">-- 選択してください --</option>
+          <option value="single">一人暮らし</option>
+          <option value="couple">夫婦のみ</option>
+          <option value="child">子どもあり（未成年）</option>
+          <option value="single_parent">ひとり親世帯</option>
+          <option value="elder">高齢者と同居</option>
+          <option value="other">その他</option>
+        </select>
+      </div>
+      <div class="diag-field">
+        <label>子どもの人数（いない場合は0）</label>
+        <input type="number" id="d-kids" min="0" max="20" placeholder="0" value="0" />
+      </div>
+      <div class="diag-field">
+        <label>おおよその世帯年収</label>
+        <select id="d-income">
+          <option value="">-- 選択してください --</option>
+          <option value="low">200万円未満</option>
+          <option value="mid-low">200〜400万円</option>
+          <option value="mid">400〜600万円</option>
+          <option value="mid-high">600〜800万円</option>
+          <option value="high">800万円以上</option>
+        </select>
+      </div>
+      <div class="diag-nav">
+        <button class="btn-diag-back" onclick="diagBack(2)">← 戻る</button>
+        <button class="btn-diag-next" onclick="diagNext(2)">次へ →</button>
+      </div>
+    </div>
+
+    <!-- STEP 3 -->
+    <div class="diag-panel" id="panel-3">
+      <h3>③ 現在のお困りごとを選んでください（複数可）</h3>
+      <div class="diag-field">
+        <div class="diag-checks" id="d-concerns">
+          <label class="diag-check-label"><input type="checkbox" value="childcare">👶 子育て・保育</label>
+          <label class="diag-check-label"><input type="checkbox" value="medical">🏥 医療費・健康</label>
+          <label class="diag-check-label"><input type="checkbox" value="housing">🏠 住まい・家賃</label>
+          <label class="diag-check-label"><input type="checkbox" value="nursing">🤝 介護</label>
+          <label class="diag-check-label"><input type="checkbox" value="disability">♿ 障害</label>
+          <label class="diag-check-label"><input type="checkbox" value="education">🎓 教育・学費</label>
+          <label class="diag-check-label"><input type="checkbox" value="job">💼 仕事・失業</label>
+          <label class="diag-check-label"><input type="checkbox" value="poverty">🌱 生活費・困窮</label>
+          <label class="diag-check-label"><input type="checkbox" value="tax">🧾 税金・控除</label>
+          <label class="diag-check-label"><input type="checkbox" value="pension">🪙 年金</label>
+        </div>
+      </div>
+      <div class="diag-nav">
+        <button class="btn-diag-back" onclick="diagBack(3)">← 戻る</button>
+        <button class="btn-diag-next" onclick="diagSubmit()">診断結果を見る 🔍</button>
+      </div>
+    </div>
+
+    <!-- RESULTS -->
+    <div id="diag-results">
+      <div class="result-count">
+        <strong id="result-num">0</strong><span style="font-size:1.1rem;font-weight:700;color:var(--green)"> 件</span>
+        <p>あなたに該当する可能性のある制度が見つかりました</p>
+      </div>
+      <div id="result-list"></div>
+      <div style="text-align:center; margin-top:24px;">
+        <button class="btn-retry" onclick="diagReset()">← 条件を変えてもう一度診断する</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── FEATURES ──────────────────────────────── -->
+<section class="features">
+  <div class="fade-up">
+    <span class="section-label">特徴</span>
+    <h2 class="section-title">くらしのInfoHub 大阪版の強み</h2>
+    <p class="section-sub">大阪の行政サービスに特化した4つのポイント。</p>
+  </div>
+  <div class="features-grid">
+    <div class="feat-card fade-up">
+      <span class="feat-icon">🗺️</span>
+      <div class="feat-title">市区町村別で絞り込み</div>
+      <div class="feat-desc">大阪市の24区、堺市、高槻市など43市町村ごとの制度を個別に検索できます。</div>
+    </div>
+    <div class="feat-card fade-up">
+      <span class="feat-icon">⚡</span>
+      <div class="feat-title">大阪独自制度を網羅</div>
+      <div class="feat-desc">全国制度に加え、大阪府・大阪市独自の給付金・助成制度をすべてカバー。</div>
+    </div>
+    <div class="feat-card fade-up">
+      <span class="feat-icon">🔒</span>
+      <div class="feat-title">登録不要・データ非保存</div>
+      <div class="feat-desc">個人情報の登録は一切不要。入力データはサーバーに保存されません。</div>
+    </div>
+    <div class="feat-card fade-up">
+      <span class="feat-icon">📱</span>
+      <div class="feat-title">スマホ完全対応</div>
+      <div class="feat-desc">外出先でもすぐに調べられるモバイル最適化デザイン。窓口に行く前に確認できます。</div>
+    </div>
+  </div>
+</section>
+
+<!-- ── LINKS ──────────────────────────────── -->
+<section class="links-section" id="links">
+  <div class="fade-up">
+    <span class="section-label">公式窓口リンク</span>
+    <h2 class="section-title">大阪府・市の主要窓口</h2>
+    <p class="section-sub">詳細・申請は各公式サイト・窓口でご確認ください。</p>
+  </div>
+  <div class="links-grid fade-up">
+    <a href="https://www.pref.osaka.lg.jp/" target="_blank" rel="noopener" class="link-card">
+      <span class="link-icon">🏛️</span>
+      <div>
+        <div class="link-name">大阪府庁 公式サイト</div>
+        <div class="link-note">pref.osaka.lg.jp</div>
+      </div>
+      <span class="link-arrow">↗</span>
+    </a>
+    <a href="https://www.city.osaka.lg.jp/" target="_blank" rel="noopener" class="link-card">
+      <span class="link-icon">🏙️</span>
+      <div>
+        <div class="link-name">大阪市 公式サイト</div>
+        <div class="link-note">city.osaka.lg.jp</div>
+      </div>
+      <span class="link-arrow">↗</span>
+    </a>
+    <a href="https://www.pref.osaka.lg.jp/fukushi/" target="_blank" rel="noopener" class="link-card">
+      <span class="link-icon">❤️</span>
+      <div>
+        <div class="link-name">大阪府 福祉情報</div>
+        <div class="link-note">福祉・介護・障がい</div>
+      </div>
+      <span class="link-arrow">↗</span>
+    </a>
+    <a href="https://osaka-shien.com/" target="_blank" rel="noopener" class="link-card">
+      <span class="link-icon">🤲</span>
+      <div>
+        <div class="link-name">大阪くらし・つながりサポート</div>
+        <div class="link-note">生活困窮・相談窓口</div>
+      </div>
+      <span class="link-arrow">↗</span>
+    </a>
+    <a href="https://www.pref.osaka.lg.jp/kotogakko/mushouka/" target="_blank" rel="noopener" class="link-card">
+      <span class="link-icon">🎓</span>
+      <div>
+        <div class="link-name">大阪府 高校授業料無償化</div>
+        <div class="link-note">私立高校授業料支援</div>
+      </div>
+      <span class="link-arrow">↗</span>
+    </a>
+    <a href="https://jsite.mhlw.go.jp/osaka-hellowork/" target="_blank" rel="noopener" class="link-card">
+      <span class="link-icon">💼</span>
+      <div>
+        <div class="link-name">ハローワーク大阪</div>
+        <div class="link-note">就労・雇用保険</div>
+      </div>
+      <span class="link-arrow">↗</span>
+    </a>
+  </div>
+</section>
+
+<!-- ── CTA ──────────────────────────────── -->
+<section class="cta-section">
+  <h2>あなたが使える大阪の制度、<br>いくつ知っていますか？</h2>
+  <p>知らないだけで損をしている給付金・助成金があるかもしれません。<br>まずはかんたん診断で確認してみましょう。</p>
+  <div class="cta-btns">
+    <a href="#diagnosis" class="btn-white">かんたん診断をはじめる →</a>
+    <a href="#categories" class="btn-outline-white">カテゴリから探す</a>
+  </div>
+</section>
+
+<!-- ── FOOTER ──────────────────────────────── -->
+<footer>
+  <div class="footer-top">
+    <div class="footer-brand">
+      <div class="footer-logo">大阪くらしの<span>InfoHub</span></div>
+      <p class="footer-tagline">大阪府・大阪市・市町村の行政サービスを<br>あなたの状況に合わせてわかりやすくお届けします。</p>
+    </div>
+    <div class="footer-col">
+      <h4>サービス</h4>
+      <ul>
+        <li><a href="#diagnosis">かんたん診断</a></li>
+        <li><a href="#categories">制度を検索</a></li>
+        <li><a href="#pickup">注目の制度</a></li>
+        <li><a href="#links">公式窓口</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>カテゴリ</h4>
+      <ul>
+        <li><a href="#categories">子育て・医療</a></li>
+        <li><a href="#categories">住宅・介護</a></li>
+        <li><a href="#categories">教育・就労</a></li>
+        <li><a href="#categories">税金・年金</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>大阪の窓口</h4>
+      <ul>
+        <li><a href="https://www.pref.osaka.lg.jp/" target="_blank">大阪府庁</a></li>
+        <li><a href="https://www.city.osaka.lg.jp/" target="_blank">大阪市</a></li>
+        <li><a href="https://jsite.mhlw.go.jp/osaka-hellowork/" target="_blank">ハローワーク大阪</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p class="footer-note">
+      ※ 掲載情報は最新でない場合があります。正確な情報はお住まいの自治体の公式サイトまたは窓口でご確認ください。<br>
+      ※ 本サイトは行政機関の公式サイトではありません。情報提供を目的としており、申請の代行は行いません。
+    </p>
+    <span class="footer-copy">© 2025 大阪くらしのInfoHub</span>
+  </div>
+</footer>
+
+<!-- ── CART OVERLAY + DRAWER ──────────────────── -->
+<div class="cart-overlay" id="cart-overlay" onclick="closeCart()"></div>
+<div class="cart-drawer" id="cart-drawer">
+  <div class="cart-header">
+    <h2>🛒 制度カート <span id="cart-count-label" style="color:var(--green);font-size:.85rem;font-weight:700;"></span></h2>
+    <button class="cart-close" onclick="closeCart()">✕</button>
+  </div>
+  <div class="cart-body" id="cart-body">
+    <div class="cart-empty" id="cart-empty">
+      <span class="empty-icon">🛒</span>
+      <p>カートはまだ空です。<br>診断結果から気になる制度を<br>カートに入れてみましょう！</p>
+    </div>
+    <div id="cart-items"></div>
+  </div>
+  <div class="cart-footer" id="cart-footer" style="display:none;">
+    <div class="cart-summary">
+      <strong id="cart-total-count">0</strong> 件の制度をカートに入れています
+    </div>
+    <button class="cart-action-self" onclick="goSelf()">
+      📋 自分で申請してみる
+    </button>
+    <button class="cart-action-pro" onclick="openProModal()">
+      🤝 専門家にまるごとお任せする
+    </button>
+    <p class="cart-action-note">※「専門家にお任せ」は有料サービスです。<br>内容確認後にお見積もりをご案内します。</p>
+  </div>
+</div>
+
+<!-- ── PRO MODAL ──────────────────────────────── -->
+<div class="pro-modal-overlay" id="pro-modal-overlay" onclick="closeProModal(event)">
+  <div class="pro-modal">
+    <button class="pro-modal-close" onclick="closeProModal()">✕</button>
+    <h3>🤝 専門家にまるごとお任せ</h3>
+    <p class="pro-lead">
+      書類集め・窓口対応・申請手続きをすべて代行します。<br>
+      「面倒くさい」「何から始めたらいいかわからない」という方も安心してお任せください。
+    </p>
+    <div class="pro-items" id="pro-items-list">
+      <p>カートの制度：</p>
+      <ul id="pro-cart-list"></ul>
+    </div>
+    <div id="pro-form-area">
+      <div class="pro-contact-form">
+        <input type="text" id="pro-name" placeholder="お名前" />
+        <input type="tel" id="pro-tel" placeholder="電話番号（例：090-0000-0000）" />
+        <input type="email" id="pro-email" placeholder="メールアドレス" />
+        <textarea id="pro-memo" placeholder="ご要望・ご状況など（任意）"></textarea>
+        <button class="btn-pro-send" onclick="sendProRequest()">📨 相談リクエストを送る</button>
+      </div>
+    </div>
+    <div class="pro-sent-msg" id="pro-sent-msg">
+      <span class="sent-icon">✅</span>
+      <p>リクエストを受け付けました！<br>担当者から1〜2営業日以内にご連絡いたします。<br>しばらくお待ちください。</p>
+    </div>
+  </div>
+</div>
+
+<!-- ── JS ──────────────────────────────── -->
+<script>
+  // スクロールアニメーション
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12 });
+
+  document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+  // チェックボックス選択ハイライト
+  document.querySelectorAll('.diag-check-label').forEach(label => {
+    label.addEventListener('click', () => {
+      const cb = label.querySelector('input');
+      // click後にchecked状態が切り替わるので次のtickで判定
+      setTimeout(() => {
+        label.classList.toggle('checked', cb.checked);
+      }, 0);
+    });
+  });
+
+  // スムーススクロール
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      const id = a.getAttribute('href').slice(1);
+      const target = document.getElementById(id);
+      if (target) {
+        e.preventDefault();
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
+  });
+
+  // ─── かんたん診断 ───────────────────────────
+  const PROGRAMS = [
+    // 子育て
+    { cat:'子育て', title:'児童手当', desc:'中学校卒業まで（15歳到達後の最初の3月末まで）の児童を養育している方に支給。', amount:'月額 1万〜1.5万円', concerns:['childcare'], incomes:['low','mid-low','mid','mid-high','high'], minKids:1, minAge:0, maxAge:80 },
+    { cat:'子育て', title:'大阪市 子ども医療費助成（18歳まで）', desc:'大阪市在住の18歳までの子どもの医療費（通院・入院）を助成。自己負担がほぼ0に。', amount:'自己負担 ほぼ0円', concerns:['childcare','medical'], incomes:['low','mid-low','mid','mid-high','high'], minKids:1, minAge:0, maxAge:80, city:'大阪市' },
+    { cat:'子育て', title:'第2子以降 保育料 無償化（大阪府）', desc:'大阪府独自。第2子以降の認可保育所等の保育料を所得に関わらず無償化。', amount:'保育料 0円', concerns:['childcare'], incomes:['low','mid-low','mid','mid-high','high'], minKids:2, minAge:20, maxAge:50 },
+    { cat:'子育て', title:'ひとり親家庭 医療費助成', desc:'ひとり親家庭の親と18歳未満の子どもの医療費を助成。', amount:'医療費 自己負担なし', concerns:['childcare','medical'], incomes:['low','mid-low','mid'], minKids:1, minAge:0, maxAge:60, family:'single_parent' },
+    { cat:'子育て', title:'出産育児一時金', desc:'健康保険加入者が出産した際に支給される給付金。', amount:'50万円（産科医療補償制度加算含む）', concerns:['childcare'], incomes:['low','mid-low','mid','mid-high','high'], minKids:0, minAge:18, maxAge:50 },
+
+    // 医療
+    { cat:'医療', title:'高額療養費制度', desc:'1か月の医療費の自己負担が上限額を超えた場合に、超過分が払い戻される制度。', amount:'上限超過分を払い戻し', concerns:['medical'], incomes:['low','mid-low','mid','mid-high','high'], minKids:0, minAge:0, maxAge:110 },
+    { cat:'医療', title:'後期高齢者医療制度', desc:'75歳以上の方が加入する医療保険制度。窓口負担は原則1割。', amount:'窓口負担 1〜3割', concerns:['medical'], incomes:['low','mid-low','mid','mid-high','high'], minKids:0, minAge:75, maxAge:110 },
+    { cat:'医療', title:'障がい者医療費助成（大阪府）', desc:'身体・知的・精神障がいのある方の医療費を助成。手帳の等級により異なる。', amount:'医療費 一部〜全額助成', concerns:['medical','disability'], incomes:['low','mid-low','mid'], minKids:0, minAge:0, maxAge:110 },
+
+    // 住宅
+    { cat:'住宅', title:'大阪府営住宅 入居募集', desc:'低所得・高齢者・障がい者・ひとり親などを対象に、低家賃の府営住宅を提供。', amount:'家賃 月額 数千円〜', concerns:['housing'], incomes:['low','mid-low'], minKids:0, minAge:0, maxAge:110 },
+    { cat:'住宅', title:'住居確保給付金', desc:'離職・減収で家賃が払えない恐れがある方に、家賃相当額を最長12か月支給。', amount:'最長 12か月分', concerns:['housing','poverty'], incomes:['low','mid-low'], minKids:0, minAge:18, maxAge:65 },
+    { cat:'住宅', title:'住宅ローン控除（住宅借入金等特別控除）', desc:'住宅ローンを組んで住宅を取得した場合、所得税・住民税から一定額を控除。', amount:'年間 最大35万円控除', concerns:['housing','tax'], incomes:['mid','mid-high','high'], minKids:0, minAge:20, maxAge:70 },
+
+    // 介護
+    { cat:'介護', title:'介護保険サービス', desc:'要介護認定を受けた方がホームヘルプ・デイサービス等を1〜3割負担で利用可。', amount:'自己負担 1〜3割', concerns:['nursing'], incomes:['low','mid-low','mid','mid-high','high'], minKids:0, minAge:40, maxAge:110 },
+    { cat:'介護', title:'家族介護慰労金（大阪市）', desc:'要介護4・5の方を在宅で介護している家族に年間慰労金を支給。', amount:'年間 最大10万円', concerns:['nursing'], incomes:['low','mid-low','mid'], minKids:0, minAge:0, maxAge:110, city:'大阪市' },
+
+    // 障害
+    { cat:'障害', title:'障害年金', desc:'病気・ケガで一定の障がい状態にある方が受給できる公的年金。', amount:'月額 約5〜16万円', concerns:['disability'], incomes:['low','mid-low','mid','mid-high','high'], minKids:0, minAge:20, maxAge:64 },
+    { cat:'障害', title:'特別障害者手当', desc:'著しく重度の障がいを持つ20歳以上の在宅の方に支給。', amount:'月額 約2.8万円', concerns:['disability'], incomes:['low','mid-low'], minKids:0, minAge:20, maxAge:110 },
+
+    // 教育
+    { cat:'教育', title:'私立高校授業料 実質無償化（大阪府独自）', desc:'大阪府の独自制度で、所得制限なく私立高校の授業料を実質無料に。全国初。', amount:'授業料 全額', concerns:['education'], incomes:['low','mid-low','mid','mid-high','high'], minKids:1, minAge:30, maxAge:60 },
+    { cat:'教育', title:'高等学校等就学支援金', desc:'国の制度。年収910万円未満世帯の高校生に授業料を支援。', amount:'年間 最大39.6万円', concerns:['education'], incomes:['low','mid-low','mid'], minKids:1, minAge:25, maxAge:60 },
+    { cat:'教育', title:'大学無償化（高等教育の修学支援）', desc:'住民税非課税世帯等の学生に授業料減免＋給付型奨学金。', amount:'授業料減免＋給付型奨学金', concerns:['education'], incomes:['low','mid-low'], minKids:1, minAge:25, maxAge:60 },
+
+    // 就労
+    { cat:'就労', title:'雇用保険（基本手当・失業給付）', desc:'離職した方に一定期間、生活を安定させるための給付金を支給。', amount:'賃金日額の50〜80%', concerns:['job'], incomes:['low','mid-low','mid','mid-high','high'], minKids:0, minAge:18, maxAge:65 },
+    { cat:'就労', title:'就業促進給付金（大阪府独自）', desc:'大阪府内で再就職した求職者への一時金。ハローワーク経由で申請。', amount:'最大 10万円', concerns:['job'], incomes:['low','mid-low','mid'], minKids:0, minAge:18, maxAge:65 },
+    { cat:'就労', title:'職業訓練（ハロートレーニング）', desc:'求職中の方が無料でITや介護等のスキルを身につけられる国の訓練制度。', amount:'受講料 無料', concerns:['job'], incomes:['low','mid-low','mid','mid-high','high'], minKids:0, minAge:18, maxAge:60 },
+
+    // 生活困窮
+    { cat:'生活困窮', title:'生活保護', desc:'生活に困窮するすべての方に、最低限度の生活を保障。', amount:'生活・住宅・医療扶助', concerns:['poverty'], incomes:['low'], minKids:0, minAge:0, maxAge:110 },
+    { cat:'生活困窮', title:'緊急小口資金（社会福祉協議会）', desc:'緊急かつ一時的な生活困難に対して少額の貸付を行う制度。', amount:'最大 10万円', concerns:['poverty'], incomes:['low','mid-low'], minKids:0, minAge:18, maxAge:110 },
+    { cat:'生活困窮', title:'食料品・生活物資支援（フードバンク大阪）', desc:'生活に困窮する方へ食料品や生活物資の無償提供。大阪府内各所に窓口あり。', amount:'現物支給', concerns:['poverty'], incomes:['low'], minKids:0, minAge:0, maxAge:110 },
+
+    // 税金
+    { cat:'税金', title:'ひとり親控除', desc:'ひとり親で生計を一にする子どもがいる場合、所得税・住民税から控除。', amount:'所得控除 35万円', concerns:['tax'], incomes:['low','mid-low','mid','mid-high'], minKids:1, minAge:0, maxAge:110, family:'single_parent' },
+    { cat:'税金', title:'障害者控除', desc:'本人または扶養親族に障がいがある場合、所得税・住民税から控除。', amount:'所得控除 27〜75万円', concerns:['tax','disability'], incomes:['low','mid-low','mid','mid-high','high'], minKids:0, minAge:0, maxAge:110 },
+    { cat:'税金', title:'医療費控除', desc:'年間10万円超の医療費がある場合、確定申告で所得税・住民税が軽減。', amount:'医療費超過分×税率分', concerns:['tax','medical'], incomes:['low','mid-low','mid','mid-high','high'], minKids:0, minAge:0, maxAge:110 },
+
+    // 年金
+    { cat:'年金', title:'国民年金保険料 免除・猶予', desc:'所得が低い場合、国民年金保険料の全額・一部免除または納付猶予が受けられる。', amount:'保険料 最大全額免除', concerns:['pension'], incomes:['low','mid-low'], minKids:0, minAge:20, maxAge:59 },
+    { cat:'年金', title:'老齢基礎年金', desc:'10年以上の受給資格期間がある65歳以上の方に支給される公的年金。', amount:'満額 月約6.8万円', concerns:['pension'], incomes:['low','mid-low','mid','mid-high','high'], minKids:0, minAge:65, maxAge:110 },
+  ];
+
+  function diagNext(step) {
+    if (step === 1) {
+      if (!document.getElementById('d-city').value) { alert('市区町村を選択してください'); return; }
+      if (!document.getElementById('d-age').value) { alert('年齢を入力してください'); return; }
+    }
+    if (step === 2) {
+      if (!document.getElementById('d-family').value) { alert('世帯構成を選択してください'); return; }
+      if (!document.getElementById('d-income').value) { alert('世帯年収を選択してください'); return; }
+    }
+    document.getElementById('panel-' + step).classList.remove('active');
+    document.getElementById('panel-' + (step + 1)).classList.add('active');
+    document.getElementById('dot-' + step).classList.remove('active');
+    document.getElementById('dot-' + step).classList.add('done');
+    document.getElementById('conn-' + step).classList.add('done');
+    document.getElementById('dot-' + (step + 1)).classList.add('active');
+    document.getElementById('diagnosis').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  function diagBack(step) {
+    document.getElementById('panel-' + step).classList.remove('active');
+    document.getElementById('panel-' + (step - 1)).classList.add('active');
+    document.getElementById('dot-' + step).classList.remove('active');
+    document.getElementById('dot-' + (step - 1)).classList.remove('done');
+    document.getElementById('dot-' + (step - 1)).classList.add('active');
+    document.getElementById('conn-' + (step - 1)).classList.remove('done');
+    document.getElementById('diagnosis').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  function diagSubmit() {
+    const age = parseInt(document.getElementById('d-age').value) || 0;
+    const city = document.getElementById('d-city').value;
+    const income = document.getElementById('d-income').value;
+    const family = document.getElementById('d-family').value;
+    const kids = parseInt(document.getElementById('d-kids').value) || 0;
+    const concerns = Array.from(document.querySelectorAll('#d-concerns input:checked')).map(i => i.value);
+
+    if (concerns.length === 0) { alert('お困りごとを1つ以上選択してください'); return; }
+
+    const isOsakaCity = city.startsWith('大阪市');
+
+    const matched = PROGRAMS.filter(p => {
+      if (p.city === '大阪市' && !isOsakaCity) return false;
+      if (age < p.minAge || age > p.maxAge) return false;
+      if (p.minKids > 0 && kids < p.minKids) return false;
+      if (p.family && p.family !== family) return false;
+      if (!p.incomes.includes(income)) return false;
+      if (!concerns.some(c => p.concerns.includes(c))) return false;
+      return true;
+    });
+
+    // パネル非表示・結果表示
+    document.getElementById('panel-3').classList.remove('active');
+    const resultsEl = document.getElementById('diag-results');
+    resultsEl.classList.add('active');
+    document.getElementById('dot-3').classList.remove('active');
+    document.getElementById('dot-3').classList.add('done');
+    document.getElementById('conn-2').classList.add('done');
+
+    document.getElementById('result-num').textContent = matched.length;
+
+    const list = document.getElementById('result-list');
+    if (matched.length === 0) {
+      list.innerHTML = '<div class="no-result">条件に合う制度が見つかりませんでした。<br>条件を変えて再度お試しください。</div>';
+    } else {
+      list.innerHTML = matched.map(p => {
+        const safeName = p.title.replace(/\\/g,'\\\\').replace(/'/g,"\\'");
+        return `
+        <div class="result-card">
+          <div class="result-card-head">
+            <span class="result-cat">${p.cat}</span>
+            <span class="result-title">${p.title}</span>
+          </div>
+          <div class="result-desc">${p.desc}</div>
+          <div class="result-footer">
+            <span class="result-amount">${p.amount.split('（')[0]}<span>${p.amount.includes('（') ? '（' + p.amount.split('（')[1] : ''}</span></span>
+            <button class="btn-cart-add" data-cart-title="${p.title}" onclick="addToCart('${safeName}')">🛒 カートに入れる</button>
+          </div>
+        </div>`;
+      }).join('');
+    }
+
+    document.getElementById('diagnosis').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  // ─── カート ───────────────────────────
+  let cart = [];
+
+  function openCart() {
+    document.getElementById('cart-overlay').classList.add('open');
+    document.getElementById('cart-drawer').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeCart() {
+    document.getElementById('cart-overlay').classList.remove('open');
+    document.getElementById('cart-drawer').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  function addToCart(title) {
+    if (cart.find(i => i.title === title)) return;
+    const prog = PROGRAMS.find(p => p.title === title);
+    if (!prog) return;
+    cart.push(prog);
+    renderCart();
+    updateBadge();
+
+    // ボタンを「入り済み」に
+    const btn = document.querySelector(`[data-cart-title="${CSS.escape(title)}"]`);
+    if (btn) {
+      btn.classList.add('in-cart');
+      btn.textContent = '✓ カートに入っています';
+      btn.classList.add('bounce');
+      setTimeout(() => btn.classList.remove('bounce'), 400);
+    }
+  }
+
+  function removeFromCart(title) {
+    cart = cart.filter(i => i.title !== title);
+    renderCart();
+    updateBadge();
+
+    // ボタンを元に戻す
+    const btn = document.querySelector(`[data-cart-title="${CSS.escape(title)}"]`);
+    if (btn) {
+      btn.classList.remove('in-cart');
+      btn.textContent = '🛒 カートに入れる';
+    }
+  }
+
+  function renderCart() {
+    const empty = document.getElementById('cart-empty');
+    const itemsEl = document.getElementById('cart-items');
+    const footer = document.getElementById('cart-footer');
+    const countLabel = document.getElementById('cart-count-label');
+    const totalCount = document.getElementById('cart-total-count');
+
+    if (cart.length === 0) {
+      empty.style.display = 'block';
+      itemsEl.innerHTML = '';
+      footer.style.display = 'none';
+      countLabel.textContent = '';
+    } else {
+      empty.style.display = 'none';
+      footer.style.display = 'block';
+      countLabel.textContent = `(${cart.length}件)`;
+      totalCount.textContent = cart.length;
+      itemsEl.innerHTML = cart.map(p => `
+        <div class="cart-item">
+          <span class="cart-item-cat">${p.cat}</span>
+          <div class="cart-item-info">
+            <div class="cart-item-title">${p.title}</div>
+            <div class="cart-item-amount">${p.amount.split('（')[0]}</div>
+          </div>
+          <button class="cart-item-remove" onclick="removeFromCart('${p.title.replace(/'/g,"\\'")}')">✕</button>
+        </div>
+      `).join('');
+    }
+  }
+
+  function updateBadge() {
+    const badge = document.getElementById('cart-badge');
+    if (cart.length > 0) {
+      badge.textContent = cart.length;
+      badge.classList.add('visible');
+    } else {
+      badge.classList.remove('visible');
+    }
+  }
+
+  function goSelf() {
+    // 自分で申請 → 申請方法を案内するメッセージを表示してカートを閉じる
+    closeCart();
+    const sec = document.getElementById('links');
+    if (sec) sec.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    setTimeout(() => {
+      alert('選択した制度の申請先窓口を「公式窓口リンク」セクションで確認できます。\nご不明な点は各市区町村の窓口へお問い合わせください。');
+    }, 500);
+  }
+
+  function openProModal() {
+    const list = document.getElementById('pro-cart-list');
+    list.innerHTML = cart.map(p => `<li>${p.title}</li>`).join('');
+    document.getElementById('pro-form-area').style.display = 'block';
+    document.getElementById('pro-sent-msg').style.display = 'none';
+    document.getElementById('pro-modal-overlay').classList.add('open');
+  }
+
+  function closeProModal(e) {
+    if (!e || e.target === document.getElementById('pro-modal-overlay') || e.currentTarget.classList.contains('pro-modal-close')) {
+      document.getElementById('pro-modal-overlay').classList.remove('open');
+    }
+  }
+
+  function sendProRequest() {
+    const name = document.getElementById('pro-name').value.trim();
+    const tel  = document.getElementById('pro-tel').value.trim();
+    const email = document.getElementById('pro-email').value.trim();
+    if (!name) { alert('お名前を入力してください'); return; }
+    if (!tel && !email) { alert('電話番号またはメールアドレスを入力してください'); return; }
+    // 実際の送信処理はここにAPI呼び出しを追加
+    document.getElementById('pro-form-area').style.display = 'none';
+    document.getElementById('pro-sent-msg').style.display = 'block';
+  }
+
+  function diagReset() {
+    ['panel-1','panel-2','panel-3'].forEach(id => document.getElementById(id).classList.remove('active'));
+    document.getElementById('panel-1').classList.add('active');
+    document.getElementById('diag-results').classList.remove('active');
+    ['dot-1','dot-2','dot-3'].forEach(id => {
+      document.getElementById(id).classList.remove('active','done');
+    });
+    document.getElementById('dot-1').classList.add('active');
+    ['conn-1','conn-2'].forEach(id => document.getElementById(id).classList.remove('done'));
+    document.getElementById('d-city').value = '';
+    document.getElementById('d-age').value = '';
+    document.getElementById('d-gender').value = '';
+    document.getElementById('d-family').value = '';
+    document.getElementById('d-kids').value = '0';
+    document.getElementById('d-income').value = '';
+    document.querySelectorAll('#d-concerns input').forEach(i => i.checked = false);
+    document.querySelectorAll('.diag-check-label').forEach(l => l.classList.remove('checked'));
+    document.getElementById('diagnosis').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+</script>
+</body>
+</html>
