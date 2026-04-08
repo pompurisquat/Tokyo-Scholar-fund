@@ -1241,70 +1241,70 @@
   </div>
   <div class="categories-grid">
 
-    <div class="cat-card fade-up">
+    <div class="cat-card fade-up" onclick="jumpToDiag('personal','childcare')">
       <span class="cat-icon">👶</span>
       <div class="cat-name">子育て</div>
       <div class="cat-desc">子ども医療費助成・保育料・児童手当・出産支援金</div>
       <span class="cat-tag">大阪府独自あり</span>
     </div>
 
-    <div class="cat-card fade-up">
+    <div class="cat-card fade-up" onclick="jumpToDiag('personal','medical')">
       <span class="cat-icon">🏥</span>
       <div class="cat-name">医療</div>
       <div class="cat-desc">高額療養費・障がい者医療費助成・後期高齢者医療</div>
       <span class="cat-tag">無料診断あり</span>
     </div>
 
-    <div class="cat-card fade-up">
+    <div class="cat-card fade-up" onclick="jumpToDiag('personal','housing')">
       <span class="cat-icon">🏠</span>
       <div class="cat-name">住宅</div>
       <div class="cat-desc">府営住宅・住宅確保給付金・空き家活用補助</div>
       <span class="cat-tag">申請サポート</span>
     </div>
 
-    <div class="cat-card fade-up">
+    <div class="cat-card fade-up" onclick="jumpToDiag('personal','nursing')">
       <span class="cat-icon">🤝</span>
       <div class="cat-name">介護</div>
       <div class="cat-desc">介護保険サービス・家族介護支援・介護予防教室</div>
       <span class="cat-tag">窓口案内あり</span>
     </div>
 
-    <div class="cat-card fade-up">
+    <div class="cat-card fade-up" onclick="jumpToDiag('personal','disability')">
       <span class="cat-icon">♿</span>
       <div class="cat-name">障害</div>
       <div class="cat-desc">障がい者手帳・就労継続支援・グループホーム</div>
       <span class="cat-tag">相談窓口連携</span>
     </div>
 
-    <div class="cat-card fade-up">
+    <div class="cat-card fade-up" onclick="jumpToDiag('personal','education')">
       <span class="cat-icon">🎓</span>
       <div class="cat-name">教育</div>
       <div class="cat-desc">私立高校授業料無償化（大阪独自）・奨学給付金</div>
       <span class="cat-tag">大阪府独自あり</span>
     </div>
 
-    <div class="cat-card fade-up">
+    <div class="cat-card fade-up" onclick="jumpToDiag('personal','job')">
       <span class="cat-icon">💼</span>
       <div class="cat-name">就労</div>
       <div class="cat-desc">就業促進給付・職業訓練・シニア就労支援</div>
       <span class="cat-tag">ハローワーク連携</span>
     </div>
 
-    <div class="cat-card fade-up">
+    <div class="cat-card fade-up" onclick="jumpToDiag('personal','poverty')">
       <span class="cat-icon">🌱</span>
       <div class="cat-name">生活困窮</div>
       <div class="cat-desc">生活保護・緊急小口資金・住居確保給付金</div>
       <span class="cat-tag">即日対応可</span>
     </div>
 
-    <div class="cat-card fade-up">
+    <div class="cat-card fade-up" onclick="jumpToDiag('personal','tax')">
       <span class="cat-icon">🧾</span>
       <div class="cat-name">税金</div>
       <div class="cat-desc">府民税・市民税の各種控除・減免・猶予制度</div>
       <span class="cat-tag">控除診断あり</span>
     </div>
 
-    <div class="cat-card fade-up">
+    <div class="cat-card fade-up" onclick="jumpToDiag('personal','pension')">
       <span class="cat-icon">🪙</span>
       <div class="cat-name">年金</div>
       <div class="cat-desc">国民年金・厚生年金・保険料免除・納付猶予</div>
@@ -1894,6 +1894,31 @@
       }
     });
   });
+
+  // ─── カテゴリカードから診断へジャンプ ───────────────────────────
+  function jumpToDiag(type, concern) {
+    // 診断をリセットして個人フローを開く
+    diagReset();
+    selectType(type);
+    // お困りごとステップまで自動で進める（Step1・2はスキップせず、Step3を開いてチェック済みに）
+    // Step3パネルを直接表示
+    document.getElementById('p-panel-1').classList.remove('active');
+    document.getElementById('p-panel-3').classList.add('active');
+    ['p-dot-1','p-dot-2'].forEach(id => {
+      document.getElementById(id).classList.remove('active');
+      document.getElementById(id).classList.add('done');
+    });
+    document.getElementById('p-conn-1').classList.add('done');
+    document.getElementById('p-conn-2').classList.add('done');
+    document.getElementById('p-dot-3').classList.add('active');
+    // 該当チェックボックスをONに
+    const cb = document.querySelector(`#d-concerns input[value="${concern}"]`);
+    if (cb) {
+      cb.checked = true;
+      cb.closest('.diag-check-label').classList.add('checked');
+    }
+    document.getElementById('diagnosis').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
 
   // ─── タイプ選択 ───────────────────────────
   let currentType = null;
