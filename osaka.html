@@ -569,6 +569,36 @@
       .howto-steps { flex-direction: column; }
     }
 
+    /* ─── USER TYPE TOGGLE ─── */
+    .type-toggle {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      margin-bottom: 32px;
+    }
+    .type-btn {
+      flex: 1;
+      max-width: 260px;
+      background: white;
+      border: 2.5px solid #d0e8d9;
+      border-radius: 18px;
+      padding: 22px 20px;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color .2s, box-shadow .2s, transform .15s;
+      font-family: 'Noto Sans JP', sans-serif;
+    }
+    .type-btn:hover { border-color: var(--green); transform: translateY(-2px); }
+    .type-btn.selected {
+      border-color: var(--green);
+      box-shadow: 0 0 0 4px rgba(0,110,60,.12);
+      background: var(--green-pale);
+    }
+    .type-btn .type-icon { font-size: 2.2rem; display: block; margin-bottom: 8px; }
+    .type-btn .type-name { font-size: 1rem; font-weight: 900; color: var(--text); display: block; margin-bottom: 4px; }
+    .type-btn .type-note { font-size: .75rem; color: var(--text-light); line-height: 1.5; }
+    .type-btn.selected .type-name { color: var(--green-dark); }
+
     /* ─── DIAGNOSIS FORM ─── */
     .diag-wrap {
       max-width: 680px;
@@ -1338,7 +1368,7 @@
   </div>
 </section>
 
-<!-- ── HOW TO ──────────────────────────────── -->
+<!-- ── DIAGNOSIS ──────────────────────────────── -->
 <section id="diagnosis" style="background:var(--bg);">
   <div class="fade-up" style="text-align:center; margin-bottom:40px;">
     <span class="section-label">かんたん診断</span>
@@ -1347,144 +1377,284 @@
   </div>
 
   <div class="diag-wrap">
-    <!-- プログレス -->
-    <div class="diag-progress">
-      <div class="diag-step-dot active" id="dot-1">
-        <div class="dot">1</div>
-        <span class="dot-label">基本情報</span>
-      </div>
-      <div class="diag-connector" id="conn-1"></div>
-      <div class="diag-step-dot" id="dot-2">
-        <div class="dot">2</div>
-        <span class="dot-label">家族・状況</span>
-      </div>
-      <div class="diag-connector" id="conn-2"></div>
-      <div class="diag-step-dot" id="dot-3">
-        <div class="dot">3</div>
-        <span class="dot-label">お困りごと</span>
-      </div>
-    </div>
 
-    <!-- STEP 1 -->
-    <div class="diag-panel active" id="panel-1">
-      <h3>① あなたの基本情報を教えてください</h3>
-      <div class="diag-field">
-        <label>お住まいの市区町村</label>
-        <select id="d-city">
-          <option value="">-- 選択してください --</option>
-          <optgroup label="大阪市（24区）">
-            <option>大阪市（北区）</option><option>大阪市（都島区）</option>
-            <option>大阪市（福島区）</option><option>大阪市（此花区）</option>
-            <option>大阪市（中央区）</option><option>大阪市（西区）</option>
-            <option>大阪市（港区）</option><option>大阪市（大正区）</option>
-            <option>大阪市（天王寺区）</option><option>大阪市（浪速区）</option>
-            <option>大阪市（西淀川区）</option><option>大阪市（淀川区）</option>
-            <option>大阪市（東淀川区）</option><option>大阪市（東成区）</option>
-            <option>大阪市（生野区）</option><option>大阪市（旭区）</option>
-            <option>大阪市（城東区）</option><option>大阪市（鶴見区）</option>
-            <option>大阪市（阿倍野区）</option><option>大阪市（住之江区）</option>
-            <option>大阪市（住吉区）</option><option>大阪市（東住吉区）</option>
-            <option>大阪市（平野区）</option><option>大阪市（西成区）</option>
-          </optgroup>
-          <optgroup label="その他主要市">
-            <option>堺市</option><option>高槻市</option><option>豊中市</option>
-            <option>枚方市</option><option>東大阪市</option><option>八尾市</option>
-            <option>吹田市</option><option>茨木市</option><option>寝屋川市</option>
-            <option>岸和田市</option><option>摂津市</option><option>箕面市</option>
-            <option>守口市</option><option>門真市</option><option>松原市</option>
-            <option>富田林市</option><option>河内長野市</option><option>大東市</option>
-            <option>その他の市町村</option>
-          </optgroup>
-        </select>
-      </div>
-      <div class="diag-field">
-        <label>あなたの年齢</label>
-        <input type="number" id="d-age" min="0" max="110" placeholder="例：35" />
-      </div>
-      <div class="diag-field">
-        <label>性別</label>
-        <select id="d-gender">
-          <option value="">-- 選択してください --</option>
-          <option value="male">男性</option>
-          <option value="female">女性</option>
-          <option value="other">回答しない</option>
-        </select>
-      </div>
-      <div class="diag-nav">
-        <button class="btn-diag-next" onclick="diagNext(1)">次へ →</button>
-      </div>
-    </div>
-
-    <!-- STEP 2 -->
-    <div class="diag-panel" id="panel-2">
-      <h3>② 家族構成・世帯状況を教えてください</h3>
-      <div class="diag-field">
-        <label>世帯構成</label>
-        <select id="d-family">
-          <option value="">-- 選択してください --</option>
-          <option value="single">一人暮らし</option>
-          <option value="couple">夫婦のみ</option>
-          <option value="child">子どもあり（未成年）</option>
-          <option value="single_parent">ひとり親世帯</option>
-          <option value="elder">高齢者と同居</option>
-          <option value="other">その他</option>
-        </select>
-      </div>
-      <div class="diag-field">
-        <label>子どもの人数（いない場合は0）</label>
-        <input type="number" id="d-kids" min="0" max="20" placeholder="0" value="0" />
-      </div>
-      <div class="diag-field">
-        <label>おおよその世帯年収</label>
-        <select id="d-income">
-          <option value="">-- 選択してください --</option>
-          <option value="low">200万円未満</option>
-          <option value="mid-low">200〜400万円</option>
-          <option value="mid">400〜600万円</option>
-          <option value="mid-high">600〜800万円</option>
-          <option value="high">800万円以上</option>
-        </select>
-      </div>
-      <div class="diag-nav">
-        <button class="btn-diag-back" onclick="diagBack(2)">← 戻る</button>
-        <button class="btn-diag-next" onclick="diagNext(2)">次へ →</button>
-      </div>
-    </div>
-
-    <!-- STEP 3 -->
-    <div class="diag-panel" id="panel-3">
-      <h3>③ 現在のお困りごとを選んでください（複数可）</h3>
-      <div class="diag-field">
-        <div class="diag-checks" id="d-concerns">
-          <label class="diag-check-label"><input type="checkbox" value="childcare">👶 子育て・保育</label>
-          <label class="diag-check-label"><input type="checkbox" value="medical">🏥 医療費・健康</label>
-          <label class="diag-check-label"><input type="checkbox" value="housing">🏠 住まい・家賃</label>
-          <label class="diag-check-label"><input type="checkbox" value="nursing">🤝 介護</label>
-          <label class="diag-check-label"><input type="checkbox" value="disability">♿ 障害</label>
-          <label class="diag-check-label"><input type="checkbox" value="education">🎓 教育・学費</label>
-          <label class="diag-check-label"><input type="checkbox" value="job">💼 仕事・失業</label>
-          <label class="diag-check-label"><input type="checkbox" value="poverty">🌱 生活費・困窮</label>
-          <label class="diag-check-label"><input type="checkbox" value="tax">🧾 税金・控除</label>
-          <label class="diag-check-label"><input type="checkbox" value="pension">🪙 年金</label>
+    <!-- TYPE SELECT -->
+    <div id="type-select-panel">
+      <p style="text-align:center;font-size:.9rem;color:var(--text-light);margin-bottom:20px;">まず、どちらですか？</p>
+      <div class="type-toggle">
+        <div class="type-btn" id="type-btn-personal" onclick="selectType('personal')">
+          <span class="type-icon">🙋</span>
+          <span class="type-name">個人・家庭</span>
+          <span class="type-note">給付金・医療・子育て<br>住宅・介護・就労など</span>
+        </div>
+        <div class="type-btn" id="type-btn-biz" onclick="selectType('biz')">
+          <span class="type-icon">🏢</span>
+          <span class="type-name">法人・中小企業</span>
+          <span class="type-note">融資・補助金・助成金<br>設備投資・雇用支援など</span>
         </div>
       </div>
-      <div class="diag-nav">
-        <button class="btn-diag-back" onclick="diagBack(3)">← 戻る</button>
-        <button class="btn-diag-next" onclick="diagSubmit()">診断結果を見る 🔍</button>
+    </div>
+
+    <!-- ── 個人フロー ── -->
+    <div id="personal-flow" style="display:none;">
+      <div class="diag-progress">
+        <div class="diag-step-dot active" id="p-dot-1"><div class="dot">1</div><span class="dot-label">基本情報</span></div>
+        <div class="diag-connector" id="p-conn-1"></div>
+        <div class="diag-step-dot" id="p-dot-2"><div class="dot">2</div><span class="dot-label">家族・状況</span></div>
+        <div class="diag-connector" id="p-conn-2"></div>
+        <div class="diag-step-dot" id="p-dot-3"><div class="dot">3</div><span class="dot-label">お困りごと</span></div>
+      </div>
+
+      <!-- P-STEP 1 -->
+      <div class="diag-panel active" id="p-panel-1">
+        <h3>① あなたの基本情報を教えてください</h3>
+        <div class="diag-field">
+          <label>お住まいの市区町村</label>
+          <select id="d-city">
+            <option value="">-- 選択してください --</option>
+            <optgroup label="大阪市（24区）">
+              <option>大阪市（北区）</option><option>大阪市（都島区）</option>
+              <option>大阪市（福島区）</option><option>大阪市（此花区）</option>
+              <option>大阪市（中央区）</option><option>大阪市（西区）</option>
+              <option>大阪市（港区）</option><option>大阪市（大正区）</option>
+              <option>大阪市（天王寺区）</option><option>大阪市（浪速区）</option>
+              <option>大阪市（西淀川区）</option><option>大阪市（淀川区）</option>
+              <option>大阪市（東淀川区）</option><option>大阪市（東成区）</option>
+              <option>大阪市（生野区）</option><option>大阪市（旭区）</option>
+              <option>大阪市（城東区）</option><option>大阪市（鶴見区）</option>
+              <option>大阪市（阿倍野区）</option><option>大阪市（住之江区）</option>
+              <option>大阪市（住吉区）</option><option>大阪市（東住吉区）</option>
+              <option>大阪市（平野区）</option><option>大阪市（西成区）</option>
+            </optgroup>
+            <optgroup label="その他主要市">
+              <option>堺市</option><option>高槻市</option><option>豊中市</option>
+              <option>枚方市</option><option>東大阪市</option><option>八尾市</option>
+              <option>吹田市</option><option>茨木市</option><option>寝屋川市</option>
+              <option>岸和田市</option><option>摂津市</option><option>箕面市</option>
+              <option>守口市</option><option>門真市</option><option>松原市</option>
+              <option>富田林市</option><option>河内長野市</option><option>大東市</option>
+              <option>その他の市町村</option>
+            </optgroup>
+          </select>
+        </div>
+        <div class="diag-field">
+          <label>あなたの年齢</label>
+          <input type="number" id="d-age" min="0" max="110" placeholder="例：35" />
+        </div>
+        <div class="diag-field">
+          <label>性別</label>
+          <select id="d-gender">
+            <option value="">-- 選択してください --</option>
+            <option value="male">男性</option>
+            <option value="female">女性</option>
+            <option value="other">回答しない</option>
+          </select>
+        </div>
+        <div class="diag-nav">
+          <button class="btn-diag-back" onclick="backToTypeSelect()">← 最初に戻る</button>
+          <button class="btn-diag-next" onclick="pNext(1)">次へ →</button>
+        </div>
+      </div>
+
+      <!-- P-STEP 2 -->
+      <div class="diag-panel" id="p-panel-2">
+        <h3>② 家族構成・世帯状況を教えてください</h3>
+        <div class="diag-field">
+          <label>世帯構成</label>
+          <select id="d-family">
+            <option value="">-- 選択してください --</option>
+            <option value="single">一人暮らし</option>
+            <option value="couple">夫婦のみ</option>
+            <option value="child">子どもあり（未成年）</option>
+            <option value="single_parent">ひとり親世帯</option>
+            <option value="elder">高齢者と同居</option>
+            <option value="other">その他</option>
+          </select>
+        </div>
+        <div class="diag-field">
+          <label>子どもの人数（いない場合は0）</label>
+          <input type="number" id="d-kids" min="0" max="20" placeholder="0" value="0" />
+        </div>
+        <div class="diag-field">
+          <label>おおよその世帯年収</label>
+          <select id="d-income">
+            <option value="">-- 選択してください --</option>
+            <option value="low">200万円未満</option>
+            <option value="mid-low">200〜400万円</option>
+            <option value="mid">400〜600万円</option>
+            <option value="mid-high">600〜800万円</option>
+            <option value="high">800万円以上</option>
+          </select>
+        </div>
+        <div class="diag-nav">
+          <button class="btn-diag-back" onclick="pBack(2)">← 戻る</button>
+          <button class="btn-diag-next" onclick="pNext(2)">次へ →</button>
+        </div>
+      </div>
+
+      <!-- P-STEP 3 -->
+      <div class="diag-panel" id="p-panel-3">
+        <h3>③ 現在のお困りごとを選んでください（複数可）</h3>
+        <div class="diag-field">
+          <div class="diag-checks" id="d-concerns">
+            <label class="diag-check-label"><input type="checkbox" value="childcare">👶 子育て・保育</label>
+            <label class="diag-check-label"><input type="checkbox" value="medical">🏥 医療費・健康</label>
+            <label class="diag-check-label"><input type="checkbox" value="housing">🏠 住まい・家賃</label>
+            <label class="diag-check-label"><input type="checkbox" value="nursing">🤝 介護</label>
+            <label class="diag-check-label"><input type="checkbox" value="disability">♿ 障害</label>
+            <label class="diag-check-label"><input type="checkbox" value="education">🎓 教育・学費</label>
+            <label class="diag-check-label"><input type="checkbox" value="job">💼 仕事・失業</label>
+            <label class="diag-check-label"><input type="checkbox" value="poverty">🌱 生活費・困窮</label>
+            <label class="diag-check-label"><input type="checkbox" value="tax">🧾 税金・控除</label>
+            <label class="diag-check-label"><input type="checkbox" value="pension">🪙 年金</label>
+          </div>
+        </div>
+        <div class="diag-nav">
+          <button class="btn-diag-back" onclick="pBack(3)">← 戻る</button>
+          <button class="btn-diag-next" onclick="diagSubmit('personal')">診断結果を見る 🔍</button>
+        </div>
       </div>
     </div>
 
-    <!-- RESULTS -->
+    <!-- ── 法人フロー ── -->
+    <div id="biz-flow" style="display:none;">
+      <div class="diag-progress">
+        <div class="diag-step-dot active" id="b-dot-1"><div class="dot">1</div><span class="dot-label">会社情報</span></div>
+        <div class="diag-connector" id="b-conn-1"></div>
+        <div class="diag-step-dot" id="b-dot-2"><div class="dot">2</div><span class="dot-label">規模・年商</span></div>
+        <div class="diag-connector" id="b-conn-2"></div>
+        <div class="diag-step-dot" id="b-dot-3"><div class="dot">3</div><span class="dot-label">課題・目的</span></div>
+      </div>
+
+      <!-- B-STEP 1 -->
+      <div class="diag-panel active" id="b-panel-1">
+        <h3>① 会社の基本情報を教えてください</h3>
+        <div class="diag-field">
+          <label>所在地（市区町村）</label>
+          <select id="b-city">
+            <option value="">-- 選択してください --</option>
+            <optgroup label="大阪市（24区）">
+              <option>大阪市（北区）</option><option>大阪市（中央区）</option>
+              <option>大阪市（西区）</option><option>大阪市（浪速区）</option>
+              <option>大阪市（天王寺区）</option><option>大阪市（淀川区）</option>
+              <option>大阪市（東淀川区）</option><option>大阪市（城東区）</option>
+              <option>大阪市（平野区）</option><option>大阪市（住之江区）</option>
+              <option>大阪市 その他の区</option>
+            </optgroup>
+            <optgroup label="その他主要市">
+              <option>堺市</option><option>高槻市</option><option>豊中市</option>
+              <option>枚方市</option><option>東大阪市</option><option>八尾市</option>
+              <option>吹田市</option><option>茨木市</option><option>寝屋川市</option>
+              <option>岸和田市</option><option>その他の市町村</option>
+            </optgroup>
+          </select>
+        </div>
+        <div class="diag-field">
+          <label>業種</label>
+          <select id="b-industry">
+            <option value="">-- 選択してください --</option>
+            <option value="mfg">製造業</option>
+            <option value="retail">小売・卸売業</option>
+            <option value="food">飲食・宿泊業</option>
+            <option value="it">IT・情報通信業</option>
+            <option value="const">建設業</option>
+            <option value="service">サービス業</option>
+            <option value="medical">医療・福祉</option>
+            <option value="other">その他</option>
+          </select>
+        </div>
+        <div class="diag-field">
+          <label>法人形態</label>
+          <select id="b-form">
+            <option value="">-- 選択してください --</option>
+            <option value="corp">株式会社・合同会社等</option>
+            <option value="sole">個人事業主・フリーランス</option>
+            <option value="npo">NPO・社団・財団法人</option>
+          </select>
+        </div>
+        <div class="diag-nav">
+          <button class="btn-diag-back" onclick="backToTypeSelect()">← 最初に戻る</button>
+          <button class="btn-diag-next" onclick="bNext(1)">次へ →</button>
+        </div>
+      </div>
+
+      <!-- B-STEP 2 -->
+      <div class="diag-panel" id="b-panel-2">
+        <h3>② 規模・年商を教えてください</h3>
+        <div class="diag-field">
+          <label>従業員数</label>
+          <select id="b-employees">
+            <option value="">-- 選択してください --</option>
+            <option value="solo">1人（代表者のみ）</option>
+            <option value="micro">2〜5人</option>
+            <option value="small">6〜20人</option>
+            <option value="mid">21〜100人</option>
+            <option value="large">101〜300人</option>
+          </select>
+        </div>
+        <div class="diag-field">
+          <label>おおよその年商（売上高）</label>
+          <select id="b-sales">
+            <option value="">-- 選択してください --</option>
+            <option value="s1">1,000万円未満</option>
+            <option value="s2">1,000万〜5,000万円</option>
+            <option value="s3">5,000万〜1億円</option>
+            <option value="s4">1億〜5億円</option>
+            <option value="s5">5億円以上</option>
+          </select>
+        </div>
+        <div class="diag-field">
+          <label>業歴（創業からの年数）</label>
+          <select id="b-age">
+            <option value="">-- 選択してください --</option>
+            <option value="new">1年未満（創業前・創業直後）</option>
+            <option value="young">1〜3年</option>
+            <option value="mid">3〜10年</option>
+            <option value="mature">10年以上</option>
+          </select>
+        </div>
+        <div class="diag-nav">
+          <button class="btn-diag-back" onclick="bBack(2)">← 戻る</button>
+          <button class="btn-diag-next" onclick="bNext(2)">次へ →</button>
+        </div>
+      </div>
+
+      <!-- B-STEP 3 -->
+      <div class="diag-panel" id="b-panel-3">
+        <h3>③ 課題・目的を選んでください（複数可）</h3>
+        <div class="diag-field">
+          <div class="diag-checks" id="b-concerns">
+            <label class="diag-check-label"><input type="checkbox" value="startup">🚀 創業・起業</label>
+            <label class="diag-check-label"><input type="checkbox" value="loan">💴 運転資金・融資</label>
+            <label class="diag-check-label"><input type="checkbox" value="equip">🏭 設備投資</label>
+            <label class="diag-check-label"><input type="checkbox" value="hire">👥 雇用・採用</label>
+            <label class="diag-check-label"><input type="checkbox" value="dx">💻 DX・IT化</label>
+            <label class="diag-check-label"><input type="checkbox" value="export">🌏 海外展開・輸出</label>
+            <label class="diag-check-label"><input type="checkbox" value="green">🌿 省エネ・脱炭素</label>
+            <label class="diag-check-label"><input type="checkbox" value="sales_down">📉 売上減・経営安定</label>
+            <label class="diag-check-label"><input type="checkbox" value="succession">🤝 事業承継</label>
+            <label class="diag-check-label"><input type="checkbox" value="biz_improve">⚙️ 生産性向上</label>
+          </div>
+        </div>
+        <div class="diag-nav">
+          <button class="btn-diag-back" onclick="bBack(3)">← 戻る</button>
+          <button class="btn-diag-next" onclick="diagSubmit('biz')">診断結果を見る 🔍</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- RESULTS（共通） -->
     <div id="diag-results">
       <div class="result-count">
         <strong id="result-num">0</strong><span style="font-size:1.1rem;font-weight:700;color:var(--green)"> 件</span>
-        <p>あなたに該当する可能性のある制度が見つかりました</p>
+        <p id="result-label">あなたに該当する可能性のある制度が見つかりました</p>
       </div>
       <div id="result-list"></div>
       <div style="text-align:center; margin-top:24px;">
         <button class="btn-retry" onclick="diagReset()">← 条件を変えてもう一度診断する</button>
       </div>
     </div>
+
   </div>
 </section>
 
@@ -1725,6 +1895,83 @@
     });
   });
 
+  // ─── タイプ選択 ───────────────────────────
+  let currentType = null;
+
+  function selectType(type) {
+    currentType = type;
+    document.getElementById('type-select-panel').style.display = 'none';
+    document.getElementById('personal-flow').style.display = type === 'personal' ? 'block' : 'none';
+    document.getElementById('biz-flow').style.display = type === 'biz' ? 'block' : 'none';
+    document.getElementById('diagnosis').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  function backToTypeSelect() {
+    document.getElementById('type-select-panel').style.display = 'block';
+    document.getElementById('personal-flow').style.display = 'none';
+    document.getElementById('biz-flow').style.display = 'none';
+    document.getElementById('diag-results').classList.remove('active');
+    document.getElementById('diagnosis').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  // 個人フロー
+  function pNext(step) {
+    if (step === 1) {
+      if (!document.getElementById('d-city').value) { alert('市区町村を選択してください'); return; }
+      if (!document.getElementById('d-age').value) { alert('年齢を入力してください'); return; }
+    }
+    if (step === 2) {
+      if (!document.getElementById('d-family').value) { alert('世帯構成を選択してください'); return; }
+      if (!document.getElementById('d-income').value) { alert('世帯年収を選択してください'); return; }
+    }
+    document.getElementById('p-panel-' + step).classList.remove('active');
+    document.getElementById('p-panel-' + (step + 1)).classList.add('active');
+    document.getElementById('p-dot-' + step).classList.remove('active');
+    document.getElementById('p-dot-' + step).classList.add('done');
+    document.getElementById('p-conn-' + step).classList.add('done');
+    document.getElementById('p-dot-' + (step + 1)).classList.add('active');
+    document.getElementById('diagnosis').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+  function pBack(step) {
+    document.getElementById('p-panel-' + step).classList.remove('active');
+    document.getElementById('p-panel-' + (step - 1)).classList.add('active');
+    document.getElementById('p-dot-' + step).classList.remove('active');
+    document.getElementById('p-dot-' + (step - 1)).classList.remove('done');
+    document.getElementById('p-dot-' + (step - 1)).classList.add('active');
+    document.getElementById('p-conn-' + (step - 1)).classList.remove('done');
+    document.getElementById('diagnosis').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  // 法人フロー
+  function bNext(step) {
+    if (step === 1) {
+      if (!document.getElementById('b-city').value) { alert('所在地を選択してください'); return; }
+      if (!document.getElementById('b-industry').value) { alert('業種を選択してください'); return; }
+      if (!document.getElementById('b-form').value) { alert('法人形態を選択してください'); return; }
+    }
+    if (step === 2) {
+      if (!document.getElementById('b-employees').value) { alert('従業員数を選択してください'); return; }
+      if (!document.getElementById('b-sales').value) { alert('年商を選択してください'); return; }
+      if (!document.getElementById('b-age').value) { alert('業歴を選択してください'); return; }
+    }
+    document.getElementById('b-panel-' + step).classList.remove('active');
+    document.getElementById('b-panel-' + (step + 1)).classList.add('active');
+    document.getElementById('b-dot-' + step).classList.remove('active');
+    document.getElementById('b-dot-' + step).classList.add('done');
+    document.getElementById('b-conn-' + step).classList.add('done');
+    document.getElementById('b-dot-' + (step + 1)).classList.add('active');
+    document.getElementById('diagnosis').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+  function bBack(step) {
+    document.getElementById('b-panel-' + step).classList.remove('active');
+    document.getElementById('b-panel-' + (step - 1)).classList.add('active');
+    document.getElementById('b-dot-' + step).classList.remove('active');
+    document.getElementById('b-dot-' + (step - 1)).classList.remove('done');
+    document.getElementById('b-dot-' + (step - 1)).classList.add('active');
+    document.getElementById('b-conn-' + (step - 1)).classList.remove('done');
+    document.getElementById('diagnosis').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
   // ─── かんたん診断 ───────────────────────────
   const PROGRAMS = [
     // 子育て
@@ -1777,63 +2024,91 @@
     { cat:'年金', title:'老齢基礎年金', desc:'10年以上の受給資格期間がある65歳以上の方に支給される公的年金。', amount:'満額 月約6.8万円', concerns:['pension'], incomes:['low','mid-low','mid','mid-high','high'], minKids:0, minAge:65, maxAge:110 },
   ];
 
-  function diagNext(step) {
-    if (step === 1) {
-      if (!document.getElementById('d-city').value) { alert('市区町村を選択してください'); return; }
-      if (!document.getElementById('d-age').value) { alert('年齢を入力してください'); return; }
+  // ─── 法人向け制度データ ───────────────────────────
+  const BIZ_PROGRAMS = [
+    // 融資・借入
+    { cat:'融資', title:'大阪府 経営安定サポート資金（新メニュー）', desc:'中東情勢・原油高等の影響を受ける中小企業向け。売上・利益率が前年同月比で減少している企業が対象。', amount:'融資限度額 2億円', concerns:['loan','sales_down'], bizAge:['young','mid','mature'], employees:['micro','small','mid','large'], sales:['s2','s3','s4','s5'] },
+    { cat:'融資', title:'大阪府 中小企業制度融資（一般融資）', desc:'大阪府内の中小企業が利用できる低金利の制度融資。運転資金・設備資金の両方に対応。', amount:'融資限度額 1億円', concerns:['loan','equip'], bizAge:['young','mid','mature'], employees:['solo','micro','small','mid','large'], sales:['s1','s2','s3','s4','s5'] },
+    { cat:'融資', title:'大阪市 小規模事業者向け融資（大阪市信用保証付き）', desc:'大阪市内の小規模事業者を対象に、信用保証料の一部補助付きで低金利融資を提供。', amount:'融資限度額 3,500万円', concerns:['loan','equip'], bizAge:['young','mid','mature'], employees:['solo','micro','small'], sales:['s1','s2','s3'], city:'大阪市' },
+    { cat:'融資', title:'日本政策金融公庫 創業融資', desc:'創業前・創業後間もない事業者向けの低金利融資。自己資金の約2倍まで借入可能なケースも。', amount:'最大 3,000万円（新創業融資）', concerns:['startup','loan'], bizAge:['new','young'], employees:['solo','micro','small'], sales:['s1','s2'] },
+    { cat:'融資', title:'小規模事業者持続化補助金（経営改善融資連携）', desc:'小規模事業者の販路開拓・生産性向上を支援。補助金と組み合わせて資金調達がしやすくなる。', amount:'補助上限 200万円', concerns:['loan','biz_improve'], bizAge:['young','mid','mature'], employees:['solo','micro','small'], sales:['s1','s2','s3'] },
+
+    // 補助金・助成金
+    { cat:'補助金', title:'ものづくり補助金（ものづくり・商業・サービス生産性向上促進補助金）', desc:'革新的な製品・サービス開発や生産プロセスの改善に必要な設備投資を支援。製造業だけでなく幅広い業種が対象。', amount:'補助上限 1,250万円（通常枠）', concerns:['equip','biz_improve'], bizAge:['young','mid','mature'], employees:['solo','micro','small','mid'], sales:['s1','s2','s3','s4'] },
+    { cat:'補助金', title:'IT導入補助金（デジタル化基盤導入枠）', desc:'会計・受発注・ECサイト等のITツール導入費用を補助。インボイス対応ソフトも対象。', amount:'補助率 最大3/4・上限 350万円', concerns:['dx'], bizAge:['young','mid','mature'], employees:['solo','micro','small','mid','large'], sales:['s1','s2','s3','s4','s5'] },
+    { cat:'補助金', title:'事業再構築補助金', desc:'コロナ禍・物価高等の影響を受けた中小企業が新分野展開・業態転換等に取り組む際に支援。', amount:'補助上限 1.5億円（大規模賃金引上枠）', concerns:['sales_down','biz_improve','equip'], bizAge:['mid','mature'], employees:['micro','small','mid','large'], sales:['s2','s3','s4','s5'] },
+    { cat:'補助金', title:'大阪府 中小企業省エネ設備導入補助金', desc:'省エネ効果のある設備（空調・照明・冷凍冷蔵機器等）の導入費用を補助。脱炭素経営を支援。', amount:'補助率 1/2・上限 500万円', concerns:['green','equip'], bizAge:['young','mid','mature'], employees:['micro','small','mid','large'], sales:['s2','s3','s4','s5'] },
+
+    // 雇用・人材
+    { cat:'助成金', title:'雇用調整助成金', desc:'景気変動等で事業縮小を余儀なくされた場合、休業・教育訓練等により雇用維持した企業に助成。', amount:'休業手当等の最大2/3〜4/5', concerns:['hire','sales_down'], bizAge:['young','mid','mature'], employees:['micro','small','mid','large'], sales:['s1','s2','s3','s4','s5'] },
+    { cat:'助成金', title:'キャリアアップ助成金（正社員化コース）', desc:'有期雇用労働者を正規雇用に転換した場合に支給。大阪労働局管轄で申請可能。', amount:'1人あたり 最大80万円', concerns:['hire'], bizAge:['young','mid','mature'], employees:['micro','small','mid','large'], sales:['s1','s2','s3','s4','s5'] },
+    { cat:'助成金', title:'特定求職者雇用開発助成金（成長分野等人材確保・育成コース）', desc:'高齢者・障がい者・就職困難者等を雇用した事業主に助成。大阪ハローワーク経由で申請。', amount:'1人あたり 最大240万円', concerns:['hire'], bizAge:['young','mid','mature'], employees:['micro','small','mid','large'], sales:['s1','s2','s3','s4','s5'] },
+
+    // 創業支援
+    { cat:'創業支援', title:'大阪府 創業支援補助金（Osaka Startup Park連携）', desc:'大阪府内で新たに創業する方を対象に、創業に必要な経費の一部を補助。メンタリング支援も付帯。', amount:'補助上限 100万円', concerns:['startup'], bizAge:['new','young'], employees:['solo','micro'], sales:['s1'] },
+    { cat:'創業支援', title:'大阪市 創業支援事業者補助金（なにわ創業者支援）', desc:'大阪市内での創業を計画・実施する方へ、経費補助＋経営相談窓口をワンストップで提供。', amount:'補助上限 50万円', concerns:['startup'], bizAge:['new','young'], employees:['solo','micro'], sales:['s1'], city:'大阪市' },
+
+    // 事業承継
+    { cat:'事業承継', title:'事業承継・引継ぎ補助金（経営革新枠）', desc:'事業承継・M&Aを契機に経営革新に取り組む中小企業を支援。設備投資・販路開拓費用を補助。', amount:'補助上限 600万円', concerns:['succession'], bizAge:['mid','mature'], employees:['micro','small','mid'], sales:['s2','s3','s4'] },
+    { cat:'事業承継', title:'大阪府事業引継ぎ支援センター（無料相談）', desc:'後継者不在・M&A・廃業等の相談を無料で受け付け。マッチングから契約まで一貫サポート。', amount:'相談無料', concerns:['succession'], bizAge:['mid','mature'], employees:['solo','micro','small','mid','large'], sales:['s1','s2','s3','s4','s5'] },
+
+    // 海外展開
+    { cat:'海外展開', title:'大阪産業局 輸出・海外展開支援補助金', desc:'大阪府内の中小企業が海外展示会出展・海外市場調査等を行う際の費用を補助。', amount:'補助上限 200万円', concerns:['export'], bizAge:['mid','mature'], employees:['small','mid','large'], sales:['s3','s4','s5'] },
+  ];
+
+  function diagSubmit(type) {
+    let matched = [];
+
+    if (type === 'personal') {
+      const age = parseInt(document.getElementById('d-age').value) || 0;
+      const city = document.getElementById('d-city').value;
+      const income = document.getElementById('d-income').value;
+      const family = document.getElementById('d-family').value;
+      const kids = parseInt(document.getElementById('d-kids').value) || 0;
+      const concerns = Array.from(document.querySelectorAll('#d-concerns input:checked')).map(i => i.value);
+      if (concerns.length === 0) { alert('お困りごとを1つ以上選択してください'); return; }
+      const isOsakaCity = city.startsWith('大阪市');
+      matched = PROGRAMS.filter(p => {
+        if (p.city === '大阪市' && !isOsakaCity) return false;
+        if (age < p.minAge || age > p.maxAge) return false;
+        if (p.minKids > 0 && kids < p.minKids) return false;
+        if (p.family && p.family !== family) return false;
+        if (!p.incomes.includes(income)) return false;
+        if (!concerns.some(c => p.concerns.includes(c))) return false;
+        return true;
+      });
+      document.getElementById('p-panel-3').classList.remove('active');
+      document.getElementById('p-dot-3').classList.remove('active');
+      document.getElementById('p-dot-3').classList.add('done');
+      document.getElementById('p-conn-2').classList.add('done');
+      document.getElementById('result-label').textContent = 'あなたに該当する可能性のある制度が見つかりました';
+
+    } else {
+      const city = document.getElementById('b-city').value;
+      const employees = document.getElementById('b-employees').value;
+      const sales = document.getElementById('b-sales').value;
+      const bizAge = document.getElementById('b-age').value;
+      const concerns = Array.from(document.querySelectorAll('#b-concerns input:checked')).map(i => i.value);
+      if (concerns.length === 0) { alert('課題・目的を1つ以上選択してください'); return; }
+      const isOsakaCity = city.startsWith('大阪市');
+      matched = BIZ_PROGRAMS.filter(p => {
+        if (p.city === '大阪市' && !isOsakaCity) return false;
+        if (!p.employees.includes(employees)) return false;
+        if (!p.sales.includes(sales)) return false;
+        if (!p.bizAge.includes(bizAge)) return false;
+        if (!concerns.some(c => p.concerns.includes(c))) return false;
+        return true;
+      });
+      document.getElementById('b-panel-3').classList.remove('active');
+      document.getElementById('b-dot-3').classList.remove('active');
+      document.getElementById('b-dot-3').classList.add('done');
+      document.getElementById('b-conn-2').classList.add('done');
+      document.getElementById('result-label').textContent = '御社に該当する可能性のある制度・支援が見つかりました';
     }
-    if (step === 2) {
-      if (!document.getElementById('d-family').value) { alert('世帯構成を選択してください'); return; }
-      if (!document.getElementById('d-income').value) { alert('世帯年収を選択してください'); return; }
-    }
-    document.getElementById('panel-' + step).classList.remove('active');
-    document.getElementById('panel-' + (step + 1)).classList.add('active');
-    document.getElementById('dot-' + step).classList.remove('active');
-    document.getElementById('dot-' + step).classList.add('done');
-    document.getElementById('conn-' + step).classList.add('done');
-    document.getElementById('dot-' + (step + 1)).classList.add('active');
-    document.getElementById('diagnosis').scrollIntoView({ behavior: 'smooth', block: 'start' });
-  }
 
-  function diagBack(step) {
-    document.getElementById('panel-' + step).classList.remove('active');
-    document.getElementById('panel-' + (step - 1)).classList.add('active');
-    document.getElementById('dot-' + step).classList.remove('active');
-    document.getElementById('dot-' + (step - 1)).classList.remove('done');
-    document.getElementById('dot-' + (step - 1)).classList.add('active');
-    document.getElementById('conn-' + (step - 1)).classList.remove('done');
-    document.getElementById('diagnosis').scrollIntoView({ behavior: 'smooth', block: 'start' });
-  }
-
-  function diagSubmit() {
-    const age = parseInt(document.getElementById('d-age').value) || 0;
-    const city = document.getElementById('d-city').value;
-    const income = document.getElementById('d-income').value;
-    const family = document.getElementById('d-family').value;
-    const kids = parseInt(document.getElementById('d-kids').value) || 0;
-    const concerns = Array.from(document.querySelectorAll('#d-concerns input:checked')).map(i => i.value);
-
-    if (concerns.length === 0) { alert('お困りごとを1つ以上選択してください'); return; }
-
-    const isOsakaCity = city.startsWith('大阪市');
-
-    const matched = PROGRAMS.filter(p => {
-      if (p.city === '大阪市' && !isOsakaCity) return false;
-      if (age < p.minAge || age > p.maxAge) return false;
-      if (p.minKids > 0 && kids < p.minKids) return false;
-      if (p.family && p.family !== family) return false;
-      if (!p.incomes.includes(income)) return false;
-      if (!concerns.some(c => p.concerns.includes(c))) return false;
-      return true;
-    });
-
-    // パネル非表示・結果表示
-    document.getElementById('panel-3').classList.remove('active');
     const resultsEl = document.getElementById('diag-results');
     resultsEl.classList.add('active');
-    document.getElementById('dot-3').classList.remove('active');
-    document.getElementById('dot-3').classList.add('done');
-    document.getElementById('conn-2').classList.add('done');
+    document.getElementById('result-num').textContent = matched.length;
 
     document.getElementById('result-num').textContent = matched.length;
 
@@ -1982,14 +2257,15 @@
   }
 
   function diagReset() {
-    ['panel-1','panel-2','panel-3'].forEach(id => document.getElementById(id).classList.remove('active'));
-    document.getElementById('panel-1').classList.add('active');
+    // 結果を隠す
     document.getElementById('diag-results').classList.remove('active');
-    ['dot-1','dot-2','dot-3'].forEach(id => {
-      document.getElementById(id).classList.remove('active','done');
-    });
-    document.getElementById('dot-1').classList.add('active');
-    ['conn-1','conn-2'].forEach(id => document.getElementById(id).classList.remove('done'));
+
+    // 個人フローをリセット
+    ['p-panel-1','p-panel-2','p-panel-3'].forEach(id => document.getElementById(id).classList.remove('active'));
+    document.getElementById('p-panel-1').classList.add('active');
+    ['p-dot-1','p-dot-2','p-dot-3'].forEach(id => document.getElementById(id).classList.remove('active','done'));
+    document.getElementById('p-dot-1').classList.add('active');
+    ['p-conn-1','p-conn-2'].forEach(id => document.getElementById(id).classList.remove('done'));
     document.getElementById('d-city').value = '';
     document.getElementById('d-age').value = '';
     document.getElementById('d-gender').value = '';
@@ -1997,8 +2273,26 @@
     document.getElementById('d-kids').value = '0';
     document.getElementById('d-income').value = '';
     document.querySelectorAll('#d-concerns input').forEach(i => i.checked = false);
+
+    // 法人フローをリセット
+    ['b-panel-1','b-panel-2','b-panel-3'].forEach(id => document.getElementById(id).classList.remove('active'));
+    document.getElementById('b-panel-1').classList.add('active');
+    ['b-dot-1','b-dot-2','b-dot-3'].forEach(id => document.getElementById(id).classList.remove('active','done'));
+    document.getElementById('b-dot-1').classList.add('active');
+    ['b-conn-1','b-conn-2'].forEach(id => document.getElementById(id).classList.remove('done'));
+    document.getElementById('b-city').value = '';
+    document.getElementById('b-industry').value = '';
+    document.getElementById('b-form').value = '';
+    document.getElementById('b-employees').value = '';
+    document.getElementById('b-sales').value = '';
+    document.getElementById('b-age').value = '';
+    document.querySelectorAll('#b-concerns input').forEach(i => i.checked = false);
+
+    // チェックラベルリセット
     document.querySelectorAll('.diag-check-label').forEach(l => l.classList.remove('checked'));
-    document.getElementById('diagnosis').scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+    // タイプ選択に戻る
+    backToTypeSelect();
   }
 </script>
 </body>
