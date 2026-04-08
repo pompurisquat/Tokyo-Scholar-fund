@@ -569,6 +569,143 @@
       .howto-steps { flex-direction: column; }
     }
 
+    /* ─── CATEGORY MODAL ─── */
+    .cat-modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.45);
+      z-index: 350;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .3s;
+    }
+    .cat-modal-overlay.open { opacity: 1; pointer-events: all; }
+    .cat-modal {
+      background: white;
+      border-radius: 24px;
+      width: 100%;
+      max-width: 600px;
+      max-height: 82vh;
+      display: flex;
+      flex-direction: column;
+      transform: translateY(20px) scale(.97);
+      transition: transform .3s;
+      overflow: hidden;
+    }
+    .cat-modal-overlay.open .cat-modal { transform: translateY(0) scale(1); }
+
+    .cat-modal-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 22px 24px 18px;
+      border-bottom: 1px solid #eee;
+      flex-shrink: 0;
+    }
+    .cat-modal-icon { font-size: 2rem; }
+    .cat-modal-title { font-size: 1.15rem; font-weight: 900; flex: 1; }
+    .cat-modal-close {
+      background: none; border: none;
+      font-size: 1.3rem; cursor: pointer;
+      color: var(--text-light); line-height: 1;
+      transition: color .2s;
+    }
+    .cat-modal-close:hover { color: var(--text); }
+
+    .cat-modal-body {
+      overflow-y: auto;
+      padding: 20px 24px 24px;
+      flex: 1;
+    }
+    .cat-modal-count {
+      font-size: .8rem;
+      color: var(--text-light);
+      margin-bottom: 16px;
+    }
+    .cat-modal-count strong { color: var(--green); }
+
+    .cat-prog-card {
+      border: 1.5px solid var(--green-light);
+      border-radius: 14px;
+      padding: 16px 18px;
+      margin-bottom: 12px;
+      transition: border-color .2s, box-shadow .2s;
+    }
+    .cat-prog-card:last-child { margin-bottom: 0; }
+    .cat-prog-card:hover { border-color: var(--green); box-shadow: 0 4px 14px rgba(0,110,60,.1); }
+    .cat-prog-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 6px;
+      flex-wrap: wrap;
+    }
+    .cat-prog-title { font-size: .93rem; font-weight: 700; }
+    .cat-prog-amount {
+      font-size: .82rem;
+      font-weight: 700;
+      color: var(--green);
+      white-space: nowrap;
+    }
+    .cat-prog-desc {
+      font-size: .8rem;
+      color: var(--text-light);
+      line-height: 1.65;
+      margin-bottom: 10px;
+    }
+    .cat-prog-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .btn-cat-cart {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: var(--green);
+      color: white;
+      border: none;
+      padding: 7px 16px;
+      border-radius: 50px;
+      font-size: .78rem;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: 'Noto Sans JP', sans-serif;
+      transition: background .2s;
+    }
+    .btn-cat-cart:hover { background: var(--green-dark); }
+    .btn-cat-cart.in-cart { background: #ccc; color: #666; cursor: default; }
+
+    .cat-modal-footer {
+      padding: 16px 24px;
+      border-top: 1px solid #eee;
+      flex-shrink: 0;
+      text-align: center;
+    }
+    .btn-go-diag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: transparent;
+      color: var(--green);
+      border: 2px solid var(--green);
+      padding: 10px 24px;
+      border-radius: 50px;
+      font-size: .88rem;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: 'Noto Sans JP', sans-serif;
+      transition: background .2s;
+    }
+    .btn-go-diag:hover { background: var(--green-pale); }
+
     /* ─── USER TYPE TOGGLE ─── */
     .type-toggle {
       display: flex;
@@ -1241,70 +1378,70 @@
   </div>
   <div class="categories-grid">
 
-    <div class="cat-card fade-up" onclick="jumpToDiag('personal','childcare')">
+    <div class="cat-card fade-up" onclick="openCatModal('childcare','👶','子育て')">
       <span class="cat-icon">👶</span>
       <div class="cat-name">子育て</div>
       <div class="cat-desc">子ども医療費助成・保育料・児童手当・出産支援金</div>
       <span class="cat-tag">大阪府独自あり</span>
     </div>
 
-    <div class="cat-card fade-up" onclick="jumpToDiag('personal','medical')">
+    <div class="cat-card fade-up" onclick="openCatModal('medical','🏥','医療')">
       <span class="cat-icon">🏥</span>
       <div class="cat-name">医療</div>
       <div class="cat-desc">高額療養費・障がい者医療費助成・後期高齢者医療</div>
       <span class="cat-tag">無料診断あり</span>
     </div>
 
-    <div class="cat-card fade-up" onclick="jumpToDiag('personal','housing')">
+    <div class="cat-card fade-up" onclick="openCatModal('housing','🏠','住宅')">
       <span class="cat-icon">🏠</span>
       <div class="cat-name">住宅</div>
       <div class="cat-desc">府営住宅・住宅確保給付金・空き家活用補助</div>
       <span class="cat-tag">申請サポート</span>
     </div>
 
-    <div class="cat-card fade-up" onclick="jumpToDiag('personal','nursing')">
+    <div class="cat-card fade-up" onclick="openCatModal('nursing','🤝','介護')">
       <span class="cat-icon">🤝</span>
       <div class="cat-name">介護</div>
       <div class="cat-desc">介護保険サービス・家族介護支援・介護予防教室</div>
       <span class="cat-tag">窓口案内あり</span>
     </div>
 
-    <div class="cat-card fade-up" onclick="jumpToDiag('personal','disability')">
+    <div class="cat-card fade-up" onclick="openCatModal('disability','♿','障害')">
       <span class="cat-icon">♿</span>
       <div class="cat-name">障害</div>
       <div class="cat-desc">障がい者手帳・就労継続支援・グループホーム</div>
       <span class="cat-tag">相談窓口連携</span>
     </div>
 
-    <div class="cat-card fade-up" onclick="jumpToDiag('personal','education')">
+    <div class="cat-card fade-up" onclick="openCatModal('education','🎓','教育')">
       <span class="cat-icon">🎓</span>
       <div class="cat-name">教育</div>
       <div class="cat-desc">私立高校授業料無償化（大阪独自）・奨学給付金</div>
       <span class="cat-tag">大阪府独自あり</span>
     </div>
 
-    <div class="cat-card fade-up" onclick="jumpToDiag('personal','job')">
+    <div class="cat-card fade-up" onclick="openCatModal('job','💼','就労')">
       <span class="cat-icon">💼</span>
       <div class="cat-name">就労</div>
       <div class="cat-desc">就業促進給付・職業訓練・シニア就労支援</div>
       <span class="cat-tag">ハローワーク連携</span>
     </div>
 
-    <div class="cat-card fade-up" onclick="jumpToDiag('personal','poverty')">
+    <div class="cat-card fade-up" onclick="openCatModal('poverty','🌱','生活困窮')">
       <span class="cat-icon">🌱</span>
       <div class="cat-name">生活困窮</div>
       <div class="cat-desc">生活保護・緊急小口資金・住居確保給付金</div>
       <span class="cat-tag">即日対応可</span>
     </div>
 
-    <div class="cat-card fade-up" onclick="jumpToDiag('personal','tax')">
+    <div class="cat-card fade-up" onclick="openCatModal('tax','🧾','税金')">
       <span class="cat-icon">🧾</span>
       <div class="cat-name">税金</div>
       <div class="cat-desc">府民税・市民税の各種控除・減免・猶予制度</div>
       <span class="cat-tag">控除診断あり</span>
     </div>
 
-    <div class="cat-card fade-up" onclick="jumpToDiag('personal','pension')">
+    <div class="cat-card fade-up" onclick="openCatModal('pension','🪙','年金')">
       <span class="cat-icon">🪙</span>
       <div class="cat-name">年金</div>
       <div class="cat-desc">国民年金・厚生年金・保険料免除・納付猶予</div>
@@ -1801,6 +1938,26 @@
   </div>
 </footer>
 
+<!-- ── CATEGORY MODAL ──────────────────────────── -->
+<div class="cat-modal-overlay" id="cat-modal-overlay" onclick="closeCatModal(event)">
+  <div class="cat-modal">
+    <div class="cat-modal-header">
+      <span class="cat-modal-icon" id="cat-modal-icon"></span>
+      <span class="cat-modal-title" id="cat-modal-title"></span>
+      <button class="cat-modal-close" onclick="closeCatModal()">✕</button>
+    </div>
+    <div class="cat-modal-body">
+      <p class="cat-modal-count" id="cat-modal-count"></p>
+      <div id="cat-modal-list"></div>
+    </div>
+    <div class="cat-modal-footer">
+      <button class="btn-go-diag" onclick="closeCatModal(); document.getElementById('diagnosis').scrollIntoView({behavior:'smooth'});">
+        🔍 条件を絞って診断する
+      </button>
+    </div>
+  </div>
+</div>
+
 <!-- ── CART OVERLAY + DRAWER ──────────────────── -->
 <div class="cart-overlay" id="cart-overlay" onclick="closeCart()"></div>
 <div class="cart-drawer" id="cart-drawer">
@@ -1895,29 +2052,68 @@
     });
   });
 
-  // ─── カテゴリカードから診断へジャンプ ───────────────────────────
-  function jumpToDiag(type, concern) {
-    // 診断をリセットして個人フローを開く
-    diagReset();
-    selectType(type);
-    // お困りごとステップまで自動で進める（Step1・2はスキップせず、Step3を開いてチェック済みに）
-    // Step3パネルを直接表示
-    document.getElementById('p-panel-1').classList.remove('active');
-    document.getElementById('p-panel-3').classList.add('active');
-    ['p-dot-1','p-dot-2'].forEach(id => {
-      document.getElementById(id).classList.remove('active');
-      document.getElementById(id).classList.add('done');
-    });
-    document.getElementById('p-conn-1').classList.add('done');
-    document.getElementById('p-conn-2').classList.add('done');
-    document.getElementById('p-dot-3').classList.add('active');
-    // 該当チェックボックスをONに
-    const cb = document.querySelector(`#d-concerns input[value="${concern}"]`);
-    if (cb) {
-      cb.checked = true;
-      cb.closest('.diag-check-label').classList.add('checked');
-    }
-    document.getElementById('diagnosis').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  // ─── カテゴリモーダル ───────────────────────────
+  const CAT_CONCERN_MAP = {
+    childcare: ['childcare'],
+    medical:   ['medical'],
+    housing:   ['housing'],
+    nursing:   ['nursing'],
+    disability:['disability'],
+    education: ['education'],
+    job:       ['job'],
+    poverty:   ['poverty'],
+    tax:       ['tax'],
+    pension:   ['pension'],
+  };
+
+  function openCatModal(concern, icon, name) {
+    // PROGRAMSから該当制度を全件抽出（年齢・年収条件を無視して concern だけでフィルタ）
+    const list = PROGRAMS.filter(p => p.concerns.includes(concern));
+
+    document.getElementById('cat-modal-icon').textContent = icon;
+    document.getElementById('cat-modal-title').textContent = name + 'の制度一覧';
+    document.getElementById('cat-modal-count').innerHTML =
+      `大阪府・大阪市の <strong>${list.length}</strong> 件の制度が見つかりました`;
+
+    document.getElementById('cat-modal-list').innerHTML = list.length === 0
+      ? '<p style="color:var(--text-light);font-size:.88rem;">現在掲載中の制度はありません。</p>'
+      : list.map(p => {
+          const safeName = p.title.replace(/\\/g,'\\\\').replace(/'/g,"\\'");
+          const inCart = cart.find(i => i.title === p.title);
+          return `
+          <div class="cat-prog-card">
+            <div class="cat-prog-head">
+              <span class="cat-prog-title">${p.title}</span>
+              <span class="cat-prog-amount">${p.amount.split('（')[0]}</span>
+            </div>
+            <div class="cat-prog-desc">${p.desc}</div>
+            <div class="cat-prog-footer">
+              <span style="font-size:.72rem;color:var(--text-light);">${p.city ? '📍 ' + p.city + '限定' : '📍 大阪府全域'}</span>
+              <button class="btn-cat-cart ${inCart ? 'in-cart' : ''}"
+                id="cat-cart-btn-${p.title.replace(/\s/g,'_')}"
+                onclick="addFromCatModal('${safeName}', this)"
+                ${inCart ? 'disabled' : ''}>
+                ${inCart ? '✓ カート済み' : '🛒 カートに入れる'}
+              </button>
+            </div>
+          </div>`;
+        }).join('');
+
+    document.getElementById('cat-modal-overlay').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeCatModal(e) {
+    if (e && e.target !== document.getElementById('cat-modal-overlay')) return;
+    document.getElementById('cat-modal-overlay').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  function addFromCatModal(title, btn) {
+    addToCart(title);
+    btn.classList.add('in-cart');
+    btn.textContent = '✓ カート済み';
+    btn.disabled = true;
   }
 
   // ─── タイプ選択 ───────────────────────────
