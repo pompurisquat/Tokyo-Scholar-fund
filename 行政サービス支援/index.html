@@ -952,6 +952,42 @@
       color: var(--text-light);
       font-size: .9rem;
     }
+
+    /* ─── SNS SHARE ─── */
+    .sns-share-box {
+      text-align: center;
+      margin: 28px 0 8px;
+    }
+    .sns-share-box p {
+      font-size: .82rem;
+      color: var(--text-light);
+      margin-bottom: 12px;
+      font-weight: 500;
+    }
+    .sns-share-btns {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .sns-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 9px 18px;
+      border-radius: 50px;
+      font-size: .8rem;
+      font-weight: 700;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      transition: opacity .2s, transform .15s;
+      white-space: nowrap;
+    }
+    .sns-btn:hover { opacity: .85; transform: translateY(-1px); }
+    .sns-btn.x-btn   { background: #000; color: #fff; }
+    .sns-btn.line-btn { background: #06C755; color: #fff; }
+    .sns-btn.fb-btn   { background: #1877F2; color: #fff; }
     .btn-retry {
       display: inline-block;
       margin-top: 16px;
@@ -2001,9 +2037,32 @@
     <div id="diag-results">
       <div class="result-count">
         <strong id="result-num">0</strong><span style="font-size:1.1rem;font-weight:700;color:var(--green)"> 件</span>
-        <p id="result-label">あなたに該当する可能性のある制度が見つかりました</p>
+        <p id="result-label">あなたに該当する可能性のある制度が見つかりました 👏🎉</p>
       </div>
       <div id="result-list"></div>
+
+      <!-- SNSシェア -->
+      <div class="sns-share-box">
+        <p>📣 このサービスをお友達・知り合いにシェアしませんか？</p>
+        <div class="sns-share-btns">
+          <a class="sns-btn x-btn"
+             href="https://twitter.com/intent/tweet?text=大阪の行政サービス・補助金を3ステップで診断！無料で使えます👇&url=https%3A%2F%2Finfohub-eight.vercel.app%2F"
+             target="_blank" rel="noopener">
+            𝕏（Twitter）でシェア
+          </a>
+          <a class="sns-btn line-btn"
+             href="https://social-plugins.line.me/lineit/share?url=https%3A%2F%2Finfohub-eight.vercel.app%2F"
+             target="_blank" rel="noopener">
+            LINEでシェア
+          </a>
+          <a class="sns-btn fb-btn"
+             href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Finfohub-eight.vercel.app%2F"
+             target="_blank" rel="noopener">
+            Facebookでシェア
+          </a>
+        </div>
+      </div>
+
       <div style="text-align:center; margin-top:24px;">
         <button class="btn-retry" onclick="diagReset()">← 条件を変えてもう一度診断する</button>
       </div>
@@ -2569,7 +2628,7 @@
       document.getElementById('p-dot-3').classList.remove('active');
       document.getElementById('p-dot-3').classList.add('done');
       document.getElementById('p-conn-2').classList.add('done');
-      document.getElementById('result-label').textContent = 'あなたに該当する可能性のある制度が見つかりました';
+      document.getElementById('result-label').innerHTML = 'あなたに該当する可能性のある制度が見つかりました 👏🎉<br><span style="font-size:.85rem;color:var(--text-light)">さっそくカートに入れて申請へ進みましょう！</span>';
 
     } else {
       const city = document.getElementById('b-city').value;
@@ -2591,7 +2650,7 @@
       document.getElementById('b-dot-3').classList.remove('active');
       document.getElementById('b-dot-3').classList.add('done');
       document.getElementById('b-conn-2').classList.add('done');
-      document.getElementById('result-label').textContent = '御社に該当する可能性のある制度・支援が見つかりました';
+      document.getElementById('result-label').innerHTML = '御社に該当する可能性のある制度・支援が見つかりました 👏🎉<br><span style="font-size:.85rem;color:var(--text-light)">さっそくカートに入れて申請へ進みましょう！</span>';
     }
 
     const resultsEl = document.getElementById('diag-results');
@@ -2640,7 +2699,7 @@
 
   function addToCart(title) {
     if (cart.find(i => i.title === title)) return;
-    const prog = PROGRAMS.find(p => p.title === title);
+    const prog = PROGRAMS.find(p => p.title === title) || BIZ_PROGRAMS.find(p => p.title === title);
     if (!prog) return;
     cart.push(prog);
     renderCart();
