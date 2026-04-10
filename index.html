@@ -952,6 +952,42 @@
       color: var(--text-light);
       font-size: .9rem;
     }
+
+    /* ─── SNS SHARE ─── */
+    .sns-share-box {
+      text-align: center;
+      margin: 28px 0 8px;
+    }
+    .sns-share-box p {
+      font-size: .82rem;
+      color: var(--text-light);
+      margin-bottom: 12px;
+      font-weight: 500;
+    }
+    .sns-share-btns {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .sns-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 9px 18px;
+      border-radius: 50px;
+      font-size: .8rem;
+      font-weight: 700;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      transition: opacity .2s, transform .15s;
+      white-space: nowrap;
+    }
+    .sns-btn:hover { opacity: .85; transform: translateY(-1px); }
+    .sns-btn.x-btn   { background: #000; color: #fff; }
+    .sns-btn.line-btn { background: #06C755; color: #fff; }
+    .sns-btn.fb-btn   { background: #1877F2; color: #fff; }
     .btn-retry {
       display: inline-block;
       margin-top: 16px;
@@ -987,6 +1023,8 @@
       font-family: 'Noto Sans JP', sans-serif;
       transition: background .2s, transform .15s, box-shadow .2s;
       box-shadow: 0 3px 10px rgba(0,110,60,.2);
+      white-space: nowrap;
+      flex-shrink: 0;
     }
     .btn-cart-add:hover { background: var(--green-dark); transform: translateY(-1px); }
     .btn-cart-add.in-cart {
@@ -1192,6 +1230,221 @@
       text-align: center;
       line-height: 1.6;
     }
+
+    /* ─── REGISTER MODAL ─── */
+    .reg-modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.52);
+      z-index: 400;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .3s;
+    }
+    .reg-modal-overlay.open { opacity: 1; pointer-events: all; }
+
+    .reg-modal {
+      background: white;
+      border-radius: 24px;
+      width: 100%;
+      max-width: 500px;
+      max-height: 90vh;
+      overflow-y: auto;
+      position: relative;
+      transform: scale(.94);
+      transition: transform .3s;
+    }
+    .reg-modal-overlay.open .reg-modal { transform: scale(1); }
+
+    .reg-modal-close {
+      position: absolute; top: 16px; right: 18px;
+      background: none; border: none;
+      font-size: 1.3rem; cursor: pointer;
+      color: var(--text-light); z-index: 1;
+    }
+
+    /* ── スクリーン共通 ── */
+    .reg-screen { display: none; padding: 36px 32px 32px; }
+    .reg-screen.active { display: block; }
+
+    /* ── STEP バー ── */
+    .reg-steps {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0;
+      margin-bottom: 28px;
+    }
+    .reg-step-dot {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+    }
+    .reg-step-dot .dot {
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      background: var(--green-light);
+      color: var(--green-dark);
+      font-size: .85rem;
+      font-weight: 900;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .reg-step-dot.active .dot { background: var(--green); color: white; }
+    .reg-step-dot.done .dot { background: var(--green-dark); color: white; }
+    .reg-step-dot span { font-size: .65rem; color: var(--text-light); white-space: nowrap; }
+    .reg-step-dot.active span { color: var(--green); font-weight: 700; }
+    .reg-step-line {
+      width: 48px; height: 2px;
+      background: var(--green-light);
+      margin-bottom: 16px;
+    }
+    .reg-step-line.done { background: var(--green-dark); }
+
+    /* ── フォーム画面 ── */
+    .reg-cart-preview {
+      background: var(--bg);
+      border-radius: 12px;
+      padding: 14px 16px;
+      margin-bottom: 22px;
+    }
+    .reg-cart-preview p {
+      font-size: .75rem;
+      color: var(--text-light);
+      margin-bottom: 8px;
+      font-weight: 600;
+    }
+    .reg-cart-preview ul {
+      font-size: .82rem;
+      padding-left: 16px;
+      line-height: 1.9;
+      color: var(--text);
+    }
+    .reg-type-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 14px;
+      border-radius: 50px;
+      font-size: .78rem;
+      font-weight: 700;
+      margin-bottom: 18px;
+    }
+    .reg-type-badge.self { background: var(--green-light); color: var(--green-dark); }
+    .reg-type-badge.pro { background: var(--orange-light); color: var(--orange); }
+
+    .reg-form { display: flex; flex-direction: column; gap: 12px; }
+    .reg-form input {
+      width: 100%;
+      padding: 12px 15px;
+      border: 1.5px solid #d0e8d9;
+      border-radius: 10px;
+      font-size: .9rem;
+      font-family: 'Noto Sans JP', sans-serif;
+      background: var(--bg);
+      outline: none;
+      transition: border-color .2s;
+    }
+    .reg-form input:focus { border-color: var(--green); }
+    .reg-terms {
+      font-size: .72rem;
+      color: var(--text-light);
+      text-align: center;
+      line-height: 1.6;
+    }
+    .btn-reg-submit {
+      width: 100%;
+      background: var(--green);
+      color: white;
+      border: none;
+      padding: 15px;
+      border-radius: 12px;
+      font-size: .97rem;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: 'Noto Sans JP', sans-serif;
+      transition: background .2s, transform .15s;
+    }
+    .btn-reg-submit:hover { background: var(--green-dark); transform: translateY(-1px); }
+    .btn-reg-submit.pro-submit { background: var(--orange); }
+    .btn-reg-submit.pro-submit:hover { background: #c94200; }
+
+    /* ── 完了画面（自分で申請） ── */
+    .reg-done-icon { font-size: 3rem; text-align: center; margin-bottom: 12px; }
+    .reg-done-title { font-size: 1.2rem; font-weight: 900; text-align: center; margin-bottom: 6px; }
+    .reg-done-sub { font-size: .85rem; color: var(--text-light); text-align: center; margin-bottom: 24px; line-height: 1.7; }
+
+    .self-link-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
+    .self-link-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--bg);
+      border-radius: 12px;
+      padding: 13px 16px;
+      gap: 10px;
+    }
+    .self-link-name { font-size: .85rem; font-weight: 700; flex: 1; }
+    .self-link-cat {
+      font-size: .68rem;
+      background: var(--green-light);
+      color: var(--green-dark);
+      padding: 2px 8px;
+      border-radius: 50px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+    .self-link-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: var(--green);
+      color: white;
+      text-decoration: none;
+      font-size: .75rem;
+      font-weight: 700;
+      padding: 6px 13px;
+      border-radius: 50px;
+      white-space: nowrap;
+      transition: background .2s;
+    }
+    .self-link-btn:hover { background: var(--green-dark); }
+    .self-note {
+      font-size: .72rem;
+      color: var(--text-light);
+      text-align: center;
+      line-height: 1.65;
+      margin-bottom: 16px;
+    }
+
+    /* ── 完了画面（プロ依頼） ── */
+    .pro-wait-items {
+      background: var(--orange-light);
+      border-radius: 12px;
+      padding: 14px 16px;
+      margin-bottom: 18px;
+    }
+    .pro-wait-items p { font-size: .75rem; color: var(--orange); font-weight: 700; margin-bottom: 6px; }
+    .pro-wait-items ul { font-size: .82rem; padding-left: 16px; line-height: 1.9; }
+
+    .btn-reg-close {
+      width: 100%;
+      background: transparent;
+      color: var(--green);
+      border: 2px solid var(--green);
+      padding: 12px;
+      border-radius: 12px;
+      font-size: .9rem;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: 'Noto Sans JP', sans-serif;
+      transition: background .2s;
+    }
+    .btn-reg-close:hover { background: var(--green-pale); }
 
     /* ─── PRO MODAL ─── */
     .pro-modal-overlay {
@@ -1784,9 +2037,32 @@
     <div id="diag-results">
       <div class="result-count">
         <strong id="result-num">0</strong><span style="font-size:1.1rem;font-weight:700;color:var(--green)"> 件</span>
-        <p id="result-label">あなたに該当する可能性のある制度が見つかりました</p>
+        <p id="result-label">あなたに該当する可能性のある制度が見つかりました 👏🎉</p>
       </div>
       <div id="result-list"></div>
+
+      <!-- SNSシェア -->
+      <div class="sns-share-box">
+        <p>📣 このサービスをお友達・知り合いにシェアしませんか？</p>
+        <div class="sns-share-btns">
+          <a class="sns-btn x-btn"
+             href="https://twitter.com/intent/tweet?text=大阪の行政サービス・補助金を3ステップで診断！無料で使えます👇&url=https%3A%2F%2Finfohub-eight.vercel.app%2F"
+             target="_blank" rel="noopener">
+            𝕏（Twitter）でシェア
+          </a>
+          <a class="sns-btn line-btn"
+             href="https://social-plugins.line.me/lineit/share?url=https%3A%2F%2Finfohub-eight.vercel.app%2F"
+             target="_blank" rel="noopener">
+            LINEでシェア
+          </a>
+          <a class="sns-btn fb-btn"
+             href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Finfohub-eight.vercel.app%2F"
+             target="_blank" rel="noopener">
+            Facebookでシェア
+          </a>
+        </div>
+      </div>
+
       <div style="text-align:center; margin-top:24px;">
         <button class="btn-retry" onclick="diagReset()">← 条件を変えてもう一度診断する</button>
       </div>
@@ -1850,26 +2126,26 @@
       </div>
       <span class="link-arrow">↗</span>
     </a>
-    <a href="https://www.pref.osaka.lg.jp/fukushi/" target="_blank" rel="noopener" class="link-card">
+    <a href="https://www.pref.osaka.lg.jp/chiikifukushi/" target="_blank" rel="noopener" class="link-card">
       <span class="link-icon">❤️</span>
       <div>
-        <div class="link-name">大阪府 福祉情報</div>
+        <div class="link-name">大阪府 地域福祉課</div>
         <div class="link-note">福祉・介護・障がい</div>
       </div>
       <span class="link-arrow">↗</span>
     </a>
-    <a href="https://osaka-shien.com/" target="_blank" rel="noopener" class="link-card">
+    <a href="https://www.city.osaka.lg.jp/fukushi/category/3-1-0-0-0-0-0-0-0-0.html" target="_blank" rel="noopener" class="link-card">
       <span class="link-icon">🤲</span>
       <div>
-        <div class="link-name">大阪くらし・つながりサポート</div>
+        <div class="link-name">大阪市 生活福祉・相談窓口</div>
         <div class="link-note">生活困窮・相談窓口</div>
       </div>
       <span class="link-arrow">↗</span>
     </a>
-    <a href="https://www.pref.osaka.lg.jp/kotogakko/mushouka/" target="_blank" rel="noopener" class="link-card">
+    <a href="https://www.pref.osaka.lg.jp/kotogakko/" target="_blank" rel="noopener" class="link-card">
       <span class="link-icon">🎓</span>
       <div>
-        <div class="link-name">大阪府 高校授業料無償化</div>
+        <div class="link-name">大阪府 高等学校課（授業料無償化）</div>
         <div class="link-note">私立高校授業料支援</div>
       </div>
       <span class="link-arrow">↗</span>
@@ -1976,42 +2252,92 @@
     <div class="cart-summary">
       <strong id="cart-total-count">0</strong> 件の制度をカートに入れています
     </div>
-    <button class="cart-action-self" onclick="goSelf()">
+    <button class="cart-action-self" onclick="openRegModal('self')">
       📋 自分で申請してみる
     </button>
-    <button class="cart-action-pro" onclick="openProModal()">
+    <button class="cart-action-pro" onclick="openRegModal('pro')">
       🤝 専門家にまるごとお任せする
     </button>
     <p class="cart-action-note">※「専門家にお任せ」は有料サービスです。<br>内容確認後にお見積もりをご案内します。</p>
   </div>
 </div>
 
-<!-- ── PRO MODAL ──────────────────────────────── -->
-<div class="pro-modal-overlay" id="pro-modal-overlay" onclick="closeProModal(event)">
-  <div class="pro-modal">
-    <button class="pro-modal-close" onclick="closeProModal()">✕</button>
-    <h3>🤝 専門家にまるごとお任せ</h3>
-    <p class="pro-lead">
-      書類集め・窓口対応・申請手続きをすべて代行します。<br>
-      「面倒くさい」「何から始めたらいいかわからない」という方も安心してお任せください。
-    </p>
-    <div class="pro-items" id="pro-items-list">
-      <p>カートの制度：</p>
-      <ul id="pro-cart-list"></ul>
-    </div>
-    <div id="pro-form-area">
-      <div class="pro-contact-form">
-        <input type="text" id="pro-name" placeholder="お名前" />
-        <input type="tel" id="pro-tel" placeholder="電話番号（例：090-0000-0000）" />
-        <input type="email" id="pro-email" placeholder="メールアドレス" />
-        <textarea id="pro-memo" placeholder="ご要望・ご状況など（任意）"></textarea>
-        <button class="btn-pro-send" onclick="sendProRequest()">📨 相談リクエストを送る</button>
+<!-- ── 会員登録モーダル ──────────────────────────── -->
+<div class="reg-modal-overlay" id="reg-modal-overlay" onclick="closeRegModal(event)">
+  <div class="reg-modal">
+    <button class="reg-modal-close" onclick="closeRegModal()">✕</button>
+
+    <!-- STEP バー -->
+    <div style="padding:28px 32px 0; display:flex; align-items:center; justify-content:center; gap:0;" id="reg-step-bar">
+      <div class="reg-step-dot active" id="reg-dot-1">
+        <div class="dot">1</div><span>会員登録</span>
+      </div>
+      <div class="reg-step-line" id="reg-line-1"></div>
+      <div class="reg-step-dot" id="reg-dot-2">
+        <div class="dot">2</div><span>申請へ進む</span>
       </div>
     </div>
-    <div class="pro-sent-msg" id="pro-sent-msg">
-      <span class="sent-icon">✅</span>
-      <p>リクエストを受け付けました！<br>担当者から1〜2営業日以内にご連絡いたします。<br>しばらくお待ちください。</p>
+
+    <!-- ── SCREEN 1: 登録フォーム ── -->
+    <div class="reg-screen active" id="reg-screen-form">
+      <div id="reg-type-badge-area"></div>
+      <h3 style="font-size:1.1rem;font-weight:900;margin-bottom:6px;color:var(--green-dark);">会員登録</h3>
+      <p style="font-size:.82rem;color:var(--text-light);margin-bottom:18px;line-height:1.7;">
+        登録後、選択した制度の申請先または専門家へのご依頼に進めます。
+      </p>
+      <div class="reg-cart-preview">
+        <p>カートの制度：</p>
+        <ul id="reg-cart-preview-list"></ul>
+      </div>
+      <div class="reg-form">
+        <input type="text" id="reg-name" placeholder="お名前（例：山田 太郎）" />
+        <input type="email" id="reg-email" placeholder="メールアドレス" />
+        <input type="tel" id="reg-tel" placeholder="電話番号（例：090-0000-0000）" />
+        <p class="reg-terms">
+          登録することで<a href="#" style="color:var(--green);">利用規約</a>・
+          <a href="#" style="color:var(--green);">プライバシーポリシー</a>に同意したものとみなします。
+        </p>
+        <button class="btn-reg-submit" id="reg-submit-btn" onclick="submitRegistration()">
+          登録して次へ進む →
+        </button>
+      </div>
     </div>
+
+    <!-- ── SCREEN 2a: 自分で申請 完了 ── -->
+    <div class="reg-screen" id="reg-screen-self">
+      <div class="reg-done-icon">✅</div>
+      <div class="reg-done-title">登録完了！</div>
+      <div class="reg-done-sub">
+        以下の申請窓口から手続きを進めてください。<br>
+        各リンク先で必要書類・申請方法をご確認ください。
+      </div>
+      <div class="self-link-list" id="self-link-list"></div>
+      <p class="self-note">
+        ※ 申請には本人確認書類等が必要な場合があります。<br>
+        ご不明点は各窓口に直接お問い合わせください。
+      </p>
+      <button class="btn-reg-close" onclick="closeRegModal()">閉じる</button>
+    </div>
+
+    <!-- ── SCREEN 2b: プロ依頼 完了 ── -->
+    <div class="reg-screen" id="reg-screen-pro">
+      <div class="reg-done-icon">🤝</div>
+      <div class="reg-done-title">ご依頼を受け付けました！</div>
+      <div class="reg-done-sub">
+        ご登録のメールアドレスに確認メールをお送りしました。<br>
+        担当の専門家より<strong>1〜2営業日以内</strong>にご連絡いたします。
+      </div>
+      <div class="pro-wait-items">
+        <p>📋 ご依頼の制度：</p>
+        <ul id="pro-wait-list"></ul>
+      </div>
+      <p class="self-note" style="margin-bottom:20px;">
+        ※ 書類の準備・窓口対応・申請手続きをすべて代行します。<br>
+        内容確認後にお見積もりをご案内します（有料サービス）。
+      </p>
+      <button class="btn-reg-close" onclick="closeRegModal()">閉じる</button>
+    </div>
+
   </div>
 </div>
 
@@ -2302,7 +2628,7 @@
       document.getElementById('p-dot-3').classList.remove('active');
       document.getElementById('p-dot-3').classList.add('done');
       document.getElementById('p-conn-2').classList.add('done');
-      document.getElementById('result-label').textContent = 'あなたに該当する可能性のある制度が見つかりました';
+      document.getElementById('result-label').innerHTML = 'あなたに該当する可能性のある制度が見つかりました 👏🎉<br><span style="font-size:.85rem;color:var(--text-light)">さっそくカートに入れて申請へ進みましょう！</span>';
 
     } else {
       const city = document.getElementById('b-city').value;
@@ -2324,7 +2650,7 @@
       document.getElementById('b-dot-3').classList.remove('active');
       document.getElementById('b-dot-3').classList.add('done');
       document.getElementById('b-conn-2').classList.add('done');
-      document.getElementById('result-label').textContent = '御社に該当する可能性のある制度・支援が見つかりました';
+      document.getElementById('result-label').innerHTML = '御社に該当する可能性のある制度・支援が見つかりました 👏🎉<br><span style="font-size:.85rem;color:var(--text-light)">さっそくカートに入れて申請へ進みましょう！</span>';
     }
 
     const resultsEl = document.getElementById('diag-results');
@@ -2373,7 +2699,7 @@
 
   function addToCart(title) {
     if (cart.find(i => i.title === title)) return;
-    const prog = PROGRAMS.find(p => p.title === title);
+    const prog = PROGRAMS.find(p => p.title === title) || BIZ_PROGRAMS.find(p => p.title === title);
     if (!prog) return;
     cart.push(prog);
     renderCart();
@@ -2442,39 +2768,138 @@
     }
   }
 
-  function goSelf() {
-    // 自分で申請 → 申請方法を案内するメッセージを表示してカートを閉じる
+  // ─── 制度別 申請先URL ───────────────────────────
+  const PROGRAM_URLS = {
+    '児童手当':                          { url: 'https://www.city.osaka.lg.jp/kodomo/page/0000009383.html', label: '大阪市 児童手当申請ページ' },
+    '大阪市 子ども医療費助成（18歳まで）':    { url: 'https://www.city.osaka.lg.jp/kodomo/page/0000355798.html', label: '大阪市 子ども医療費助成' },
+    '第2子以降 保育料 無償化（大阪府）':      { url: 'https://www.pref.osaka.lg.jp/kodomosupport/index.html', label: '大阪府 子どもサポート' },
+    'ひとり親家庭 医療費助成':              { url: 'https://www.pref.osaka.lg.jp/kodomosupport/hitoioya/iryo_jyosei.html', label: '大阪府 ひとり親医療費助成' },
+    '出産育児一時金':                     { url: 'https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/kenkou_iryou/iryouhoken/shussan/index.html', label: '厚生労働省 出産育児一時金' },
+    '高額療養費制度':                     { url: 'https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/kenkou_iryou/iryouhoken/juuyou/kougakuiryou/index.html', label: '厚生労働省 高額療養費' },
+    '後期高齢者医療制度':                  { url: 'https://www.pref.osaka.lg.jp/iryou/kouki/index.html', label: '大阪府 後期高齢者医療' },
+    '障がい者医療費助成（大阪府）':           { url: 'https://www.pref.osaka.lg.jp/shogaifukushi/iryo/jyosei.html', label: '大阪府 障がい者医療費助成' },
+    '大阪府営住宅 入居募集':               { url: 'https://www.osaka-kousha.or.jp/', label: '大阪府住宅供給公社' },
+    '住居確保給付金':                     { url: 'https://www.city.osaka.lg.jp/fukushi/page/0000372957.html', label: '大阪市 住居確保給付金' },
+    '住宅ローン控除（住宅借入金等特別控除）':   { url: 'https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1213.htm', label: '国税庁 住宅ローン控除' },
+    '介護保険サービス':                    { url: 'https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/hukushi_kaigo/kaigo_koureisha/index.html', label: '厚生労働省 介護保険' },
+    '家族介護慰労金（大阪市）':             { url: 'https://www.city.osaka.lg.jp/fukushi/page/0000024876.html', label: '大阪市 家族介護慰労金' },
+    '障害年金':                          { url: 'https://www.nenkin.go.jp/service/jukyu/shougainenkin/jukyu-yoken/20150514.html', label: '日本年金機構 障害年金' },
+    '特別障害者手当':                     { url: 'https://www.mhlw.go.jp/bunya/shougaihoken/jidou/tokubetu.html', label: '厚生労働省 特別障害者手当' },
+    '私立高校授業料 実質無償化（大阪府独自）': { url: 'https://www.pref.osaka.lg.jp/kotogakko/index.html', label: '大阪府 高等学校課' },
+    '高等学校等就学支援金':                { url: 'https://www.mext.go.jp/a_menu/shotou/mushouka/index.htm', label: '文部科学省 就学支援金' },
+    '大学無償化（高等教育の修学支援）':       { url: 'https://www.mext.go.jp/a_menu/koutou/hutankeigen/index.htm', label: '文部科学省 高等教育無償化' },
+    '雇用保険（基本手当・失業給付）':         { url: 'https://jsite.mhlw.go.jp/osaka-hellowork/', label: 'ハローワーク大阪' },
+    '就業促進給付金（大阪府独自）':           { url: 'https://jsite.mhlw.go.jp/osaka-hellowork/', label: 'ハローワーク大阪' },
+    '職業訓練（ハロートレーニング）':          { url: 'https://jsite.mhlw.go.jp/osaka-hellowork/', label: 'ハローワーク大阪' },
+    '生活保護':                          { url: 'https://www.city.osaka.lg.jp/fukushi/page/0000016942.html', label: '大阪市 生活保護申請' },
+    '緊急小口資金（社会福祉協議会）':         { url: 'https://www.pref.osaka.lg.jp/shakai/index.html', label: '大阪府 社会福祉協議会' },
+    '食料品・生活物資支援（フードバンク大阪）': { url: 'https://www.city.osaka.lg.jp/fukushi/category/3-1-0-0-0-0-0-0-0-0.html', label: '大阪市 生活福祉窓口' },
+    'ひとり親控除':                       { url: 'https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1171.htm', label: '国税庁 ひとり親控除' },
+    '障害者控除':                         { url: 'https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1160.htm', label: '国税庁 障害者控除' },
+    '医療費控除':                         { url: 'https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1120.htm', label: '国税庁 医療費控除' },
+    '国民年金保険料 免除・猶予':             { url: 'https://www.nenkin.go.jp/service/kokunen/menjo/20150407.html', label: '日本年金機構 保険料免除' },
+    '老齢基礎年金':                        { url: 'https://www.nenkin.go.jp/service/jukyu/roureinenkin/jukyu-yoken/20140421.html', label: '日本年金機構 老齢年金' },
+    // 法人
+    '大阪府 経営安定サポート資金（新メニュー）': { url: 'https://www.pref.osaka.lg.jp/chusho/shien/keieishien/index.html', label: '大阪府 中小企業支援' },
+    '大阪府 中小企業制度融資（一般融資）':     { url: 'https://www.pref.osaka.lg.jp/chusho/shien/keieishien/index.html', label: '大阪府 制度融資' },
+    '大阪市 小規模事業者向け融資（大阪市信用保証付き）': { url: 'https://www.city.osaka.lg.jp/keizaisenryaku/page/0000017014.html', label: '大阪市 中小企業支援' },
+    '日本政策金融公庫 創業融資':             { url: 'https://www.jfc.go.jp/n/finance/search/04_ippan_m.html', label: '日本政策金融公庫' },
+    '小規模事業者持続化補助金（経営改善融資連携）': { url: 'https://r3.jizokukahojokin.info/', label: '持続化補助金 公式' },
+    'ものづくり補助金（ものづくり・商業・サービス生産性向上促進補助金）': { url: 'https://portal.monodukuri-hojo.jp/', label: 'ものづくり補助金 公式' },
+    'IT導入補助金（デジタル化基盤導入枠）':    { url: 'https://www.it-hojo.jp/', label: 'IT導入補助金 公式' },
+    '事業再構築補助金':                    { url: 'https://jigyou-saikouchiku.go.jp/', label: '事業再構築補助金 公式' },
+    '大阪府 中小企業省エネ設備導入補助金':     { url: 'https://www.pref.osaka.lg.jp/energy/index.html', label: '大阪府 省エネ支援' },
+    '雇用調整助成金':                      { url: 'https://jsite.mhlw.go.jp/osaka-hellowork/', label: 'ハローワーク大阪' },
+    'キャリアアップ助成金（正社員化コース）':   { url: 'https://jsite.mhlw.go.jp/osaka-hellowork/', label: 'ハローワーク大阪' },
+    '特定求職者雇用開発助成金（成長分野等人材確保・育成コース）': { url: 'https://jsite.mhlw.go.jp/osaka-hellowork/', label: 'ハローワーク大阪' },
+    '大阪府 創業支援補助金（Osaka Startup Park連携）': { url: 'https://www.pref.osaka.lg.jp/chusho/kigyou/index.html', label: '大阪府 創業支援' },
+    '大阪市 創業支援事業者補助金（なにわ創業者支援）': { url: 'https://www.osaka-cci.or.jp/', label: '大阪商工会議所' },
+    '事業承継・引継ぎ補助金（経営革新枠）':    { url: 'https://jsh.go.jp/', label: '事業承継・引継ぎ補助金 公式' },
+    '大阪府事業引継ぎ支援センター（無料相談）': { url: 'https://www.pref.osaka.lg.jp/chusho/shien/hikitsugi/index.html', label: '大阪府 事業引継ぎ支援センター' },
+    '大阪産業局 輸出・海外展開支援補助金':     { url: 'https://www.innovation-osaka.jp/', label: '大阪産業局' },
+  };
+
+  // ─── 会員登録モーダル ───────────────────────────
+  let regType = 'self';
+
+  function openRegModal(type) {
+    regType = type;
     closeCart();
-    const sec = document.getElementById('links');
-    if (sec) sec.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    setTimeout(() => {
-      alert('選択した制度の申請先窓口を「公式窓口リンク」セクションで確認できます。\nご不明な点は各市区町村の窓口へお問い合わせください。');
-    }, 500);
-  }
 
-  function openProModal() {
-    const list = document.getElementById('pro-cart-list');
-    list.innerHTML = cart.map(p => `<li>${p.title}</li>`).join('');
-    document.getElementById('pro-form-area').style.display = 'block';
-    document.getElementById('pro-sent-msg').style.display = 'none';
-    document.getElementById('pro-modal-overlay').classList.add('open');
-  }
+    // フォーム画面にリセット
+    document.getElementById('reg-screen-form').classList.add('active');
+    document.getElementById('reg-screen-self').classList.remove('active');
+    document.getElementById('reg-screen-pro').classList.remove('active');
+    document.getElementById('reg-dot-1').className = 'reg-step-dot active';
+    document.getElementById('reg-dot-2').className = 'reg-step-dot';
+    document.getElementById('reg-line-1').className = 'reg-step-line';
+    document.getElementById('reg-name').value = '';
+    document.getElementById('reg-email').value = '';
+    document.getElementById('reg-tel').value = '';
 
-  function closeProModal(e) {
-    if (!e || e.target === document.getElementById('pro-modal-overlay') || e.currentTarget.classList.contains('pro-modal-close')) {
-      document.getElementById('pro-modal-overlay').classList.remove('open');
+    // バッジ表示
+    const badgeEl = document.getElementById('reg-type-badge-area');
+    if (type === 'self') {
+      badgeEl.innerHTML = '<span class="reg-type-badge self">📋 自分で申請する</span>';
+      document.getElementById('reg-submit-btn').className = 'btn-reg-submit';
+      document.getElementById('reg-submit-btn').textContent = '登録して申請窓口を見る →';
+    } else {
+      badgeEl.innerHTML = '<span class="reg-type-badge pro">🤝 専門家にお任せする</span>';
+      document.getElementById('reg-submit-btn').className = 'btn-reg-submit pro-submit';
+      document.getElementById('reg-submit-btn').textContent = '登録して相談を依頼する →';
     }
+
+    // カートプレビュー
+    document.getElementById('reg-cart-preview-list').innerHTML =
+      cart.map(p => `<li>${p.title}</li>`).join('');
+
+    document.getElementById('reg-modal-overlay').classList.add('open');
+    document.body.style.overflow = 'hidden';
   }
 
-  function sendProRequest() {
-    const name = document.getElementById('pro-name').value.trim();
-    const tel  = document.getElementById('pro-tel').value.trim();
-    const email = document.getElementById('pro-email').value.trim();
-    if (!name) { alert('お名前を入力してください'); return; }
-    if (!tel && !email) { alert('電話番号またはメールアドレスを入力してください'); return; }
-    // 実際の送信処理はここにAPI呼び出しを追加
-    document.getElementById('pro-form-area').style.display = 'none';
-    document.getElementById('pro-sent-msg').style.display = 'block';
+  function closeRegModal(e) {
+    if (e && e.target !== document.getElementById('reg-modal-overlay')) return;
+    document.getElementById('reg-modal-overlay').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  function submitRegistration() {
+    const name  = document.getElementById('reg-name').value.trim();
+    const email = document.getElementById('reg-email').value.trim();
+    const tel   = document.getElementById('reg-tel').value.trim();
+    if (!name)  { alert('お名前を入力してください'); return; }
+    if (!email) { alert('メールアドレスを入力してください'); return; }
+    if (!tel)   { alert('電話番号を入力してください'); return; }
+
+    // 登録完了 → ステップバー更新
+    document.getElementById('reg-dot-1').className = 'reg-step-dot done';
+    document.getElementById('reg-dot-2').className = 'reg-step-dot active';
+    document.getElementById('reg-line-1').className = 'reg-step-line done';
+    document.getElementById('reg-screen-form').classList.remove('active');
+
+    if (regType === 'self') {
+      // 申請先リンク生成
+      const linkList = document.getElementById('self-link-list');
+      linkList.innerHTML = cart.map(p => {
+        const info = PROGRAM_URLS[p.title] || { url: 'https://www.pref.osaka.lg.jp/', label: '大阪府公式サイト' };
+        return `
+        <div class="self-link-item">
+          <div>
+            <span class="self-link-cat">${p.cat}</span>
+            <div class="self-link-name">${p.title}</div>
+          </div>
+          <a href="${info.url}" target="_blank" rel="noopener" class="self-link-btn">
+            申請へ ↗
+          </a>
+        </div>`;
+      }).join('');
+      document.getElementById('reg-screen-self').classList.add('active');
+    } else {
+      // プロ依頼完了
+      document.getElementById('pro-wait-list').innerHTML =
+        cart.map(p => `<li>${p.title}</li>`).join('');
+      document.getElementById('reg-screen-pro').classList.add('active');
+    }
   }
 
   function diagReset() {
