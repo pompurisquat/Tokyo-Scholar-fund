@@ -1,0 +1,1374 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LIFE KARTE — 無料保険診断で月の見直し額を3分で診断</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #F5F7FA;
+      --card: #FFFFFF;
+      --primary: #1B9C85;
+      --primary-light: #E8F6F3;
+      --primary-dark: #147A68;
+      --danger: #E05252;
+      --danger-light: #FDEAEA;
+      --warn: #E89C30;
+      --warn-light: #FEF6E4;
+      --safe: #3CB371;
+      --safe-light: #E8F5EE;
+      --text: #1A1A1A;
+      --muted: #7A7A7A;
+      --border: #E8ECF0;
+      --shadow: 0 2px 12px rgba(0,0,0,0.06);
+      --radius: 16px;
+    }
+
+    body {
+      background: var(--bg);
+      font-family: -apple-system, BlinkMacSystemFont, 'Hiragino Sans', 'Noto Sans JP', sans-serif;
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    /* ── Progress Bar ── */
+    .progress-wrap {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--bg);
+      padding: 14px 20px 10px;
+      border-bottom: 1px solid var(--border);
+    }
+    .progress-bar {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 6px;
+    }
+    .progress-seg {
+      flex: 1;
+      height: 5px;
+      border-radius: 99px;
+      background: var(--border);
+      transition: background 0.4s;
+    }
+    .progress-seg.done { background: var(--primary); }
+    .progress-seg.active { background: #7ECABB; }
+    .progress-label {
+      text-align: center;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    /* ── Layout ── */
+    .page { display: none; animation: fadeIn 0.35s ease; }
+    .page.active { display: block; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+
+    .container {
+      max-width: 480px;
+      margin: 0 auto;
+      padding: 28px 20px 60px;
+    }
+
+    /* ── Step Badge ── */
+    .step-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--primary-light);
+      color: var(--primary-dark);
+      font-size: 13px;
+      font-weight: 700;
+      padding: 6px 14px;
+      border-radius: 99px;
+      margin-bottom: 18px;
+    }
+
+    /* ── Hero Text ── */
+    .hero-title {
+      font-size: 32px;
+      font-weight: 900;
+      line-height: 1.25;
+      margin-bottom: 12px;
+    }
+    .hero-title .accent { color: var(--danger); }
+    .hero-sub {
+      font-size: 15px;
+      color: var(--muted);
+      line-height: 1.7;
+      margin-bottom: 28px;
+    }
+
+    /* ── Card ── */
+    .card {
+      background: var(--card);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 24px;
+      margin-bottom: 16px;
+    }
+
+    /* ── Question Group ── */
+    .q-label {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
+    .btn-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 22px;
+    }
+    .btn-group:last-child { margin-bottom: 0; }
+    .opt-btn {
+      padding: 9px 18px;
+      border-radius: 99px;
+      border: 1.5px solid var(--border);
+      background: var(--card);
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .opt-btn:hover { border-color: var(--primary); color: var(--primary); }
+    .opt-btn.selected {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: #fff;
+    }
+
+    /* ── Primary Button ── */
+    .btn-primary {
+      display: block;
+      width: 100%;
+      padding: 16px;
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      border-radius: var(--radius);
+      font-size: 16px;
+      font-weight: 800;
+      cursor: pointer;
+      text-align: center;
+      transition: background 0.2s, transform 0.1s;
+      margin-top: 8px;
+    }
+    .btn-primary:hover { background: var(--primary-dark); }
+    .btn-primary:active { transform: scale(0.98); }
+    .btn-primary:disabled { background: var(--border); color: var(--muted); cursor: not-allowed; }
+
+    .btn-secondary {
+      display: block;
+      width: 100%;
+      padding: 13px;
+      background: transparent;
+      color: var(--muted);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius);
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      text-align: center;
+      margin-top: 8px;
+      transition: all 0.2s;
+    }
+    .btn-secondary:hover { border-color: var(--primary); color: var(--primary); }
+
+    .btn-back {
+      background: none;
+      border: none;
+      color: var(--muted);
+      font-size: 14px;
+      cursor: pointer;
+      padding: 0;
+      margin-bottom: 18px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .btn-back:hover { color: var(--text); }
+
+    /* ── Insurance Input ── */
+    .insurance-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .insurance-row:last-of-type { border-bottom: none; }
+    .ins-label { font-size: 14px; font-weight: 600; flex: 1; }
+    .ins-input-wrap {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .ins-input {
+      width: 96px;
+      text-align: right;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      padding: 8px 10px;
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text);
+      background: #FAFAFA;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .ins-input:focus { border-color: var(--primary); background: #fff; }
+    .ins-unit { font-size: 12px; color: var(--muted); white-space: nowrap; }
+
+    .total-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      background: var(--primary-light);
+      border-radius: 12px;
+      padding: 14px 18px;
+      margin-top: 16px;
+    }
+    .total-label { font-size: 14px; font-weight: 700; color: var(--primary-dark); }
+    .total-value { font-size: 24px; font-weight: 900; color: var(--primary-dark); }
+    .total-unit { font-size: 13px; font-weight: 600; color: var(--primary-dark); }
+
+    /* ── OCR Banner ── */
+    .ocr-banner {
+      background: linear-gradient(135deg, #EEE8FF, #E0D4FF);
+      border-radius: var(--radius);
+      padding: 18px;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+    }
+    .ocr-icon { font-size: 28px; flex-shrink: 0; }
+    .ocr-title { font-size: 14px; font-weight: 800; color: #6B4DB8; margin-bottom: 4px; }
+    .ocr-sub { font-size: 13px; color: #7A5EC5; margin-bottom: 10px; }
+    .ocr-btn {
+      padding: 7px 16px;
+      border: 1.5px solid #8B6DD3;
+      background: transparent;
+      border-radius: 99px;
+      font-size: 13px;
+      font-weight: 700;
+      color: #6B4DB8;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .ocr-btn:hover { background: #6B4DB8; color: #fff; }
+
+    /* ── Result Cards ── */
+    .result-hero {
+      text-align: left;
+      margin-bottom: 24px;
+    }
+    .result-amount {
+      font-size: 40px;
+      font-weight: 900;
+      line-height: 1.1;
+      margin-bottom: 8px;
+    }
+    .result-amount .accent { color: var(--danger); }
+    .result-note { font-size: 13px; color: var(--muted); }
+
+    .ins-result-card {
+      background: var(--card);
+      border-radius: var(--radius);
+      padding: 18px;
+      margin-bottom: 10px;
+      box-shadow: var(--shadow);
+    }
+    .ins-result-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+    .ins-result-name { font-size: 15px; font-weight: 800; }
+    .badge {
+      padding: 4px 12px;
+      border-radius: 99px;
+      font-size: 12px;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+    .badge-danger { background: var(--danger-light); color: var(--danger); }
+    .badge-warn { background: var(--warn-light); color: var(--warn); }
+    .badge-safe { background: var(--safe-light); color: var(--safe); }
+    .ins-result-text { font-size: 13px; color: var(--muted); line-height: 1.6; }
+
+    .review-summary {
+      background: linear-gradient(135deg, var(--primary-light), #D4F2EC);
+      border-radius: var(--radius);
+      padding: 20px;
+      margin-top: 20px;
+      margin-bottom: 8px;
+    }
+    .review-summary-label { font-size: 14px; font-weight: 700; color: var(--primary-dark); margin-bottom: 8px; }
+    .review-summary-value { font-size: 36px; font-weight: 900; color: var(--primary-dark); }
+    .review-summary-unit { font-size: 16px; font-weight: 700; }
+    .review-summary-note { font-size: 12px; color: var(--primary); margin-top: 6px; }
+
+    /* ── Future Design ── */
+    .compare-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .compare-col {
+      background: var(--bg);
+      border-radius: 12px;
+      padding: 14px;
+    }
+    .compare-col.good { background: var(--primary-light); }
+    .compare-title {
+      font-size: 13px;
+      font-weight: 800;
+      color: var(--muted);
+      margin-bottom: 10px;
+      padding-bottom: 6px;
+      border-bottom: 1px solid var(--border);
+    }
+    .compare-col.good .compare-title { color: var(--primary-dark); border-color: #B2E0D8; }
+    .compare-item {
+      font-size: 13px;
+      color: var(--muted);
+      padding: 4px 0;
+      display: flex;
+      align-items: flex-start;
+      gap: 6px;
+    }
+    .compare-col.good .compare-item { color: var(--primary-dark); }
+
+    .calc-card {
+      background: linear-gradient(135deg, #1B9C85, #0D7A66);
+      color: #fff;
+      border-radius: var(--radius);
+      padding: 22px;
+      margin-bottom: 16px;
+    }
+    .calc-label { font-size: 13px; opacity: 0.85; margin-bottom: 4px; }
+    .calc-title { font-size: 15px; font-weight: 800; margin-bottom: 16px; }
+    .calc-total-label { font-size: 13px; opacity: 0.85; margin-bottom: 4px; }
+    .calc-total-value { font-size: 42px; font-weight: 900; line-height: 1; margin-bottom: 4px; }
+    .calc-sub { font-size: 12px; opacity: 0.75; margin-bottom: 16px; }
+    .calc-rows { border-top: 1px solid rgba(255,255,255,0.2); padding-top: 14px; }
+    .calc-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 13px;
+      padding: 4px 0;
+      opacity: 0.9;
+    }
+    .calc-row .val { font-weight: 700; }
+    .calc-note { font-size: 11px; opacity: 0.65; margin-top: 10px; }
+
+    .info-box {
+      background: #FFF8E1;
+      border-left: 3px solid var(--warn);
+      border-radius: 8px;
+      padding: 12px 14px;
+      font-size: 13px;
+      color: #7A5C00;
+      line-height: 1.6;
+      margin-bottom: 16px;
+    }
+
+    /* ── FAQ Accordion ── */
+    .faq-item {
+      background: var(--card);
+      border-radius: var(--radius);
+      margin-bottom: 8px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+    .faq-q {
+      width: 100%;
+      text-align: left;
+      padding: 18px 20px;
+      background: none;
+      border: none;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      color: var(--text);
+    }
+    .faq-arrow {
+      font-size: 18px;
+      color: var(--primary);
+      transition: transform 0.3s;
+      flex-shrink: 0;
+    }
+    .faq-item.open .faq-arrow { transform: rotate(45deg); }
+    .faq-a {
+      display: none;
+      padding: 0 20px 18px;
+      font-size: 14px;
+      color: var(--muted);
+      line-height: 1.75;
+    }
+    .faq-a .highlight { color: var(--primary-dark); font-weight: 700; }
+    .faq-item.open .faq-a { display: block; }
+
+    /* ── Complete / Share ── */
+    .share-card {
+      background: linear-gradient(135deg, #1A1A2E, #16213E);
+      color: #fff;
+      border-radius: var(--radius);
+      padding: 24px;
+      margin-bottom: 16px;
+    }
+    .share-header { font-size: 13px; opacity: 0.6; margin-bottom: 4px; }
+    .share-brand { font-size: 16px; font-weight: 900; letter-spacing: 0.05em; margin-bottom: 16px; }
+    .share-amount-label { font-size: 13px; opacity: 0.7; margin-bottom: 4px; }
+    .share-amount { display: flex; align-items: baseline; gap: 4px; line-height: 1; }
+    .share-amount-prefix { font-size: 15px; font-weight: 700; opacity: 0.75; }
+    .share-amount-num { font-size: 44px; font-weight: 900; }
+    .share-amount-unit { font-size: 22px; font-weight: 900; }
+    .share-condition { font-size: 13px; opacity: 0.7; margin-top: 6px; margin-bottom: 16px; }
+    .share-checks { margin-bottom: 16px; }
+    .share-check { font-size: 13px; display: flex; align-items: center; gap: 8px; padding: 3px 0; opacity: 0.85; }
+    .share-check::before { content: "✓"; color: #4ECDC4; font-weight: 700; }
+    .share-url { font-size: 12px; opacity: 0.4; margin-top: 12px; }
+
+    .share-btn-x {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 14px;
+      background: #1A1A1A;
+      color: #fff;
+      border: none;
+      border-radius: var(--radius);
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      width: 100%;
+      margin-bottom: 8px;
+      transition: background 0.2s;
+    }
+    .share-btn-x:hover { background: #333; }
+
+    .share-btn-ig {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 14px;
+      background: linear-gradient(135deg, #F58529, #DD2A7B, #8134AF, #515BD4);
+      color: #fff;
+      border: none;
+      border-radius: var(--radius);
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      width: 100%;
+      margin-bottom: 16px;
+      transition: opacity 0.2s;
+    }
+    .share-btn-ig:hover { opacity: 0.9; }
+
+    /* ── Service Intro ── */
+    .service-intro {
+      text-align: center;
+      padding: 24px 0 8px;
+    }
+    .service-icon { font-size: 40px; margin-bottom: 10px; }
+    .service-title { font-size: 24px; font-weight: 900; line-height: 1.3; margin-bottom: 8px; }
+    .service-sub { font-size: 14px; color: var(--muted); line-height: 1.7; margin-bottom: 24px; }
+
+    .content-grid { display: flex; flex-direction: column; gap: 12px; margin-bottom: 24px; }
+    .content-card {
+      background: var(--card);
+      border-radius: var(--radius);
+      padding: 20px;
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+    }
+    .content-type { font-size: 13px; font-weight: 800; color: var(--muted); margin-bottom: 4px; display: flex; align-items: center; gap: 8px; }
+    .content-name { font-size: 16px; font-weight: 900; margin-bottom: 8px; }
+    .content-desc { font-size: 13px; color: var(--muted); line-height: 1.6; }
+    .content-meta { margin-top: 10px; display: flex; gap: 8px; align-items: center; }
+    .content-tag {
+      padding: 3px 10px;
+      border-radius: 99px;
+      font-size: 12px;
+      font-weight: 700;
+      background: var(--primary-light);
+      color: var(--primary-dark);
+    }
+    .new-badge {
+      padding: 2px 8px;
+      background: var(--danger);
+      color: #fff;
+      border-radius: 99px;
+      font-size: 11px;
+      font-weight: 800;
+    }
+
+    .recommend-grid { display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px; }
+    .rec-card {
+      background: var(--card);
+      border-radius: 12px;
+      padding: 14px 16px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      box-shadow: var(--shadow);
+    }
+    .rec-icon { font-size: 24px; flex-shrink: 0; }
+    .rec-info { flex: 1; }
+    .rec-name { font-size: 14px; font-weight: 800; margin-bottom: 2px; }
+    .rec-meta { font-size: 12px; color: var(--muted); }
+    .rec-free { color: var(--primary-dark); font-weight: 700; font-size: 12px; }
+
+    .cta-section { text-align: center; padding: 8px 0; }
+    .cta-note { font-size: 12px; color: var(--muted); margin-top: 8px; }
+
+    /* ── Amazon-style Service Card ── */
+    .amz-card {
+      background: var(--card);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border);
+      overflow: hidden;
+      margin-bottom: 12px;
+    }
+    .amz-header {
+      background: linear-gradient(135deg, #1B9C85, #0D7A66);
+      color: #fff;
+      padding: 12px 16px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .amz-body { padding: 16px; }
+    .amz-thumb {
+      width: 100%;
+      height: 120px;
+      background: linear-gradient(135deg, #E8F6F3, #D0EDE9);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 40px;
+      margin-bottom: 12px;
+    }
+    .amz-title { font-size: 15px; font-weight: 900; margin-bottom: 4px; line-height: 1.4; }
+    .amz-sub { font-size: 12px; color: var(--muted); margin-bottom: 10px; line-height: 1.5; }
+    .amz-stars { color: #E89C30; font-size: 13px; margin-bottom: 6px; }
+    .amz-price-row { display: flex; align-items: baseline; gap: 6px; margin-bottom: 10px; }
+    .amz-price-free { font-size: 20px; font-weight: 900; color: var(--primary-dark); }
+    .amz-price-note { font-size: 12px; color: var(--muted); }
+    .amz-features { margin-bottom: 12px; }
+    .amz-feature {
+      font-size: 13px;
+      color: var(--muted);
+      padding: 3px 0;
+      display: flex;
+      align-items: flex-start;
+      gap: 6px;
+    }
+    .amz-feature::before { content: "✓"; color: var(--primary); font-weight: 700; flex-shrink: 0; }
+    .amz-btn {
+      display: block;
+      width: 100%;
+      padding: 12px;
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 800;
+      cursor: pointer;
+      text-align: center;
+      text-decoration: none;
+      transition: background 0.2s;
+    }
+    .amz-btn:hover { background: var(--primary-dark); }
+    .amz-tag {
+      display: inline-block;
+      padding: 2px 8px;
+      background: var(--primary-light);
+      color: var(--primary-dark);
+      border-radius: 99px;
+      font-size: 11px;
+      font-weight: 700;
+      margin-right: 4px;
+      margin-bottom: 4px;
+    }
+    .amz-search-bar {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+    .amz-search-input {
+      flex: 1;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      padding: 9px 12px;
+      font-size: 13px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .amz-search-input:focus { border-color: var(--primary); }
+    .amz-search-btn {
+      padding: 9px 14px;
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .amz-results { display: flex; flex-direction: column; gap: 8px; }
+    .amz-result-item {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      padding: 10px;
+      background: var(--bg);
+      border-radius: 10px;
+      text-decoration: none;
+      color: var(--text);
+    }
+    .amz-result-icon { font-size: 22px; flex-shrink: 0; width: 36px; text-align: center; }
+    .amz-result-info { flex: 1; }
+    .amz-result-name { font-size: 13px; font-weight: 800; margin-bottom: 2px; color: var(--primary-dark); }
+    .amz-result-desc { font-size: 12px; color: var(--muted); line-height: 1.4; }
+    .amz-result-tag { font-size: 11px; color: var(--primary); font-weight: 700; margin-top: 3px; }
+
+    /* quiz */
+    .quiz-card {
+      background: var(--card);
+      border-radius: var(--radius);
+      padding: 20px;
+      box-shadow: var(--shadow);
+      margin-bottom: 12px;
+    }
+    .quiz-q { font-size: 15px; font-weight: 700; line-height: 1.5; margin-bottom: 14px; }
+    .quiz-opts { display: flex; flex-direction: column; gap: 8px; }
+    .quiz-opt {
+      padding: 12px 16px;
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 600;
+      background: none;
+      cursor: pointer;
+      text-align: left;
+      transition: all 0.2s;
+    }
+    .quiz-opt:hover { border-color: var(--primary); color: var(--primary); }
+    .quiz-opt.correct { background: var(--safe-light); border-color: var(--safe); color: var(--safe); }
+    .quiz-opt.wrong { background: var(--danger-light); border-color: var(--danger); color: var(--danger); }
+    .quiz-result { font-size: 14px; font-weight: 700; margin-top: 12px; padding: 10px 14px; border-radius: 10px; display: none; }
+    .quiz-result.correct { background: var(--safe-light); color: var(--safe); }
+    .quiz-result.wrong { background: var(--danger-light); color: var(--danger); }
+  </style>
+</head>
+<body>
+
+<!-- Progress Bar -->
+<div class="progress-wrap">
+  <div class="progress-bar" id="progressBar">
+    <div class="progress-seg active" id="seg0"></div>
+    <div class="progress-seg" id="seg1"></div>
+    <div class="progress-seg" id="seg2"></div>
+    <div class="progress-seg" id="seg3"></div>
+    <div class="progress-seg" id="seg4"></div>
+    <div class="progress-seg" id="seg5"></div>
+  </div>
+  <div class="progress-label" id="progressLabel">プロフィール入力中</div>
+</div>
+
+<!-- ═══════════════ STEP 1: プロフィール ═══════════════ -->
+<div class="page active" id="page0">
+  <div class="container">
+    <div class="step-badge">✦ LIFE KARTE</div>
+    <h1 class="hero-title">あなた、<span class="accent">毎月損</span>してるかも🤔</h1>
+    <p class="hero-sub">3分で「払いすぎの保険」と「もらえてない給付金」がぜんぶわかる。登録不要・完全無料！</p>
+
+    <div class="card">
+      <p class="q-label">雇用形態は？</p>
+      <div class="btn-group" id="empGroup">
+        <button class="opt-btn" data-group="emp" data-val="会社員">会社員</button>
+        <button class="opt-btn" data-group="emp" data-val="自営業">自営業</button>
+        <button class="opt-btn" data-group="emp" data-val="パート">パート</button>
+        <button class="opt-btn" data-group="emp" data-val="その他">その他</button>
+      </div>
+
+      <p class="q-label">家族構成は？</p>
+      <div class="btn-group" id="familyGroup">
+        <button class="opt-btn" data-group="family" data-val="おひとり様">おひとり様</button>
+        <button class="opt-btn" data-group="family" data-val="子どもあり">子どもあり</button>
+        <button class="opt-btn" data-group="family" data-val="夫婦のみ">夫婦のみ</button>
+        <button class="opt-btn" data-group="family" data-val="親と同居">親と同居</button>
+      </div>
+
+      <p class="q-label">年収の目安は？</p>
+      <div class="btn-group" id="incomeGroup">
+        <button class="opt-btn" data-group="income" data-val="〜300万">〜300万</button>
+        <button class="opt-btn" data-group="income" data-val="400〜600万">400〜600万</button>
+        <button class="opt-btn" data-group="income" data-val="700万〜">700万〜</button>
+      </div>
+    </div>
+
+    <button class="btn-primary" id="step1Next" disabled onclick="goTo(1)">
+      次へ：保険料を入力する →
+    </button>
+  </div>
+</div>
+
+<!-- ═══════════════ STEP 2: 保険料入力 ═══════════════ -->
+<div class="page" id="page1">
+  <div class="container">
+    <button class="btn-back" onclick="goTo(0)">← 戻る</button>
+    <div class="step-badge">📋 STEP 2</div>
+    <h1 class="hero-title">今の<span class="accent">保険料</span>を<br>入力してね</h1>
+    <p class="hero-sub">わからない項目は空欄でOK！証券があればOCRで自動入力もできるよ（近日実装予定）</p>
+
+    <div class="ocr-banner">
+      <div class="ocr-icon">📄</div>
+      <div>
+        <div class="ocr-title">証券OCRで自動入力（近日公開）</div>
+        <div class="ocr-sub">保険証券を写真で撮るだけで全項目が自動で入力されます</div>
+        <button class="ocr-btn">事前登録する</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="insurance-row">
+        <span class="ins-label">医療保険</span>
+        <div class="ins-input-wrap">
+          <input class="ins-input" id="ins_medical" type="number" value="0" min="0" step="500" oninput="calcTotal()" />
+          <span class="ins-unit">円/月</span>
+        </div>
+      </div>
+      <div class="insurance-row">
+        <span class="ins-label">がん保険</span>
+        <div class="ins-input-wrap">
+          <input class="ins-input" id="ins_cancer" type="number" value="0" min="0" step="500" oninput="calcTotal()" />
+          <span class="ins-unit">円/月</span>
+        </div>
+      </div>
+      <div class="insurance-row">
+        <span class="ins-label">就業不能保険</span>
+        <div class="ins-input-wrap">
+          <input class="ins-input" id="ins_disability" type="number" value="0" min="0" step="500" oninput="calcTotal()" />
+          <span class="ins-unit">円/月</span>
+        </div>
+      </div>
+      <div class="insurance-row">
+        <span class="ins-label">死亡保険・変額保険</span>
+        <div class="ins-input-wrap">
+          <input class="ins-input" id="ins_life" type="number" value="0" min="0" step="500" oninput="calcTotal()" />
+          <span class="ins-unit">円/月</span>
+        </div>
+      </div>
+      <div class="insurance-row">
+        <span class="ins-label">その他</span>
+        <div class="ins-input-wrap">
+          <input class="ins-input" id="ins_other" type="number" value="0" min="0" step="500" oninput="calcTotal()" />
+          <span class="ins-unit">円/月</span>
+        </div>
+      </div>
+
+      <div class="total-row">
+        <span class="total-label">月々の保険料合計</span>
+        <span>
+          <span class="total-value" id="totalDisplay">0</span>
+          <span class="total-unit">円</span>
+        </span>
+      </div>
+    </div>
+
+    <button class="btn-primary" onclick="diagnose()">診断する ✦</button>
+    <button class="btn-secondary" onclick="skipDiagnose()">保険料がわからないのでスキップ</button>
+  </div>
+</div>
+
+<!-- ═══════════════ STEP 3: 診断結果 ═══════════════ -->
+<div class="page" id="page2">
+  <div class="container">
+    <button class="btn-back" onclick="goTo(1)">← 戻る</button>
+    <div class="step-badge">😲 診断結果</div>
+    <div class="result-hero">
+      <div class="result-amount">年間<span class="accent" id="reviewAmountDisplay">0万円</span>分、<br>見直せるかも</div>
+      <p class="result-note">これはあくまで目安です。最終的な判断はご自身でお願いします。</p>
+    </div>
+
+    <div id="resultCards"></div>
+
+    <div class="review-summary">
+      <div class="review-summary-label">💡 見直し可能額の目安（年間）</div>
+      <div class="review-summary-value">
+        年間&nbsp;<span id="reviewSummary">0</span>&nbsp;<span class="review-summary-unit">万円</span>
+      </div>
+      <div class="review-summary-note">⚠️ これはあくまで保険料のみで判断した目安です。保険の要否は保障内容・家族構成・職業・貯蓄状況などによって大きく異なります。</div>
+    </div>
+
+    <button class="btn-primary" onclick="goTo(3)">浮いた保険料でどうなる？ →</button>
+  </div>
+</div>
+
+<!-- ═══════════════ STEP 4: 未来設計 ═══════════════ -->
+<div class="page" id="page3">
+  <div class="container">
+    <button class="btn-back" onclick="goTo(2)">← 戻る</button>
+    <div class="step-badge">🌱 未来設計</div>
+    <h1 class="hero-title">浮いた<span class="accent" id="futureAmtTitle">0万円</span>で<br>10年後が変わる</h1>
+    <p class="hero-sub">毎月の余剰資金を目的に合わせて振り分けると、将来の選択肢が広がります。</p>
+
+    <div class="card">
+      <p style="font-size:13px;color:var(--muted);margin-bottom:4px;">月々の余剰資金（目安）</p>
+      <p style="font-size:32px;font-weight:900;color:var(--primary);margin-bottom:4px;"><span id="futureMonthly">0</span><span style="font-size:16px;">万円</span></p>
+      <p style="font-size:13px;color:var(--muted);">これが毎月あなたの手元に残ります</p>
+    </div>
+
+    <div class="compare-grid">
+      <div class="compare-col">
+        <div class="compare-title">今のまま</div>
+        <div class="compare-item"><span>•</span>過剰な保険料を払い続ける</div>
+        <div class="compare-item"><span>•</span>余剰資金がない</div>
+        <div class="compare-item"><span>•</span>将来の備えが進まない</div>
+      </div>
+      <div class="compare-col good">
+        <div class="compare-title">見直し後</div>
+        <div class="compare-item"><span>•</span>必要な保障だけ残す</div>
+        <div class="compare-item"><span>•</span>余剰資金で将来を備える</div>
+        <div class="compare-item"><span>•</span>目的別に資金を積み立て</div>
+      </div>
+    </div>
+
+    <div class="calc-card">
+      <div class="calc-label">✦ 余剰資金を10年間・年利4%で運用したら？</div>
+      <div class="calc-title">10年後の資産（目安）</div>
+      <div class="calc-total-value" id="futureTotal">0万円</div>
+      <div class="calc-sub" id="futureSubLabel">月0万円を10年積み立てた場合</div>
+      <div class="calc-rows">
+        <div class="calc-row"><span>元本（積立分）</span><span class="val" id="futureBase">0万円</span></div>
+        <div class="calc-row"><span>運用益（目安）</span><span class="val" id="futureGain">+0万円</span></div>
+      </div>
+      <div class="calc-note">※年利4%の複利計算による目安。実際の運用成果を保証するものではありません。</div>
+    </div>
+
+    <div class="info-box">📌 具体的な資産形成の方法・商品の選び方は、会員登録後のコンテンツで詳しく解説しています。目的と期日に合わせた「出口設計」がとても大切です。</div>
+
+    <button class="btn-primary" onclick="goTo(4)">次へ：なぜこうなるの？ →</button>
+  </div>
+</div>
+
+<!-- ═══════════════ STEP 5: 仕組み理解 ═══════════════ -->
+<div class="page" id="page4">
+  <div class="container">
+    <button class="btn-back" onclick="goTo(3)">← 戻る</button>
+    <div class="step-badge">💡 仕組み理解</div>
+    <h1 class="hero-title">「なんで今まで<br>誰も教えてくれなかったの？」</h1>
+    <p class="hero-sub" style="margin-bottom:20px;">タップして確認してみてね</p>
+
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <button class="faq-q">「病気になったら医療費が怖い」は本当？<span class="faq-arrow">＋</span></button>
+      <div class="faq-a">実は<span class="highlight">高額療養費制度</span>があって、どんな大病でも月8.7万円が上限（年収500万の場合）。ただし、自由診療・先進医療は社保の対象外。民間保険で補う意味があるのは主にこの「社保が効かない治療」の部分です。</div>
+    </div>
+
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <button class="faq-q">会社員に就業不能保険って必要？<span class="faq-arrow">＋</span></button>
+      <div class="faq-a">会社員には<span class="highlight">傷病手当金</span>（給与の2/3・最長1年6ヶ月）があります。さらに障害が残れば障害年金も受給可能。民間の就業不能保険は「社保の上乗せ」として考えると、より合理的な判断ができます。</div>
+    </div>
+
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <button class="faq-q">積立型の保険はお得？<span class="faq-arrow">＋</span></button>
+      <div class="faq-a">積立型・貯蓄型保険は<span class="highlight">保障と運用を一体化</span>しているため、どちらも中途半端になりがちです。実質利回りは低く、途中解約すると元本割れするケースも。「保障はシンプルに、運用は別で」という考え方が一般的に合理的です。</div>
+    </div>
+
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <button class="faq-q">なぜ「保険貧乏」が起きるの？<span class="faq-arrow">＋</span></button>
+      <div class="faq-a"><span class="highlight">社保の仕組みを知らずに民間保険を重複して加入</span>することが主な原因です。保険会社・代理店は手数料で動くため、解約や見直しを勧めるインセンティブがありません。「何のリスクに備えるか」を目的別に整理することが重要です。</div>
+    </div>
+
+    <!-- クイズ -->
+    <div class="quiz-card" style="margin-top:24px;">
+      <p style="font-size:13px;font-weight:700;color:var(--primary-dark);margin-bottom:10px;">🧠 今日の確認クイズ</p>
+      <div class="quiz-q">Q. 高額療養費制度で月々の医療費の上限はいくら？（年収500万の場合）</div>
+      <div class="quiz-opts" id="quizOpts">
+        <button class="quiz-opt" onclick="answerQuiz(this, false)">① 30万円</button>
+        <button class="quiz-opt" onclick="answerQuiz(this, true)">② 約8.7万円</button>
+        <button class="quiz-opt" onclick="answerQuiz(this, false)">③ 上限なし</button>
+      </div>
+      <div class="quiz-result" id="quizResult"></div>
+    </div>
+
+    <button class="btn-primary" style="margin-top:20px;" onclick="goTo(5)">結果をシェア＆更なるお得情報へ →</button>
+  </div>
+</div>
+
+<!-- ═══════════════ STEP 6: 診断完了 ═══════════════ -->
+<div class="page" id="page5">
+  <div class="container">
+    <button class="btn-back" onclick="goTo(4)">← 戻る</button>
+    <div class="step-badge">🎉 診断完了！</div>
+    <h1 class="hero-title">この結果、<br>シェアしてみて！</h1>
+    <p class="hero-sub">「知らなかった」のはあなただけじゃない。友人も同じ損をしてるかも。</p>
+
+    <div class="share-card">
+      <div class="share-header">LIFE KARTE — 保険診断</div>
+      <div class="share-brand">✦ LIFE KARTE</div>
+      <div class="share-amount-label">見直し可能額の目安（年間）</div>
+      <div class="share-amount">
+        <span class="share-amount-prefix">年間</span>
+        <span class="share-amount-num" id="shareAmt">0</span>
+        <span class="share-amount-unit">万円</span>
+      </div>
+      <div class="share-condition" id="shareCondition">— の場合</div>
+      <div class="share-checks" id="shareChecks"></div>
+      <div class="share-url">life-karte.vercel.app</div>
+    </div>
+
+    <button class="share-btn-x" onclick="shareToX()">✕ Xにシェアする</button>
+    <button class="share-btn-ig">📸 Instagramストーリーズに貼る</button>
+
+    <!-- Service Intro -->
+    <div class="service-intro">
+      <div class="service-icon">🎮</div>
+      <div class="service-title">楽しく知識を<br>手に入れよう</div>
+      <div class="service-sub">ゲーム感覚で社保・保険・資産形成が身につく。<br>月100円でコンテンツ全部使い放題！</div>
+    </div>
+
+    <p style="font-size:13px;font-weight:800;color:var(--muted);margin-bottom:12px;">✦ こんな形で学べます</p>
+
+    <div class="content-grid">
+      <div class="content-card">
+        <div class="content-type">🔍 診断形式 <span class="new-badge">NEW</span></div>
+        <div class="content-name">あなたに必要な保険、診断します</div>
+        <div class="content-desc">属性・ライフステージ別に「本当に必要な保障」をAIが判定。あなただけの保険設計の考え方がわかる。</div>
+        <div class="content-meta">
+          <span class="content-tag">5分</span>
+          <span class="content-tag">会社員編</span>
+          <span class="content-tag">自営業編</span>
+          <span class="content-tag">子育て編</span>
+        </div>
+      </div>
+
+      <div class="content-card">
+        <div class="content-type">⚔️ クエスト形式 <span style="color:var(--warn);font-size:12px;">⭐⭐⭐☆☆</span></div>
+        <div class="content-name">社保マスターへの道</div>
+        <div class="content-desc">ステップをクリアしながら社保・保険・投資の知識を段階的にレベルアップ。バッジを集めよう！</div>
+        <div class="content-meta">
+          <span class="content-tag">進行中：社保の基本を知る</span>
+          <span style="font-size:12px;color:var(--muted);">2/5</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Amazon風 行政サービス検索 -->
+    <div class="amz-card">
+      <div class="amz-header">
+        🏛️ くらしInfoHub — 行政サービス検索
+        <span style="margin-left:auto;background:rgba(255,255,255,0.2);padding:2px 8px;border-radius:99px;font-size:11px;">無料</span>
+      </div>
+      <div class="amz-body">
+        <div class="amz-thumb">🔍</div>
+        <div class="amz-title">あなたに使える行政サービスを<br>今すぐ探せる</div>
+        <div class="amz-sub">補助金・給付金・支援制度をライフステージ別に検索。知らなきゃ損する制度が見つかります。</div>
+        <div class="amz-stars">★★★★★ <span style="color:var(--muted);font-size:12px;">利用者多数</span></div>
+
+        <div class="amz-search-bar">
+          <input class="amz-search-input" type="text" id="amzSearchInput" placeholder="例：育児休業、医療費、住宅..." oninput="amzSearch()" />
+          <button class="amz-search-btn" onclick="amzSearch()">検索</button>
+        </div>
+
+        <div class="amz-results" id="amzResults">
+          <a class="amz-result-item" href="https://life-karte.vercel.app/" target="_blank">
+            <div class="amz-result-icon">👶</div>
+            <div class="amz-result-info">
+              <div class="amz-result-name">児童手当・育児支援制度</div>
+              <div class="amz-result-desc">子どもの年齢に応じた給付金・手当を検索</div>
+            </div>
+          </a>
+          <a class="amz-result-item" href="https://life-karte.vercel.app/" target="_blank">
+            <div class="amz-result-icon">🏥</div>
+            <div class="amz-result-info">
+              <div class="amz-result-name">医療費・高額療養費制度</div>
+              <div class="amz-result-desc">社保でカバーされる医療費の上限と申請方法</div>
+            </div>
+          </a>
+          <a class="amz-result-item" href="https://life-karte.vercel.app/" target="_blank">
+            <div class="amz-result-icon">🏠</div>
+            <div class="amz-result-info">
+              <div class="amz-result-name">住宅・リフォーム補助金</div>
+              <div class="amz-result-desc">自治体別の住宅取得・省エネ改修の補助制度</div>
+            </div>
+          </a>
+        </div>
+
+        <div style="margin-top:10px;">
+          <span class="amz-tag">育児</span>
+          <span class="amz-tag">医療</span>
+          <span class="amz-tag">住宅</span>
+          <span class="amz-tag">介護</span>
+          <span class="amz-tag">就労</span>
+          <span class="amz-tag">教育</span>
+        </div>
+
+        <a class="amz-btn" href="https://life-karte.vercel.app/" target="_blank" style="margin-top:14px;">
+          すべての行政サービスを探す →
+        </a>
+      </div>
+    </div>
+
+    <p style="font-size:13px;font-weight:800;color:var(--muted);margin-bottom:12px;">🛒 おすすめコンテンツ</p>
+    <div class="recommend-grid">
+      <div class="rec-card">
+        <div class="rec-icon">🏥</div>
+        <div class="rec-info">
+          <div class="rec-name">社保 完全攻略ガイド</div>
+          <div class="rec-meta">★★★★★ · 人気No.1</div>
+        </div>
+        <div class="rec-free">会員無料</div>
+      </div>
+      <div class="rec-card">
+        <div class="rec-icon">💰</div>
+        <div class="rec-info">
+          <div class="rec-name">保険貧乏から抜け出す5ステップ</div>
+          <div class="rec-meta">★★★★☆ · 新着</div>
+        </div>
+        <div class="rec-free">会員無料</div>
+      </div>
+      <div class="rec-card">
+        <div class="rec-icon">📈</div>
+        <div class="rec-info">
+          <div class="rec-name">目的別 資産形成の考え方</div>
+          <div class="rec-meta">★★★★★ · 定番</div>
+        </div>
+        <div class="rec-free">会員無料</div>
+      </div>
+    </div>
+
+    <div class="cta-section">
+      <button class="btn-primary" style="font-size:18px;padding:18px;">月100円で会員登録する ✦</button>
+      <p class="cta-note">初月無料・いつでも解約OK<br>売りつけや勧誘は一切ありません</p>
+      <p style="font-size:12px;color:var(--muted);margin-top:12px;">
+        ※ 会員ページ内に<a href="#" style="color:var(--primary);">正直なFPへの相談窓口</a>もあります（フィー型のみ）
+      </p>
+    </div>
+  </div>
+</div>
+
+<script>
+  // ── State ──
+  const state = {
+    emp: null,
+    family: null,
+    income: null,
+    medical: 0,
+    cancer: 0,
+    disability: 0,
+    life: 0,
+    other: 0,
+    reviewable: 0,
+  };
+
+  const LABELS = [
+    'プロフィール入力中',
+    '保険料を入力中',
+    '診断結果を表示中',
+    '未来設計を計算中',
+    '仕組みを理解中',
+    '診断完了！'
+  ];
+
+  // ── Navigation ──
+  function goTo(step) {
+    document.querySelectorAll('.page').forEach((p, i) => {
+      p.classList.toggle('active', i === step);
+    });
+    document.querySelectorAll('.progress-seg').forEach((seg, i) => {
+      seg.classList.remove('done', 'active');
+      if (i < step) seg.classList.add('done');
+      else if (i === step) seg.classList.add('active');
+    });
+    document.getElementById('progressLabel').textContent = LABELS[step];
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  // ── Option Buttons ──
+  document.querySelectorAll('.opt-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const group = btn.dataset.group;
+      document.querySelectorAll(`[data-group="${group}"]`).forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+      state[group] = btn.dataset.val;
+      checkStep1();
+    });
+  });
+
+  function checkStep1() {
+    const ok = state.emp && state.family && state.income;
+    document.getElementById('step1Next').disabled = !ok;
+  }
+
+  // ── Insurance Total ──
+  function calcTotal() {
+    const vals = ['medical', 'cancer', 'disability', 'life', 'other'].map(k => {
+      const v = parseInt(document.getElementById(`ins_${k}`).value) || 0;
+      state[k] = v;
+      return v;
+    });
+    const total = vals.reduce((a, b) => a + b, 0);
+    document.getElementById('totalDisplay').textContent = total.toLocaleString();
+  }
+
+  // ── Diagnose ──
+  function diagnose() {
+    const medical = parseInt(document.getElementById('ins_medical').value) || 0;
+    const cancer = parseInt(document.getElementById('ins_cancer').value) || 0;
+    const disability = parseInt(document.getElementById('ins_disability').value) || 0;
+    const life = parseInt(document.getElementById('ins_life').value) || 0;
+    const other = parseInt(document.getElementById('ins_other').value) || 0;
+
+    state.medical = medical; state.cancer = cancer;
+    state.disability = disability; state.life = life; state.other = other;
+
+    const emp = state.emp;
+    const family = state.family;
+
+    const results = [];
+    let reviewable = 0;
+
+    // 医療保険
+    if (medical > 0) {
+      const isEmployee = emp === '会社員';
+      if (isEmployee) {
+        results.push({
+          name: '医療保険（入院特約）',
+          level: 'danger',
+          text: '社保の高額療養費で大きくカバーされます。ただし自由診療・先進医療は対象外のため、その部分への備えは検討の余地があります。'
+        });
+        reviewable += Math.round(medical * 0.7);
+      } else {
+        results.push({
+          name: '医療保険',
+          level: 'warn',
+          text: '社保の適用範囲を確認した上で、必要な保障を見極めましょう。'
+        });
+        reviewable += Math.round(medical * 0.3);
+      }
+    }
+
+    // 就業不能
+    if (disability > 0) {
+      if (emp === '会社員') {
+        results.push({
+          name: '就業不能保険',
+          level: 'warn',
+          text: '会社員の場合、傷病手当金（給与の2/3・最長1年6ヶ月）が社保から支給されます。ご自身の状況に合わせてご判断ください。'
+        });
+        reviewable += Math.round(disability * 0.6);
+      } else {
+        results.push({
+          name: '就業不能保険',
+          level: 'safe',
+          text: '自営業・パートの方には社保の手当が薄いため、民間保険での備えは有効です。'
+        });
+      }
+    }
+
+    // 変額保険
+    if (life > 0) {
+      results.push({
+        name: '変額保険',
+        level: 'danger',
+        text: '保障と運用が一体になっており、コストが高くなる傾向があります。目的を整理した上での検討をおすすめします。'
+      });
+      reviewable += Math.round(life * 0.9);
+    }
+
+    // がん保険
+    if (cancer > 0) {
+      results.push({
+        name: 'がん保険（自由診療対応）',
+        level: 'warn',
+        text: '自由診療・先進医療は社保の対象外。民間保険で備えることが有効な場面があります。'
+      });
+      reviewable += Math.round(cancer * 0.2);
+    }
+
+    // 収入保障（子どもあり）
+    if (family === '子どもあり') {
+      results.push({
+        name: '収入保障保険',
+        level: 'warn',
+        text: '扶養家族がいる場合、万が一の際の生活保障として有効な選択肢のひとつです。'
+      });
+    }
+
+    state.reviewable = reviewable;
+    const reviewableYear = reviewable * 12; // 年間換算
+
+    // Render result cards
+    const container = document.getElementById('resultCards');
+    container.innerHTML = results.map(r => {
+      const badgeClass = r.level === 'danger' ? 'badge-danger' : r.level === 'warn' ? 'badge-warn' : 'badge-safe';
+      const badgeText = r.level === 'danger' ? '🔴 危険' : r.level === 'warn' ? '⚠️ 要注意' : '✅ 適切';
+      return `
+        <div class="ins-result-card">
+          <div class="ins-result-header">
+            <span class="ins-result-name">${r.name}</span>
+            <span class="badge ${badgeClass}">${badgeText}</span>
+          </div>
+          <p class="ins-result-text">${r.text}</p>
+        </div>`;
+    }).join('');
+
+    const reviewManYear = (reviewableYear / 10000).toFixed(1);
+    document.getElementById('reviewAmountDisplay').textContent = `${reviewManYear}万円`;
+    document.getElementById('reviewSummary').textContent = reviewManYear;
+
+    // Future calc（月額ベースで計算）
+    updateFuture(reviewable);
+    updateShare(reviewable);
+
+    goTo(2);
+  }
+
+  function skipDiagnose() {
+    state.reviewable = 0;
+    document.getElementById('resultCards').innerHTML = '<div class="card" style="text-align:center;color:var(--muted)">保険料の入力をスキップしました。<br>一般的な見直し事例をご参照ください。</div>';
+    document.getElementById('reviewAmountDisplay').textContent = '—';
+    document.getElementById('reviewSummary').textContent = '—';
+    updateFuture(25000);
+    updateShare(0);
+    goTo(2);
+  }
+
+  // ── Future Calc ──
+  function updateFuture(reviewable) {
+    const monthly = reviewable;
+    const monthlyMan = (monthly / 10000).toFixed(1);
+    const years = 10;
+    const rate = 0.04;
+    // FV = monthly * ((1+r/12)^(n*12) - 1) / (r/12)
+    const r = rate / 12;
+    const n = years * 12;
+    const fv = monthly * ((Math.pow(1 + r, n) - 1) / r) * (1 + r);
+    const base = monthly * n;
+    const gain = fv - base;
+
+    document.getElementById('futureAmtTitle').textContent = `${monthlyMan}万円`;
+    document.getElementById('futureMonthly').textContent = monthlyMan;
+    document.getElementById('futureTotal').textContent = `${Math.round(fv / 10000)}万円`;
+    document.getElementById('futureSubLabel').textContent = `月${monthlyMan}万円を10年積み立てた場合`;
+    document.getElementById('futureBase').textContent = `${Math.round(base / 10000)}万円`;
+    document.getElementById('futureGain').textContent = `+${Math.round(gain / 10000)}万円`;
+  }
+
+  // ── Share ──
+  function updateShare(reviewable) {
+    const reviewableYear = reviewable * 12;
+    const reviewManYear = (reviewableYear / 10000).toFixed(1);
+    document.getElementById('shareAmt').textContent = reviewManYear;
+    document.getElementById('shareCondition').textContent =
+      `${state.emp}・${state.family}・年収${state.income} の場合`;
+
+    const checks = [];
+    if (state.emp === '会社員') {
+      checks.push('社保でカバーされる保険があることを知った');
+    }
+    if (state.life > 0) {
+      checks.push('変額保険のコストを確認した');
+    }
+    document.getElementById('shareChecks').innerHTML = checks.map(c =>
+      `<div class="share-check">${c}</div>`
+    ).join('');
+  }
+
+  function shareToX() {
+    const reviewManYear = (state.reviewable * 12 / 10000).toFixed(1);
+    const text = `【保険の見直し診断】\n私の場合、年間${reviewManYear}万円分の見直し余地があるかも！\n\n社保の仕組みを知らないと、知らぬ間に保険貧乏になってる。\n3分で無料診断↓\nhttps://life-karte.vercel.app\n\n#LIFEKARTE #保険見直し #家計改善`;
+    window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`, '_blank');
+  }
+
+  // ── FAQ Toggle ──
+  function toggleFaq(el) {
+    el.classList.toggle('open');
+  }
+
+  // ── Quiz ──
+  function answerQuiz(btn, correct) {
+    document.querySelectorAll('.quiz-opt').forEach(b => b.disabled = true);
+    btn.classList.add(correct ? 'correct' : 'wrong');
+    const result = document.getElementById('quizResult');
+    result.style.display = 'block';
+    if (correct) {
+      result.className = 'quiz-result correct';
+      result.textContent = '✅ 正解！高額療養費制度で月8.7万円が上限（年収500万の場合）。';
+    } else {
+      result.className = 'quiz-result wrong';
+      result.textContent = '❌ 不正解。正解は「② 約8.7万円」。高額療養費制度で上限が設定されています。';
+      document.querySelectorAll('.quiz-opt')[1].classList.add('correct');
+    }
+  }
+
+  // ── Amazon-style Search ──
+  const AMZ_DATA = [
+    { icon: '👶', name: '児童手当・育児支援制度', desc: '子どもの年齢に応じた給付金・手当を検索', tags: ['育児','子ども','手当','出産'] },
+    { icon: '🏥', name: '医療費・高額療養費制度', desc: '社保でカバーされる医療費の上限と申請方法', tags: ['医療','病院','療養','薬'] },
+    { icon: '🏠', name: '住宅・リフォーム補助金', desc: '自治体別の住宅取得・省エネ改修の補助制度', tags: ['住宅','リフォーム','家','引越'] },
+    { icon: '👴', name: '介護保険・高齢者支援', desc: '介護認定から利用できる公的サービスを確認', tags: ['介護','高齢','親','老後'] },
+    { icon: '🎓', name: '教育・奨学金制度', desc: '大学・専門学校向けの奨学金・給付制度', tags: ['教育','奨学金','大学','学費'] },
+    { icon: '💼', name: '失業給付・雇用保険', desc: '失業時に受給できる給付金と手続き方法', tags: ['就労','失業','雇用','転職'] },
+    { icon: '🤱', name: '育児休業給付金', desc: '産休・育休中の給付金の計算と申請手順', tags: ['育休','産休','育児','出産'] },
+    { icon: '♿', name: '障害者支援・障害年金', desc: '障害認定から受けられる各種支援制度', tags: ['障害','年金','支援','福祉'] },
+  ];
+
+  function amzSearch() {
+    const q = document.getElementById('amzSearchInput').value.trim();
+    const container = document.getElementById('amzResults');
+    if (!q) {
+      container.innerHTML = AMZ_DATA.slice(0, 3).map(d => amzResultHTML(d)).join('');
+      return;
+    }
+    const filtered = AMZ_DATA.filter(d =>
+      d.name.includes(q) || d.desc.includes(q) || d.tags.some(t => t.includes(q))
+    );
+    if (filtered.length === 0) {
+      container.innerHTML = `<div style="text-align:center;padding:16px;color:var(--muted);font-size:13px;">「${q}」に関連するサービスは<a href="https://life-karte.vercel.app/" target="_blank" style="color:var(--primary);font-weight:700;">LIFE KARTEで検索</a>してみてください。</div>`;
+    } else {
+      container.innerHTML = filtered.map(d => amzResultHTML(d)).join('');
+    }
+  }
+
+  function amzResultHTML(d) {
+    return `<a class="amz-result-item" href="https://life-karte.vercel.app/" target="_blank">
+      <div class="amz-result-icon">${d.icon}</div>
+      <div class="amz-result-info">
+        <div class="amz-result-name">${d.name}</div>
+        <div class="amz-result-desc">${d.desc}</div>
+      </div>
+    </a>`;
+  }
+
+  // ── Init ──
+  calcTotal();
+</script>
+</body>
+</html>
