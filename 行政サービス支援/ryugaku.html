@@ -1,0 +1,1404 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>海外進学奨学金ナビ | 東京都高校生向け留学支援検索</title>
+  <meta name="description" content="アメリカ・オーストラリア・マレーシアの4年制大学進学を目指す東京都内の高校生向けに、あなたに合った奨学金・給付金をかんたん診断でご案内します。" />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&family=Lato:wght@700;900&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --blue:        #0057B8;
+      --blue-dark:   #003D82;
+      --blue-mid:    #1A72D9;
+      --blue-light:  #D6E8FF;
+      --blue-pale:   #F0F6FF;
+      --gold:        #E8A820;
+      --gold-light:  #FEF3D0;
+      --orange:      #E8540A;
+      --orange-light:#FDE8DA;
+      --green:       #12A150;
+      --green-light: #D6F0E4;
+      --text:        #1A1A2E;
+      --text-light:  #5A6070;
+      --white:       #FFFFFF;
+      --bg:          #F4F7FF;
+      --radius-card: 20px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Noto Sans JP', 'Hiragino Maru Gothic Pro', sans-serif;
+      color: var(--text);
+      background: var(--bg);
+      line-height: 1.8;
+      overflow-x: hidden;
+    }
+
+    /* ─── NAV ─── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 200;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 6%;
+      background: rgba(244,247,255,0.95);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(0,87,184,.12);
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+    .logo-badge {
+      background: var(--blue);
+      color: white;
+      font-weight: 900;
+      font-size: .75rem;
+      padding: 4px 10px;
+      border-radius: 6px;
+      letter-spacing: .04em;
+      white-space: nowrap;
+    }
+    .logo-text {
+      font-size: 1rem;
+      font-weight: 900;
+      color: var(--text);
+      letter-spacing: .02em;
+    }
+    .logo-text span { color: var(--blue); }
+    .nav-cta {
+      background: var(--blue);
+      color: white;
+      border: none;
+      padding: 10px 22px;
+      border-radius: 50px;
+      font-size: .88rem;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: 'Noto Sans JP', sans-serif;
+      transition: background .2s, transform .15s;
+      text-decoration: none;
+    }
+    .nav-cta:hover { background: var(--blue-dark); transform: translateY(-1px); }
+
+    /* ─── HERO ─── */
+    .hero {
+      min-height: 88vh;
+      padding: 130px 6% 80px;
+      background: var(--bg);
+      position: relative;
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+    }
+    .blob {
+      position: absolute;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 0;
+      opacity: .18;
+    }
+    .hero-blob1 {
+      width: 560px; height: 560px;
+      background: var(--blue-light);
+      top: -120px; right: -140px;
+    }
+    .hero-blob2 {
+      width: 300px; height: 300px;
+      background: var(--gold-light);
+      bottom: 20px; left: -80px;
+      opacity: .28;
+    }
+    .hero-content { position: relative; z-index: 1; max-width: 640px; }
+
+    .tokyo-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--blue-light);
+      color: var(--blue-dark);
+      font-size: .8rem;
+      font-weight: 700;
+      padding: 5px 14px;
+      border-radius: 50px;
+      margin-bottom: 20px;
+      border: 1px solid rgba(0,87,184,.2);
+    }
+
+    .hero h1 {
+      font-size: clamp(1.9rem, 4vw, 2.9rem);
+      font-weight: 900;
+      line-height: 1.3;
+      margin-bottom: 20px;
+      letter-spacing: -.01em;
+    }
+    .hero h1 em {
+      font-style: normal;
+      color: var(--blue);
+    }
+    .hero p {
+      font-size: 1.05rem;
+      color: var(--text-light);
+      margin-bottom: 36px;
+      max-width: 520px;
+    }
+
+    .btn-primary {
+      background: var(--blue);
+      color: white;
+      border: none;
+      padding: 18px 38px;
+      border-radius: 50px;
+      font-size: 1.05rem;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: 'Noto Sans JP', sans-serif;
+      transition: background .2s, transform .15s, box-shadow .2s;
+      box-shadow: 0 6px 24px rgba(0,87,184,.28);
+      text-decoration: none;
+      display: inline-block;
+    }
+    .btn-primary:hover {
+      background: var(--blue-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px rgba(0,87,184,.38);
+    }
+
+    /* ─── STATS BAR ─── */
+    .stats-bar {
+      background: var(--blue);
+      color: white;
+      display: flex;
+      justify-content: center;
+      gap: 60px;
+      padding: 28px 6%;
+      flex-wrap: wrap;
+    }
+    .stat-item { text-align: center; }
+    .stat-num {
+      font-size: 2rem;
+      font-weight: 900;
+      letter-spacing: -.02em;
+      display: block;
+    }
+    .stat-label { font-size: .8rem; opacity: .85; }
+
+    /* ─── SECTION COMMON ─── */
+    section { padding: 80px 6%; }
+
+    .section-label {
+      display: inline-block;
+      background: var(--blue-light);
+      color: var(--blue-dark);
+      font-size: .78rem;
+      font-weight: 700;
+      padding: 4px 14px;
+      border-radius: 50px;
+      margin-bottom: 12px;
+      letter-spacing: .08em;
+    }
+    .section-title {
+      font-size: clamp(1.5rem, 3vw, 2.1rem);
+      font-weight: 900;
+      margin-bottom: 10px;
+      letter-spacing: -.01em;
+    }
+    .section-sub {
+      color: var(--text-light);
+      font-size: .95rem;
+      margin-bottom: 48px;
+    }
+
+    /* ─── COUNTRY CARDS ─── */
+    .countries { background: white; }
+    .countries-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 24px;
+    }
+    .country-card {
+      background: var(--bg);
+      border-radius: var(--radius-card);
+      padding: 32px 28px;
+      border: 2px solid transparent;
+      transition: border-color .2s, transform .2s, box-shadow .2s;
+    }
+    .country-card:hover {
+      border-color: var(--blue);
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(0,87,184,.12);
+    }
+    .country-flag { font-size: 2.4rem; margin-bottom: 12px; display: block; }
+    .country-name { font-size: 1.2rem; font-weight: 900; margin-bottom: 8px; }
+    .country-meta { font-size: .85rem; color: var(--text-light); margin-bottom: 16px; }
+    .country-amount {
+      background: var(--blue-light);
+      color: var(--blue-dark);
+      font-weight: 700;
+      font-size: .9rem;
+      padding: 8px 16px;
+      border-radius: 10px;
+      display: inline-block;
+    }
+
+    /* ─── DIAGNOSTIC SECTION ─── */
+    .diagnostic { background: var(--bg); }
+
+    .wizard-wrap {
+      max-width: 720px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 28px;
+      padding: 48px;
+      box-shadow: 0 8px 40px rgba(0,87,184,.10);
+    }
+
+    /* progress bar */
+    .progress-bar {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      margin-bottom: 40px;
+    }
+    .step-dot {
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: .8rem; font-weight: 700;
+      background: #E0E6F0;
+      color: var(--text-light);
+      flex-shrink: 0;
+      transition: background .3s, color .3s;
+    }
+    .step-dot.active { background: var(--blue); color: white; }
+    .step-dot.done { background: var(--green); color: white; }
+    .step-line {
+      flex: 1; height: 3px;
+      background: #E0E6F0;
+      transition: background .3s;
+    }
+    .step-line.done { background: var(--green); }
+
+    /* step panels */
+    .step-panel { display: none; }
+    .step-panel.active { display: block; }
+
+    .step-title {
+      font-size: 1.35rem;
+      font-weight: 900;
+      margin-bottom: 8px;
+    }
+    .step-sub {
+      font-size: .9rem;
+      color: var(--text-light);
+      margin-bottom: 28px;
+    }
+
+    /* choice buttons */
+    .choices {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 32px;
+    }
+    .choice-btn {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 16px 20px;
+      border: 2px solid #E0E6F0;
+      border-radius: 14px;
+      background: white;
+      cursor: pointer;
+      font-family: 'Noto Sans JP', sans-serif;
+      font-size: .95rem;
+      font-weight: 500;
+      color: var(--text);
+      transition: border-color .2s, background .2s, transform .15s;
+      text-align: left;
+      width: 100%;
+    }
+    .choice-btn:hover {
+      border-color: var(--blue);
+      background: var(--blue-pale);
+      transform: translateX(4px);
+    }
+    .choice-btn.selected {
+      border-color: var(--blue);
+      background: var(--blue-pale);
+    }
+    .choice-btn .icon { font-size: 1.4rem; flex-shrink: 0; }
+    .choice-btn .label { font-weight: 700; display: block; }
+    .choice-btn .hint { font-size: .8rem; color: var(--text-light); display: block; }
+
+    /* multi-select */
+    .choice-btn.multi-select.selected {
+      border-color: var(--blue);
+      background: var(--blue-pale);
+    }
+    .choice-btn.multi-select.selected::after {
+      content: "✓";
+      margin-left: auto;
+      color: var(--blue);
+      font-weight: 900;
+      font-size: 1.1rem;
+    }
+
+    .wizard-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .btn-back {
+      background: transparent;
+      color: var(--text-light);
+      border: 2px solid #E0E6F0;
+      padding: 12px 24px;
+      border-radius: 50px;
+      font-size: .9rem;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: 'Noto Sans JP', sans-serif;
+      transition: border-color .2s, color .2s;
+    }
+    .btn-back:hover { border-color: var(--blue); color: var(--blue); }
+    .btn-next {
+      background: var(--blue);
+      color: white;
+      border: none;
+      padding: 14px 32px;
+      border-radius: 50px;
+      font-size: .95rem;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: 'Noto Sans JP', sans-serif;
+      transition: background .2s, transform .15s, box-shadow .2s;
+      box-shadow: 0 4px 16px rgba(0,87,184,.25);
+    }
+    .btn-next:hover { background: var(--blue-dark); transform: translateY(-1px); }
+    .btn-next:disabled {
+      background: #B0BFD8;
+      box-shadow: none;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    /* ─── RESULTS ─── */
+    #results-section { display: none; }
+    #results-section.visible { display: block; }
+
+    .results-wrap { max-width: 860px; margin: 0 auto; }
+
+    .results-header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+    .results-count {
+      font-size: 1rem;
+      color: var(--text-light);
+      margin-top: 8px;
+    }
+    .results-count span {
+      color: var(--blue);
+      font-weight: 900;
+      font-size: 1.4rem;
+    }
+
+    .scholarship-list {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      margin-bottom: 48px;
+    }
+    .scholarship-card {
+      background: white;
+      border-radius: var(--radius-card);
+      padding: 32px;
+      border: 1.5px solid #E0E6F0;
+      transition: border-color .2s, box-shadow .2s;
+      position: relative;
+      overflow: hidden;
+    }
+    .scholarship-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 4px; height: 100%;
+      background: var(--blue);
+    }
+    .scholarship-card:hover {
+      border-color: var(--blue-mid);
+      box-shadow: 0 8px 32px rgba(0,87,184,.10);
+    }
+    .scholarship-card.rank-gold::before { background: var(--gold); }
+    .scholarship-card.rank-silver::before { background: #8099B8; }
+
+    .card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
+    }
+    .card-badges { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 8px; }
+    .badge {
+      font-size: .72rem;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 20px;
+    }
+    .badge-country { background: var(--blue-light); color: var(--blue-dark); }
+    .badge-type-grant { background: var(--green-light); color: #0A5C2A; }
+    .badge-type-loan { background: var(--gold-light); color: #7A4A00; }
+    .badge-public { background: #EDE8FF; color: #4A0096; }
+    .badge-match {
+      background: var(--blue);
+      color: white;
+      font-size: .72rem;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 20px;
+    }
+
+    .card-name {
+      font-size: 1.15rem;
+      font-weight: 900;
+      margin-bottom: 4px;
+      line-height: 1.4;
+    }
+    .card-org {
+      font-size: .85rem;
+      color: var(--text-light);
+    }
+
+    .card-amount {
+      text-align: right;
+      flex-shrink: 0;
+    }
+    .amount-label { font-size: .78rem; color: var(--text-light); display: block; }
+    .amount-value {
+      font-size: 1.6rem;
+      font-weight: 900;
+      color: var(--blue);
+      letter-spacing: -.02em;
+    }
+    .amount-unit { font-size: .85rem; font-weight: 500; color: var(--text-light); }
+
+    .card-body { font-size: .9rem; color: var(--text-light); margin-bottom: 20px; line-height: 1.7; }
+
+    .card-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      padding-top: 16px;
+      border-top: 1px solid #F0F0F8;
+    }
+    .meta-item { display: flex; flex-direction: column; gap: 2px; }
+    .meta-label { font-size: .75rem; color: var(--text-light); font-weight: 500; }
+    .meta-value { font-size: .88rem; font-weight: 700; }
+
+    .card-actions {
+      margin-top: 20px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .btn-detail {
+      background: var(--blue-pale);
+      color: var(--blue);
+      border: 2px solid var(--blue-light);
+      padding: 10px 22px;
+      border-radius: 50px;
+      font-size: .88rem;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: 'Noto Sans JP', sans-serif;
+      transition: background .2s;
+      text-decoration: none;
+    }
+    .btn-detail:hover { background: var(--blue-light); }
+
+    .retry-wrap {
+      text-align: center;
+      padding: 20px;
+    }
+    .btn-retry {
+      background: transparent;
+      color: var(--text-light);
+      border: 2px solid #D0D8E8;
+      padding: 12px 28px;
+      border-radius: 50px;
+      font-size: .9rem;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: 'Noto Sans JP', sans-serif;
+      transition: border-color .2s, color .2s;
+    }
+    .btn-retry:hover { border-color: var(--blue); color: var(--blue); }
+
+    /* ─── HOW IT WORKS ─── */
+    .how { background: white; }
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 24px;
+    }
+    .step-card {
+      text-align: center;
+      padding: 32px 20px;
+    }
+    .step-num {
+      width: 52px; height: 52px;
+      background: var(--blue);
+      color: white;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.3rem; font-weight: 900;
+      margin: 0 auto 16px;
+    }
+    .step-card h3 { font-size: 1rem; font-weight: 700; margin-bottom: 8px; }
+    .step-card p { font-size: .88rem; color: var(--text-light); }
+
+    /* ─── DISCLAIMER ─── */
+    .disclaimer {
+      background: var(--bg);
+      padding: 40px 6%;
+      text-align: center;
+    }
+    .disclaimer p {
+      font-size: .8rem;
+      color: var(--text-light);
+      max-width: 700px;
+      margin: 0 auto;
+      line-height: 1.8;
+    }
+
+    /* ─── FOOTER ─── */
+    footer {
+      background: var(--text);
+      color: rgba(255,255,255,.7);
+      padding: 32px 6%;
+      text-align: center;
+      font-size: .83rem;
+    }
+    footer a { color: rgba(255,255,255,.6); text-decoration: none; }
+
+    /* ─── MOBILE ─── */
+    @media (max-width: 640px) {
+      .wizard-wrap { padding: 28px 20px; }
+      .card-top { flex-direction: column; }
+      .card-amount { text-align: left; }
+      .stats-bar { gap: 32px; }
+      .btn-primary { width: 100%; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="logo">
+    <span class="logo-badge">東京都</span>
+    <span class="logo-text">海外進学<span>奨学金ナビ</span></span>
+  </a>
+  <a href="#diagnostic" class="nav-cta">無料診断スタート</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="blob hero-blob1"></div>
+  <div class="blob hero-blob2"></div>
+  <div class="hero-content">
+    <div class="tokyo-badge">🗼 東京都高校生対象</div>
+    <h1>海外の大学へ進学する<br><em>奨学金</em>、すぐわかる。</h1>
+    <p>アメリカ・オーストラリア・マレーシアの4年制大学進学を目指す東京都内の高校生向けに、あなたの条件にぴったりの奨学金・補助金情報を無料でご案内します。</p>
+    <a href="#diagnostic" class="btn-primary">3分で奨学金を探す →</a>
+  </div>
+</section>
+
+<!-- STATS BAR -->
+<div class="stats-bar">
+  <div class="stat-item">
+    <span class="stat-num">14件</span>
+    <span class="stat-label">掲載奨学金・補助金数</span>
+  </div>
+  <div class="stat-item">
+    <span class="stat-num">最大240万円</span>
+    <span class="stat-label">年間給付額（一部奨学金）</span>
+  </div>
+  <div class="stat-item">
+    <span class="stat-num">3カ国</span>
+    <span class="stat-label">対応留学先</span>
+  </div>
+  <div class="stat-item">
+    <span class="stat-num">無料</span>
+    <span class="stat-label">診断・情報提供</span>
+  </div>
+</div>
+
+<!-- COUNTRIES -->
+<section class="countries">
+  <span class="section-label">COUNTRIES</span>
+  <h2 class="section-title">対応している留学先</h2>
+  <p class="section-sub">4年制大学への正規留学を想定した奨学金情報を掲載しています。</p>
+  <div class="countries-grid">
+    <div class="country-card">
+      <span class="country-flag">🇺🇸</span>
+      <div class="country-name">アメリカ</div>
+      <div class="country-meta">4年制大学（Undergraduate）<br>年間学費目安：200〜400万円</div>
+      <span class="country-amount">奨学金掲載数：6件</span>
+    </div>
+    <div class="country-card">
+      <span class="country-flag">🇦🇺</span>
+      <div class="country-name">オーストラリア</div>
+      <div class="country-meta">4年制大学（Bachelor's Degree）<br>年間学費目安：150〜280万円</div>
+      <span class="country-amount">奨学金掲載数：5件</span>
+    </div>
+    <div class="country-card">
+      <span class="country-flag">🇲🇾</span>
+      <div class="country-name">マレーシア</div>
+      <div class="country-meta">4年制大学（Bachelor's Degree）<br>年間学費目安：60〜140万円</div>
+      <span class="country-amount">奨学金掲載数：4件</span>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="how">
+  <span class="section-label">HOW IT WORKS</span>
+  <h2 class="section-title">使い方は簡単3ステップ</h2>
+  <p class="section-sub">難しい書類不要。質問に答えるだけで、あなたに合った奨学金がすぐわかります。</p>
+  <div class="steps-grid">
+    <div class="step-card">
+      <div class="step-num">1</div>
+      <h3>質問に答える</h3>
+      <p>渡航先・英語力・学校のレベルなど5つの質問に答えるだけ。約3分で完了します。</p>
+    </div>
+    <div class="step-card">
+      <div class="step-num">2</div>
+      <h3>奨学金が絞り込まれる</h3>
+      <p>あなたの条件に合致した奨学金を自動でリストアップ。給付額や応募条件がひと目でわかります。</p>
+    </div>
+    <div class="step-card">
+      <div class="step-num">3</div>
+      <h3>詳細・公式情報を確認</h3>
+      <p>気になる奨学金の公式サイトへ直接アクセス。最新の募集情報を確認して応募できます。</p>
+    </div>
+  </div>
+</section>
+
+<!-- DIAGNOSTIC -->
+<section class="diagnostic" id="diagnostic">
+  <span class="section-label">SCHOLARSHIP FINDER</span>
+  <h2 class="section-title" style="text-align:center">奨学金かんたん診断</h2>
+  <p class="section-sub" style="text-align:center">以下の質問に順番にお答えください</p>
+
+  <div class="wizard-wrap">
+
+    <!-- PROGRESS -->
+    <div class="progress-bar" id="progressBar">
+      <div class="step-dot active" id="dot1">1</div>
+      <div class="step-line" id="line1"></div>
+      <div class="step-dot" id="dot2">2</div>
+      <div class="step-line" id="line2"></div>
+      <div class="step-dot" id="dot3">3</div>
+      <div class="step-line" id="line3"></div>
+      <div class="step-dot" id="dot4">4</div>
+      <div class="step-line" id="line4"></div>
+      <div class="step-dot" id="dot5">5</div>
+    </div>
+
+    <!-- STEP 1: 渡航先 -->
+    <div class="step-panel active" id="step1">
+      <div class="step-title">留学先を選んでください</div>
+      <div class="step-sub">複数選択できます（行きたい国すべてにチェック）</div>
+      <div class="choices">
+        <button class="choice-btn multi-select" data-key="country" data-val="us">
+          <span class="icon">🇺🇸</span>
+          <span>
+            <span class="label">アメリカ</span>
+            <span class="hint">UCLA・NYU・Purdue などの4年制大学</span>
+          </span>
+        </button>
+        <button class="choice-btn multi-select" data-key="country" data-val="au">
+          <span class="icon">🇦🇺</span>
+          <span>
+            <span class="label">オーストラリア</span>
+            <span class="hint">メルボルン大・クイーンズランド大 など</span>
+          </span>
+        </button>
+        <button class="choice-btn multi-select" data-key="country" data-val="my">
+          <span class="icon">🇲🇾</span>
+          <span>
+            <span class="label">マレーシア</span>
+            <span class="hint">マラヤ大・モナッシュ大マレーシア校 など</span>
+          </span>
+        </button>
+        <button class="choice-btn multi-select" data-key="country" data-val="all">
+          <span class="icon">🌏</span>
+          <span>
+            <span class="label">まだ決めていない／すべて見たい</span>
+            <span class="hint">3カ国すべての奨学金を表示します</span>
+          </span>
+        </button>
+      </div>
+      <div class="wizard-nav">
+        <span></span>
+        <button class="btn-next" id="next1" onclick="goNext(1)" disabled>次へ →</button>
+      </div>
+    </div>
+
+    <!-- STEP 2: 英語力 -->
+    <div class="step-panel" id="step2">
+      <div class="step-title">あなたの英語力を教えてください</div>
+      <div class="step-sub">一番近いものを1つ選んでください</div>
+      <div class="choices">
+        <button class="choice-btn" data-key="english" data-val="900up" onclick="selectSingle(this, 2)">
+          <span class="icon">⭐</span>
+          <span>
+            <span class="label">TOEIC 900点以上 / TOEFL 100点以上</span>
+            <span class="hint">英語は得意。上位大学も視野に入れている</span>
+          </span>
+        </button>
+        <button class="choice-btn" data-key="english" data-val="800" onclick="selectSingle(this, 2)">
+          <span class="icon">🔵</span>
+          <span>
+            <span class="label">TOEIC 800〜899点 / TOEFL 80〜99点</span>
+            <span class="hint">日常会話・授業は概ね問題ない</span>
+          </span>
+        </button>
+        <button class="choice-btn" data-key="english" data-val="700" onclick="selectSingle(this, 2)">
+          <span class="icon">🟡</span>
+          <span>
+            <span class="label">TOEIC 700〜799点 / TOEFL 60〜79点</span>
+            <span class="hint">英語は勉強中。まだ伸ばせる自信あり</span>
+          </span>
+        </button>
+        <button class="choice-btn" data-key="english" data-val="low" onclick="selectSingle(this, 2)">
+          <span class="icon">⚪</span>
+          <span>
+            <span class="label">TOEIC 700点未満 / まだ受験していない</span>
+            <span class="hint">これから勉強する予定</span>
+          </span>
+        </button>
+      </div>
+      <div class="wizard-nav">
+        <button class="btn-back" onclick="goBack(2)">← 戻る</button>
+        <button class="btn-next" id="next2" onclick="goNext(2)" disabled>次へ →</button>
+      </div>
+    </div>
+
+    <!-- STEP 3: 偏差値 -->
+    <div class="step-panel" id="step3">
+      <div class="step-title">現在の高校・学力レベルを教えてください</div>
+      <div class="step-sub">在籍高校の偏差値、または自己評価で選んでください</div>
+      <div class="choices">
+        <button class="choice-btn" data-key="hensachi" data-val="65up" onclick="selectSingle(this, 3)">
+          <span class="icon">🏆</span>
+          <span>
+            <span class="label">偏差値 65以上（進学校・上位校）</span>
+            <span class="hint">東大・早慶進学者が多い水準の高校</span>
+          </span>
+        </button>
+        <button class="choice-btn" data-key="hensachi" data-val="55" onclick="selectSingle(this, 3)">
+          <span class="icon">📘</span>
+          <span>
+            <span class="label">偏差値 55〜64（中堅上位）</span>
+            <span class="hint">MARCHや国公立大進学者が多い水準</span>
+          </span>
+        </button>
+        <button class="choice-btn" data-key="hensachi" data-val="45" onclick="selectSingle(this, 3)">
+          <span class="icon">📗</span>
+          <span>
+            <span class="label">偏差値 45〜54（中堅）</span>
+            <span class="hint">日東駒専・地方国公立進学者が多い水準</span>
+          </span>
+        </button>
+        <button class="choice-btn" data-key="hensachi" data-val="under45" onclick="selectSingle(this, 3)">
+          <span class="icon">📙</span>
+          <span>
+            <span class="label">偏差値 44以下 / わからない</span>
+            <span class="hint">学力より意欲・チャレンジ精神で勝負したい</span>
+          </span>
+        </button>
+      </div>
+      <div class="wizard-nav">
+        <button class="btn-back" onclick="goBack(3)">← 戻る</button>
+        <button class="btn-next" id="next3" onclick="goNext(3)" disabled>次へ →</button>
+      </div>
+    </div>
+
+    <!-- STEP 4: 家計 -->
+    <div class="step-panel" id="step4">
+      <div class="step-title">世帯年収の目安を教えてください</div>
+      <div class="step-sub">給付型奨学金の多くは家計基準があります（非公開情報として利用します）</div>
+      <div class="choices">
+        <button class="choice-btn" data-key="income" data-val="low" onclick="selectSingle(this, 4)">
+          <span class="icon">💚</span>
+          <span>
+            <span class="label">600万円未満</span>
+            <span class="hint">給付型・返済不要の奨学金を最優先で案内します</span>
+          </span>
+        </button>
+        <button class="choice-btn" data-key="income" data-val="mid" onclick="selectSingle(this, 4)">
+          <span class="icon">💙</span>
+          <span>
+            <span class="label">600〜1,000万円</span>
+            <span class="hint">給付型・貸付型どちらも候補に含めます</span>
+          </span>
+        </button>
+        <button class="choice-btn" data-key="income" data-val="high" onclick="selectSingle(this, 4)">
+          <span class="icon">💛</span>
+          <span>
+            <span class="label">1,000万円以上</span>
+            <span class="hint">能力・成績重視型の奨学金を中心に案内します</span>
+          </span>
+        </button>
+        <button class="choice-btn" data-key="income" data-val="unknown" onclick="selectSingle(this, 4)">
+          <span class="icon">⚪</span>
+          <span>
+            <span class="label">わからない / 答えたくない</span>
+            <span class="hint">すべての奨学金を対象にご案内します</span>
+          </span>
+        </button>
+      </div>
+      <div class="wizard-nav">
+        <button class="btn-back" onclick="goBack(4)">← 戻る</button>
+        <button class="btn-next" id="next4" onclick="goNext(4)" disabled>次へ →</button>
+      </div>
+    </div>
+
+    <!-- STEP 5: 時期 -->
+    <div class="step-panel" id="step5">
+      <div class="step-title">留学開始はいつごろを考えていますか？</div>
+      <div class="step-sub">募集スケジュールを考慮して優先度を調整します</div>
+      <div class="choices">
+        <button class="choice-btn" data-key="timing" data-val="within1" onclick="selectSingle(this, 5)">
+          <span class="icon">🔥</span>
+          <span>
+            <span class="label">1年以内（今すぐ〜来年）</span>
+            <span class="hint">直近の募集が締め切っている場合もあります</span>
+          </span>
+        </button>
+        <button class="choice-btn" data-key="timing" data-val="1to2" onclick="selectSingle(this, 5)">
+          <span class="icon">📅</span>
+          <span>
+            <span class="label">1〜2年後</span>
+            <span class="hint">計画的に準備できる最もスタンダードなペース</span>
+          </span>
+        </button>
+        <button class="choice-btn" data-key="timing" data-val="over2" onclick="selectSingle(this, 5)">
+          <span class="icon">🌱</span>
+          <span>
+            <span class="label">2年以上先</span>
+            <span class="hint">英語力・成績を高めてから挑戦する予定</span>
+          </span>
+        </button>
+      </div>
+      <div class="wizard-nav">
+        <button class="btn-back" onclick="goBack(5)">← 戻る</button>
+        <button class="btn-next" id="next5" onclick="showResults()" disabled>診断結果を見る →</button>
+      </div>
+    </div>
+
+  </div><!-- /wizard-wrap -->
+</section>
+
+<!-- RESULTS -->
+<section id="results-section">
+  <div class="results-wrap">
+    <div class="results-header">
+      <span class="section-label">RESULTS</span>
+      <h2 class="section-title">あなたへのおすすめ奨学金</h2>
+      <p class="results-count"><span id="matchCount">0</span>件の奨学金が見つかりました</p>
+    </div>
+    <div class="scholarship-list" id="scholarshipList"></div>
+    <div class="retry-wrap">
+      <button class="btn-retry" onclick="resetDiagnostic()">← 条件を変えてもう一度診断する</button>
+    </div>
+  </div>
+</section>
+
+<!-- DISCLAIMER -->
+<div class="disclaimer">
+  <p>※ 本サイトに掲載している奨学金情報は、各公式機関の情報をもとに作成していますが、募集要項・給付額・応募資格は年度ごとに変更になる場合があります。必ず各奨学金の公式サイトにてご確認ください。<br>※ 本サービスは情報提供を目的としており、奨学金の採用を保証するものではありません。</p>
+</div>
+
+<footer>
+  <p>© 2026 海外進学奨学金ナビ | 東京都高校生向け留学支援情報サービス</p>
+</footer>
+
+<script>
+// ─── SCHOLARSHIP DATABASE ───
+const SCHOLARSHIPS = [
+  {
+    id: "tobitatsu",
+    name: "トビタテ！留学JAPAN 高校生コース",
+    org: "文部科学省",
+    type: "grant",
+    countries: ["us","au","my","all"],
+    amount: "月額6〜12万円",
+    amountNum: 120,
+    amountDetail: "+ 往復渡航費・授業料補助",
+    english: ["900up","800","700","low"],
+    hensachi: ["65up","55","45","under45"],
+    income: ["low","mid","high","unknown"],
+    timing: ["within1","1to2","over2"],
+    deadline: "例年2〜3月（高校生コース）",
+    duration: "留学期間（3ヶ月〜2年）",
+    repay: "返済不要",
+    url: "https://tobitate-mext.jasso.go.jp/",
+    note: "学力より「やる気・自己実現力」を重視。多様なバックグラウンドの高校生を支援。英語力より留学計画の具体性・熱意が審査ポイント。",
+    priority: 1
+  },
+  {
+    id: "jasso_haken",
+    name: "JASSO 海外留学支援制度（学部学生等向け）",
+    org: "日本学生支援機構（JASSO）",
+    type: "grant",
+    countries: ["us","au","my","all"],
+    amount: "月額8万円",
+    amountNum: 96,
+    amountDetail: "+ 一時金あり",
+    english: ["900up","800","700"],
+    hensachi: ["65up","55","45"],
+    income: ["low","mid","unknown"],
+    timing: ["1to2","over2"],
+    deadline: "大学入学後に申請（高校生は事前準備）",
+    duration: "1年〜2年",
+    repay: "返済不要",
+    url: "https://www.jasso.go.jp/study_a/scholarships/hakenryugaku.html",
+    note: "大学進学後に協定校を通じて申請。高校在学中から目指す大学・奨学金を逆算して選ぶことが重要。成績・語学力基準あり。",
+    priority: 2
+  },
+  {
+    id: "jasso_ikuei",
+    name: "JASSO 第一種奨学金（自宅外・海外進学）",
+    org: "日本学生支援機構（JASSO）",
+    type: "loan",
+    countries: ["us","au","my","all"],
+    amount: "月額6.4万円",
+    amountNum: 77,
+    amountDetail: "無利子（成績上位者は返済免除あり）",
+    english: ["900up","800","700","low"],
+    hensachi: ["65up","55","45","under45"],
+    income: ["low","mid","unknown"],
+    timing: ["within1","1to2","over2"],
+    deadline: "高校3年4月〜（予約採用）",
+    duration: "在学期間",
+    repay: "無利子貸付（一部返済免除制度あり）",
+    url: "https://www.jasso.go.jp/shogakukin/index.html",
+    note: "返済が必要な貸付型。ただし成績優秀者は卒業後に一部〜全額免除される制度あり。家計基準を満たせば高校在学中から予約採用申請可能。",
+    priority: 3
+  },
+  {
+    id: "tokyo_shigakukyuufu",
+    name: "東京都私立高校生海外留学奨学金",
+    org: "東京都 / 公益財団法人東京都私学財団",
+    type: "grant",
+    countries: ["us","au","my","all"],
+    amount: "年間最大100万円",
+    amountNum: 100,
+    amountDetail: "渡航費・学費補助",
+    english: ["900up","800","700"],
+    hensachi: ["65up","55","45"],
+    income: ["low","mid","unknown"],
+    timing: ["within1","1to2"],
+    deadline: "例年5〜6月",
+    duration: "1年以内の留学",
+    repay: "返済不要",
+    url: "https://www.shigaku-tokyo.or.jp/",
+    note: "東京都内の私立高校に在籍していることが条件。語学研修・学校交流プログラムへの参加が前提となる場合あり。詳細は在籍校または財団に確認。",
+    priority: 2
+  },
+  {
+    id: "afs_scholarships",
+    name: "AFS日本協会 奨学留学プログラム",
+    org: "公益財団法人AFS日本協会",
+    type: "grant",
+    countries: ["us","au","my","all"],
+    amount: "半額〜全額免除",
+    amountNum: 80,
+    amountDetail: "プログラム費用の一部または全額",
+    english: ["900up","800","700","low"],
+    hensachi: ["65up","55","45","under45"],
+    income: ["low","mid","unknown"],
+    timing: ["1to2","over2"],
+    deadline: "例年10〜11月（翌年夏出発）",
+    duration: "約1年間",
+    repay: "返済不要",
+    url: "https://afs.or.jp/",
+    note: "交換留学プログラム。現地ホストファミリー宅に滞在し、現地高校へ通う。語学力より異文化への関心・適応力・協調性が重視される。",
+    priority: 2
+  },
+  {
+    id: "rotary_youth",
+    name: "ロータリー財団青少年交換プログラム",
+    org: "国際ロータリー / 各地区ロータリークラブ",
+    type: "grant",
+    countries: ["us","au","my","all"],
+    amount: "ほぼ全額",
+    amountNum: 150,
+    amountDetail: "渡航費・ホームステイ・学費含む",
+    english: ["900up","800","700","low"],
+    hensachi: ["65up","55","45","under45"],
+    income: ["low","mid","high","unknown"],
+    timing: ["1to2","over2"],
+    deadline: "各地区ロータリークラブによる（通常1年前から選考）",
+    duration: "約1年間",
+    repay: "返済不要",
+    url: "https://www.rotary.org/ja/our-programs/youth-exchanges",
+    note: "最寄りのロータリークラブに申請。費用のほぼ全額が補助される非常にお得なプログラム。人物重視の面接選考あり。",
+    priority: 2
+  },
+  // アメリカ専用
+  {
+    id: "usnews_merit",
+    name: "米国大学メリット奨学金（各大学独自）",
+    org: "各米国大学",
+    type: "grant",
+    countries: ["us"],
+    amount: "年間120〜240万円",
+    amountNum: 180,
+    amountDetail: "大学・成績により異なる（Need-based / Merit-based）",
+    english: ["900up","800"],
+    hensachi: ["65up","55"],
+    income: ["low","mid","high","unknown"],
+    timing: ["within1","1to2","over2"],
+    deadline: "大学ごとに異なる（通常12〜1月）",
+    duration: "4年間（成績維持が条件）",
+    repay: "返済不要",
+    url: "https://bigfuture.collegeboard.org/",
+    note: "多くの米国大学は成績優秀者・経済支援を必要とする学生に独自の奨学金を提供。SATスコア・GPA・エッセイが重要。出願と同時に自動審査される場合が多い。",
+    priority: 1
+  },
+  {
+    id: "fulbright_prep",
+    name: "フルブライト奨学金（大学院・大学準備）",
+    org: "日米教育委員会（フルブライト・ジャパン）",
+    type: "grant",
+    countries: ["us"],
+    amount: "渡航費・生活費・学費全額",
+    amountNum: 240,
+    amountDetail: "学費・生活費・保険・渡航費を含む全額給付",
+    english: ["900up"],
+    hensachi: ["65up"],
+    income: ["low","mid","high","unknown"],
+    timing: ["over2"],
+    deadline: "例年4〜5月（翌年渡航分）",
+    duration: "1〜2年",
+    repay: "返済不要",
+    url: "https://www.fulbright.jp/",
+    note: "日米交流を目的とした米国政府主導の最高権威の奨学金。主に大学院生・研究者向けだが、将来の進路として意識すると良い。",
+    priority: 3
+  },
+  // オーストラリア専用
+  {
+    id: "australia_awards",
+    name: "Australia Awards Scholarships",
+    org: "オーストラリア政府 DFAT",
+    type: "grant",
+    countries: ["au"],
+    amount: "授業料・生活費全額",
+    amountNum: 200,
+    amountDetail: "学費・往復航空券・生活費・保険含む",
+    english: ["900up","800"],
+    hensachi: ["65up","55"],
+    income: ["low","mid","high","unknown"],
+    timing: ["1to2","over2"],
+    deadline: "例年4〜6月",
+    duration: "学部課程全期間",
+    repay: "返済不要",
+    url: "https://www.australiaawardsjapan.org/",
+    note: "オーストラリア政府が提供する権威ある奨学金。学術成績と指導力・社会貢献意欲が審査のポイント。英語力（IELTS 6.5以上）が必要。",
+    priority: 1
+  },
+  {
+    id: "au_univ_merit",
+    name: "豪州主要大学 国際生奨学金",
+    org: "メルボルン大・クイーンズランド大・ANU など",
+    type: "grant",
+    countries: ["au"],
+    amount: "年間50〜150万円",
+    amountNum: 100,
+    amountDetail: "授業料の25〜50%相当",
+    english: ["900up","800","700"],
+    hensachi: ["65up","55"],
+    income: ["low","mid","high","unknown"],
+    timing: ["within1","1to2","over2"],
+    deadline: "出願と同時（12〜2月）",
+    duration: "4年間（成績維持が条件）",
+    repay: "返済不要",
+    url: "https://www.universitiesaustralia.edu.au/",
+    note: "各大学が国際生を対象に提供する成績優秀者奨学金。出願書類（高校成績・英語スコア）で自動審査されるケースが多い。",
+    priority: 2
+  },
+  // マレーシア専用
+  {
+    id: "malaysia_mara",
+    name: "マレーシア MARA奨学金（外国人枠）",
+    org: "マレーシア農村開発省 MARA",
+    type: "grant",
+    countries: ["my"],
+    amount: "授業料・生活費全額",
+    amountNum: 140,
+    amountDetail: "UiTM等の国立大学入学者向け",
+    english: ["900up","800","700"],
+    hensachi: ["65up","55","45"],
+    income: ["low","mid","unknown"],
+    timing: ["1to2","over2"],
+    deadline: "例年3〜4月",
+    duration: "4年間",
+    repay: "返済不要",
+    url: "https://www.mara.gov.my/",
+    note: "マレーシア政府系奨学金。マレーシア国立大学への正規入学が条件。英語ほかマレー語の学習も必要になる場合がある。",
+    priority: 2
+  },
+  {
+    id: "malaysia_univ",
+    name: "マレーシア主要私立大学 国際生奨学金",
+    org: "テイラーズ大・モナッシュ大マレーシア校 など",
+    type: "grant",
+    countries: ["my"],
+    amount: "年間30〜80万円",
+    amountNum: 60,
+    amountDetail: "授業料の20〜50%相当",
+    english: ["900up","800","700","low"],
+    hensachi: ["65up","55","45","under45"],
+    income: ["low","mid","high","unknown"],
+    timing: ["within1","1to2","over2"],
+    deadline: "入学出願と同時",
+    duration: "4年間（継続条件あり）",
+    repay: "返済不要",
+    url: "https://www.taylorsu.edu.my/",
+    note: "学費が欧米の1/3〜1/2程度のマレーシア。英語での教育が充実しており、費用対効果が高い選択肢。奨学金のハードルも比較的低め。",
+    priority: 1
+  },
+  {
+    id: "jica_ryugaku",
+    name: "JICA 民間連携奨学金",
+    org: "独立行政法人 国際協力機構（JICA）",
+    type: "grant",
+    countries: ["my","au"],
+    amount: "月額10万円",
+    amountNum: 120,
+    amountDetail: "＋渡航費・保険",
+    english: ["900up","800","700"],
+    hensachi: ["65up","55"],
+    income: ["low","mid","unknown"],
+    timing: ["1to2","over2"],
+    deadline: "例年6〜7月",
+    duration: "2〜4年",
+    repay: "返済不要",
+    url: "https://www.jica.go.jp/",
+    note: "開発途上国・新興国での国際協力・社会課題解決への意欲がある人向け。マレーシア・アジアを目指す学生に特に有利。",
+    priority: 2
+  },
+  {
+    id: "nippon_foundation",
+    name: "日本財団 海外奨学金",
+    org: "公益財団法人 日本財団",
+    type: "grant",
+    countries: ["us","au","my","all"],
+    amount: "年間120〜200万円",
+    amountNum: 160,
+    amountDetail: "授業料・生活費・渡航費を含む",
+    english: ["900up","800"],
+    hensachi: ["65up","55"],
+    income: ["low","mid","high","unknown"],
+    timing: ["1to2","over2"],
+    deadline: "例年10〜11月",
+    duration: "4年間",
+    repay: "返済不要",
+    url: "https://www.nippon-foundation.or.jp/",
+    note: "社会課題への問題意識・リーダーシップを重視。書類・面接審査あり。卒業後の社会貢献へのコミットメントが求められる。",
+    priority: 2
+  }
+];
+
+// ─── STATE ───
+let answers = {};
+let multiCountries = [];
+let currentStep = 1;
+const TOTAL_STEPS = 5;
+
+// ─── MULTI SELECT (step1) ───
+document.querySelectorAll('.choice-btn.multi-select').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const val = btn.dataset.val;
+    if (val === 'all') {
+      multiCountries = ['all'];
+      document.querySelectorAll('.choice-btn.multi-select').forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+    } else {
+      multiCountries = multiCountries.filter(v => v !== 'all');
+      document.querySelector('[data-val="all"]').classList.remove('selected');
+      if (multiCountries.includes(val)) {
+        multiCountries = multiCountries.filter(v => v !== val);
+        btn.classList.remove('selected');
+      } else {
+        multiCountries.push(val);
+        btn.classList.add('selected');
+      }
+    }
+    document.getElementById('next1').disabled = multiCountries.length === 0;
+  });
+});
+
+// ─── SINGLE SELECT ───
+function selectSingle(btn, step) {
+  const key = btn.dataset.key;
+  btn.closest('.choices').querySelectorAll('.choice-btn').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+  answers[key] = btn.dataset.val;
+  document.getElementById('next' + step).disabled = false;
+}
+
+// ─── NAV ───
+function goNext(step) {
+  if (step === 1) answers.country = multiCountries;
+  setStep(step + 1);
+}
+function goBack(step) { setStep(step - 1); }
+
+function setStep(n) {
+  document.getElementById('step' + currentStep).classList.remove('active');
+  currentStep = n;
+  document.getElementById('step' + n).classList.add('active');
+  updateProgress();
+  window.scrollTo({ top: document.querySelector('.diagnostic').offsetTop - 80, behavior: 'smooth' });
+}
+
+function updateProgress() {
+  for (let i = 1; i <= TOTAL_STEPS; i++) {
+    const dot = document.getElementById('dot' + i);
+    dot.classList.remove('active', 'done');
+    if (i < currentStep) dot.classList.add('done');
+    else if (i === currentStep) dot.classList.add('active');
+    if (i < TOTAL_STEPS) {
+      const line = document.getElementById('line' + i);
+      line.classList.toggle('done', i < currentStep);
+    }
+  }
+}
+
+// ─── RESULTS ───
+function showResults() {
+  const countries = answers.country;
+  const english = answers.english;
+  const hensachi = answers.hensachi;
+  const income = answers.income;
+  const timing = answers.timing;
+
+  const matched = SCHOLARSHIPS.filter(s => {
+    const countryMatch = countries.includes('all') ||
+      s.countries.includes('all') ||
+      countries.some(c => s.countries.includes(c));
+    const englishMatch = s.english.includes(english);
+    const hensachiMatch = s.hensachi.includes(hensachi);
+    const incomeMatch = s.income.includes(income);
+    const timingMatch = s.timing.includes(timing);
+    return countryMatch && englishMatch && hensachiMatch && incomeMatch && timingMatch;
+  });
+
+  matched.sort((a, b) => b.amountNum - a.amountNum);
+
+  document.getElementById('matchCount').textContent = matched.length;
+
+  const list = document.getElementById('scholarshipList');
+  list.innerHTML = matched.length === 0
+    ? '<div style="text-align:center;padding:48px;color:var(--text-light)"><div style="font-size:3rem;margin-bottom:16px">🔍</div><div style="font-weight:700;margin-bottom:8px">条件に合う奨学金が見つかりませんでした</div><div style="font-size:.9rem">英語力アップや学力向上後に再診断すると結果が増えることがあります。</div></div>'
+    : matched.map((s, i) => buildCard(s, i)).join('');
+
+  document.querySelector('.diagnostic').style.display = 'none';
+  const rs = document.getElementById('results-section');
+  rs.classList.add('visible');
+  rs.style.padding = '80px 6%';
+  window.scrollTo({ top: rs.offsetTop - 80, behavior: 'smooth' });
+}
+
+function buildCard(s, idx) {
+  const rankClass = idx === 0 ? 'rank-gold' : idx === 1 ? '' : 'rank-silver';
+  const typeLabel = s.type === 'grant' ? '<span class="badge badge-type-grant">給付型（返済不要）</span>' : '<span class="badge badge-type-loan">貸付型</span>';
+  const countryBadges = s.countries
+    .filter(c => c !== 'all')
+    .map(c => ({ us: '🇺🇸 アメリカ', au: '🇦🇺 オーストラリア', my: '🇲🇾 マレーシア' }[c]))
+    .filter(Boolean)
+    .map(label => `<span class="badge badge-country">${label}</span>`)
+    .join('');
+  const allBadge = s.countries.includes('all') ? '<span class="badge badge-country">🌏 3カ国対応</span>' : '';
+
+  return `
+    <div class="scholarship-card ${rankClass}">
+      <div class="card-top">
+        <div>
+          <div class="card-badges">
+            ${idx === 0 ? '<span class="badge-match badge">おすすめ</span>' : ''}
+            ${typeLabel}
+            ${allBadge || countryBadges}
+          </div>
+          <div class="card-name">${s.name}</div>
+          <div class="card-org">${s.org}</div>
+        </div>
+        <div class="card-amount">
+          <span class="amount-label">給付額</span>
+          <div class="amount-value">${s.amount}</div>
+          <div class="amount-unit">${s.amountDetail}</div>
+        </div>
+      </div>
+      <div class="card-body">${s.note}</div>
+      <div class="card-meta">
+        <div class="meta-item">
+          <span class="meta-label">募集時期</span>
+          <span class="meta-value">${s.deadline}</span>
+        </div>
+        <div class="meta-item">
+          <span class="meta-label">対応期間</span>
+          <span class="meta-value">${s.duration}</span>
+        </div>
+        <div class="meta-item">
+          <span class="meta-label">返済</span>
+          <span class="meta-value">${s.repay}</span>
+        </div>
+      </div>
+      <div class="card-actions">
+        <a href="${s.url}" target="_blank" rel="noopener" class="btn-detail">公式サイトを見る →</a>
+      </div>
+    </div>
+  `;
+}
+
+function resetDiagnostic() {
+  answers = {};
+  multiCountries = [];
+  currentStep = 1;
+  document.querySelectorAll('.choice-btn').forEach(b => b.classList.remove('selected'));
+  document.querySelectorAll('.btn-next').forEach(b => b.disabled = true);
+  document.querySelectorAll('.step-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('step1').classList.add('active');
+  updateProgress();
+  document.querySelector('.diagnostic').style.display = '';
+  document.getElementById('results-section').classList.remove('visible');
+  document.getElementById('results-section').style.display = 'none';
+  window.scrollTo({ top: document.querySelector('.diagnostic').offsetTop - 80, behavior: 'smooth' });
+}
+
+// scroll CTA
+document.querySelector('.nav-cta').addEventListener('click', e => {
+  e.preventDefault();
+  document.querySelector('#diagnostic').scrollIntoView({ behavior: 'smooth', block: 'start' });
+});
+document.querySelector('.btn-primary').addEventListener('click', e => {
+  e.preventDefault();
+  document.querySelector('#diagnostic').scrollIntoView({ behavior: 'smooth', block: 'start' });
+});
+</script>
+</body>
+</html>
